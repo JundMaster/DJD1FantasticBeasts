@@ -5,6 +5,15 @@ using UnityEngine;
 public class character_movement : MonoBehaviour
 {
     public float runSpeed;
+    public float jumpSpeed;
+    float jumpTime;
+    public float jumpMaxTime;
+
+    //public float groundCheckRadius;
+
+    public Transform groundCheck;
+    public LayerMask groundLayers;
+    
 
     Rigidbody2D rb;
 
@@ -28,15 +37,53 @@ public class character_movement : MonoBehaviour
 
         currentVelocity = new Vector2(runSpeed * hAxis, currentVelocity.y);
 
+
+        
+
+        Collider2D groundCollision = Physics2D.OverlapCircle(groundCheck.position, 0.05f, groundLayers);
+
+        bool onGround = groundCollision != null;
+
+        if ((Input.GetButtonDown("Jump")) && (onGround))
+        {
+            currentVelocity.y = jumpSpeed;
+            rb.gravityScale = 0.0f;
+
+            jumpTime = Time.time;
+        }
+        else if ((Input.GetButton("Jump")) && ((Time.time - jumpTime) < jumpMaxTime))
+        {
+            
+        }
+        else
+        {
+            rb.gravityScale = 5.0f;
+        }
+
         rb.velocity = currentVelocity;
 
         //anim.SetFloat("nome da var", Mathf.Abs(currentVelocity.x));
 
         if (currentVelocity.x < -0.5f)
-            transform.rotation = Quaternion.Euler(0, 180, 0);
+        {
+            if (transform.right.x > 0)
+                transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
 
         else if (currentVelocity.x > 0.5f)
-            transform.rotation = Quaternion.identity;
+        {
+            if (transform.right.x < 0)
+                transform.rotation = Quaternion.identity;
+        }
+
+        
 
     }
+
+    /*
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(groundCheck.position, groundCheckRadius);
+    }*/
 }
