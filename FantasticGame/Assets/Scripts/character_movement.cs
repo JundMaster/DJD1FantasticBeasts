@@ -62,13 +62,13 @@ public class character_movement : MonoBehaviour
         rb.velocity = currentVelocity;
 
         // If velocity is negative and the sprite is positive, rotates the sprite to the left
-        if (currentVelocity.x < -0.5f)
+        if (currentVelocity.x < -0.1f)
         {
             if (transform.right.x > 0)
                 transform.rotation = Quaternion.Euler(0, 180, 0);
         }
         // Else, rotates it back to the original position
-        else if (currentVelocity.x > 0.5f)
+        else if (currentVelocity.x > 0.1f)
         {
             if (transform.right.x < 0)
                 transform.rotation = Quaternion.identity;
