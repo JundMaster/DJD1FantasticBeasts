@@ -3,34 +3,69 @@
 public class camera_follow : MonoBehaviour
 {
     // VARIABLES DECLARATION
-    public Transform target;
-    public float camSpeed = 3f;
-    public Vector3 offset;
-    Vector3 TempOffset;
+    [SerializeField] Transform target;
+    [SerializeField] float camSpeed = 4f;
+    [SerializeField] Vector3 offset;
 
+    [SerializeField] Rect cameraTrap;
 
     // Runs after update()
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         // Camera position relative to player
-        Vector3 desiredPosition = target.position + offset;
-        // Linear interpolation between current position and desired position in t time
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, camSpeed*Time.deltaTime);
-        transform.position = smoothedPosition;
+        Vector3 targetPos = target.position + offset;
+        targetPos.z = transform.position.z;
+        Rect rect = CreateRect();
 
 
-        // New Camera Pos
-        TempOffset = new Vector3(0, -1, -1);
+        if (targetPos.x < rect.xMin) rect.xMin = targetPos.x;
+        if (targetPos.x > rect.xMax) rect.xMax = targetPos.x;
+        if (targetPos.y < rect.yMin) rect.yMin = targetPos.y;
+        if (targetPos.y > rect.yMax) rect.yMax = targetPos.y;
+
+
+        // Variable to know the center of the recrangle
+        Vector3 movePos = rect.center;
+        movePos.z = transform.position.z;
+
+
+        Vector3 newPos = movePos - transform.position;
+        transform.position += newPos * camSpeed;
+        
+
+        
         // Gets vAxis
         float vAxis = Input.GetAxis("Vertical");
         // If the player isn't moving and pressed down
         if (vAxis < 0) // Isn't moving >> missing
         {
-            desiredPosition = target.position + TempOffset;
-            smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, camSpeed * Time.deltaTime);
-            transform.position = smoothedPosition;
         }
 
+    }
 
+    Rect CreateRect()
+    {
+        Rect rect = cameraTrap;
+        rect.position += new Vector2(-rect.width / 2, -rect.height / 2);
+        // Camera's x and y
+        rect.position += new Vector2(transform.position.x, transform.position.y);
+
+        return rect;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Rect tempRect = CreateRect();
+        Gizmos.color = new Color(1, 1, 1, 0.5f);
+
+        Vector3 p1 = new Vector3(tempRect.xMin, tempRect.yMin, 0);
+        Vector3 p2 = new Vector3(tempRect.xMax, tempRect.yMin, 0);
+        Vector3 p3 = new Vector3(tempRect.xMax, tempRect.yMax, 0);
+        Vector3 p4 = new Vector3(tempRect.xMin, tempRect.yMax, 0);
+
+        Gizmos.DrawLine(p1, p2);
+        Gizmos.DrawLine(p2, p3);
+        Gizmos.DrawLine(p3, p4);
+        Gizmos.DrawLine(p4, p1);
     }
 }

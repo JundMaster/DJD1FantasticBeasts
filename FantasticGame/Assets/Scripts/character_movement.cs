@@ -6,16 +6,20 @@ public class character_movement : MonoBehaviour
 {
     // VARIABLES DECLARATION
     // Moving Variables
+    float hAxis;
     public float runSpeed;
     public float jumpSpeed;
     public float jumpMaxTime;
     float jumpTime;
+    Vector2 currentVelocity;
 
     // groundChecking variables
     public Transform groundCheck;
     public LayerMask groundLayers;
-    // Variable to draw groundCheck RADIUS CIRCLE
-    public float groundCheckRadius;
+    public float groundCheckRadius; // For gizmos
+    bool onGround;
+    public bool jumpClicked;
+
 
     Rigidbody2D rb;
     Animator anim;
@@ -27,28 +31,26 @@ public class character_movement : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    void Update()
+    private void FixedUpdate()
     {
-        // Ground collision -> Checks if groundCheck position + 0.05f circle radius is in contact with the floor
-        Collider2D groundCollision = Physics2D.OverlapCircle(groundCheck.position, 0.05f, groundLayers);
-        bool onGround = groundCollision != null;
-
-
         // MOVEMENT
-        // Gets hAxis and sets currentVelocity for rigidbody
-        float hAxis = Input.GetAxis("Horizontal");
         Vector2 currentVelocity = rb.velocity;
         currentVelocity = new Vector2(runSpeed * hAxis, currentVelocity.y);
 
+        // Ground collision -> Checks if groundCheck position + 0.05f circle radius is in contact with the floor
+        Collider2D groundCollision = Physics2D.OverlapCircle(groundCheck.position, 0.05f, groundLayers);
+        onGround = groundCollision != null;
+
+        // JUMP
         // Jump conditions
-        if ((Input.GetButtonDown("Jump")) && (onGround))
+        if ((jumpClicked) && (onGround))
         {
             // If the player jumps, gravityScale is set to 0
             currentVelocity.y = jumpSpeed;
             rb.gravityScale = 0.0f;
-            jumpTime = Time.time;
+            jumpTime = Time.fixedTime;
         }
-        else if ((Input.GetButton("Jump")) && ((Time.time - jumpTime) < jumpMaxTime))
+        else if ((jumpClicked) && ((Time.fixedTime - jumpTime) < jumpMaxTime))
         {
             // While pressing jump, how much time has passed since jump was pressed
             // Jumps until jumpTime reaches jumpMaxTime
@@ -56,11 +58,22 @@ public class character_movement : MonoBehaviour
         else
         {
             rb.gravityScale = 5.0f;
+            
         }
 
         // Sets rigidbody final velocity
         rb.velocity = currentVelocity;
+    }
 
+    void Update()
+    {
+        // MOVEMENT
+        // Gets hAxis and sets currentVelocity for rigidbody
+        hAxis = Input.GetAxis("Horizontal");
+        jumpClicked = Input.GetButton("Jump");
+        currentVelocity = rb.velocity;
+
+        // SPRITE ROTATION
         // If velocity is negative and the sprite is positive, rotates the sprite to the left
         if (currentVelocity.x < -0.1f)
         {
@@ -76,7 +89,8 @@ public class character_movement : MonoBehaviour
 
         // Reference for animator movement
         anim.SetFloat("absVelX", Mathf.Abs(currentVelocity.x));
-
+        anim.SetFloat("jumpVel", (currentVelocity.y));
+        anim.SetBool("grounded", onGround);
 
     }
 
