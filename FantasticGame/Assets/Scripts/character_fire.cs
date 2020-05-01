@@ -16,9 +16,12 @@ public class character_fire : MonoBehaviour
     {
         anim.SetBool("attack", false);
 
-        if (Input.GetButtonDown("Fire1"))
+        if (PauseMenu.gamePaused == false)
         {
-            anim.SetBool("attack", true);
+            if (Input.GetButtonDown("Fire1"))
+            {
+                anim.SetBool("attack", true);
+            }
         }
     }
 }
