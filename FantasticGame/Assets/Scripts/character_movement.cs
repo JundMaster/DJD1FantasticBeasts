@@ -7,18 +7,19 @@ public class character_movement : MonoBehaviour
     // VARIABLES DECLARATION
     // Moving Variables
     float hAxis;
-    public float runSpeed;
-    public float jumpSpeed;
-    public float jumpMaxTime;
+    [SerializeField] float runSpeed;
+    [SerializeField] float jumpSpeed;
+    [SerializeField] float jumpMaxTime;
     float jumpTime;
     Vector2 currentVelocity;
 
     // groundChecking variables
-    public Transform groundCheck;
-    public LayerMask groundLayers;
-    public float groundCheckRadius; // For gizmos
-    bool onGround;
-    public bool jumpClicked;
+    [SerializeField] Transform groundCheck;
+    [SerializeField] LayerMask groundLayers;
+    [SerializeField] float groundCheckRadius; // For gizmos
+
+    public static bool onGround;
+    [SerializeField] bool jumpClicked;
 
 
     Rigidbody2D rb;

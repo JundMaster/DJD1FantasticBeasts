@@ -9,6 +9,8 @@ public class character_fire : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
+        // Fixes a bug where character atacked on pause menu
+        PauseMenu.gamePaused = false;
     }
 
     // Update is called once per frame
