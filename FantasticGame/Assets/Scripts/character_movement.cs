@@ -7,7 +7,7 @@ public class character_movement : MonoBehaviour
     // VARIABLES DECLARATION
     // Moving Variables
     float hAxis;
-    [SerializeField] float runSpeed;
+    [SerializeField] float runSpeed = 2.5f;
     [SerializeField] float jumpSpeed;
     [SerializeField] float jumpMaxTime;
     float jumpTime;
@@ -22,7 +22,7 @@ public class character_movement : MonoBehaviour
     [SerializeField] bool jumpClicked;
 
 
-    Rigidbody2D rb;
+    static public Rigidbody2D rb;
     Animator anim;
 
     void Start()
@@ -36,11 +36,56 @@ public class character_movement : MonoBehaviour
     {
         // MOVEMENT
         Vector2 currentVelocity = rb.velocity;
-        currentVelocity = new Vector2(runSpeed * hAxis, currentVelocity.y);
+
+        if (!(Character_rope.usingRope))
+            currentVelocity = new Vector2(runSpeed * hAxis, currentVelocity.y);
 
         // Ground collision -> Checks if groundCheck position + 0.05f circle radius is in contact with the floor
         Collider2D groundCollision = Physics2D.OverlapCircle(groundCheck.position, 0.05f, groundLayers);
         onGround = groundCollision != null;
+
+        /*
+        if (Character_rope.usingRope)
+        {
+            
+            if (currentVelocity.x > 0.01f)
+            {
+
+                if (Input.GetKeyDown(KeyCode.D))
+                {
+                    currentVelocity.x += 1f *1;
+                }
+                if (Input.GetKeyDown(KeyCode.A))
+                {
+                    currentVelocity.x += -1f;
+                }
+            }
+            if (currentVelocity.x < -0.01f)
+            {
+        
+                if (Input.GetKeyDown(KeyCode.D))
+                {
+                    currentVelocity.x += 1f;
+                }
+                if (Input.GetKeyDown(KeyCode.A))
+                {
+                    currentVelocity.x += -1f;
+                }
+            }
+            if (currentVelocity.x > -0.01f && currentVelocity.x < 0.01)
+            {
+                if (Input.GetKeyDown(KeyCode.D))
+                {
+                    currentVelocity.x += 1f;
+                }
+                if (Input.GetKeyDown(KeyCode.A))
+                {
+                    currentVelocity.x += -1f;
+                }
+            }
+        }
+        */
+        
 
         // JUMP
         // Jump conditions

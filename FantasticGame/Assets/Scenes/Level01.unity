@@ -18066,7 +18066,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 98e26eb35a0c39145b47cd3b388476a2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -18827,7 +18827,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1658509101}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.611, y: -0.266, z: 0}
+  m_LocalPosition: {x: -1.712, y: 0.211, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2090653570}
@@ -18938,11 +18938,11 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.06, y: 0.2983871}
+  m_Offset: {x: 0.06, y: 0.02}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 0.41935483, y: 0.5967742}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.4, y: 0.5692308}
     newSize: {x: 0.26, y: 0.37}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -18961,15 +18961,15 @@ DistanceJoint2D:
   m_Enabled: 1
   serializedVersion: 4
   m_EnableCollision: 1
-  m_ConnectedRigidBody: {fileID: 1225308000}
+  m_ConnectedRigidBody: {fileID: 0}
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
   m_AutoConfigureConnectedAnchor: 0
-  m_Anchor: {x: 0.1, y: 0.6}
+  m_Anchor: {x: 0.1, y: 0.26}
   m_ConnectedAnchor: {x: 0, y: 0}
-  m_AutoConfigureDistance: 0
-  m_Distance: 0.005
-  m_MaxDistanceOnly: 1
+  m_AutoConfigureDistance: 1
+  m_Distance: 1.6794002
+  m_MaxDistanceOnly: 0
 --- !u!114 &1658509111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18982,6 +18982,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d47d6b6d19ff6248992ebfdd13831ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rope: {fileID: 0}
   ropeRender: {fileID: 1404015952}
   maxDistance: 1.5
   ceilingLayer:
@@ -19090,7 +19091,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2090653569}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.044, y: 0.565, z: 0}
+  m_LocalPosition: {x: 0.033, y: 0.253, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1658509103}
@@ -19274,7 +19275,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2143292016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.027, z: 0}
+  m_LocalPosition: {x: 0.004, y: -0.271, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1658509103}
