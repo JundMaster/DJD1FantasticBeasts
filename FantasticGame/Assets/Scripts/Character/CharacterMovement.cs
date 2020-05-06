@@ -11,14 +11,16 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] float jumpSpeed;
     [SerializeField] float jumpMaxTime;
     float jumpTime;
-    Vector2 currentVelocity;
+    [SerializeField] float coyoteTime = 0.165f;
+    float coyoteCounter;
 
     // groundChecking variables
     [SerializeField] Transform groundCheck;
     [SerializeField] LayerMask groundLayers;
     public static bool onGround;
 
-    [SerializeField] bool jumpClicked;
+    bool jumpClicked;
+    bool jumpBeingClicked;
 
     static public Rigidbody2D rb;
     Animator anim;
@@ -33,29 +35,61 @@ public class CharacterMovement : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    private void FixedUpdate()
+    void Update()
     {
+        // MOVEMENT INPUTS
+        // Gets hAxis and sets
+        hAxis = Input.GetAxis("Horizontal");
+        jumpClicked = Input.GetButtonDown("Jump");
+        jumpBeingClicked = Input.GetButton("Jump");
+        
         // MOVEMENT
         Vector2 currentVelocity = rb.velocity;
+        Vector2 rightBalance = new Vector2(1500f * Time.deltaTime, 0f);
+        Vector2 leftBalance = new Vector2(-1500f * Time.deltaTime, 0f);
 
+        // If the character is using a rope, ignore this speed
         if (!(CharacterRope.usingRope))
             currentVelocity = new Vector2(runSpeed * hAxis, currentVelocity.y);
+        else
+            if (rb.velocity.x < 2 && rb.velocity.x > -2)
+            {
+                if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    Debug.Log(rightBalance);
+                    rb.AddForce(rightBalance);
+                }
+                if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    Debug.Log(leftBalance);
+                    rb.AddForce(leftBalance);
+                }
+            }
 
+        // GROUND COLLISION
         // Ground collision -> Checks if groundCheck position + 0.05f circle radius is in contact with the floor
         Collider2D groundCollision = Physics2D.OverlapCircle(groundCheck.position, 0.05f, groundLayers);
         onGround = groundCollision != null;
 
+        // If the character leaves the ground, it has some time (coyoteTime float) to jump
+        if (onGround)
+        {
+            coyoteCounter = coyoteTime;
+        }
+        else
+            coyoteCounter -= Time.deltaTime;
 
         // JUMP
         // Jump conditions
-        if ((jumpClicked) && (onGround))
+        if ((jumpClicked) && coyoteCounter > 0)
         {
             // If the player jumps, gravityScale is set to 0
             currentVelocity.y = jumpSpeed;
             rb.gravityScale = 0.0f;
-            jumpTime = Time.fixedTime;
+            jumpTime = Time.time;
+
         }
-        else if ((jumpClicked) && ((Time.fixedTime - jumpTime) < jumpMaxTime))
+        else if ((jumpBeingClicked) && ((Time.time - jumpTime) < jumpMaxTime))
         {
             // While pressing jump, how much time has passed since jump was pressed
             // Jumps until jumpTime reaches jumpMaxTime
@@ -63,20 +97,11 @@ public class CharacterMovement : MonoBehaviour
         else
         {
             rb.gravityScale = 5.0f;
-            
         }
 
         // Sets rigidbody final velocity
         rb.velocity = currentVelocity;
-    }
 
-    void Update()
-    {
-        // MOVEMENT
-        // Gets hAxis and sets currentVelocity for rigidbody
-        hAxis = Input.GetAxis("Horizontal");
-        jumpClicked = Input.GetButton("Jump");
-        currentVelocity = rb.velocity;
 
         // SPRITE ROTATION
         // If velocity is negative and the sprite is positive, rotates the sprite to the left

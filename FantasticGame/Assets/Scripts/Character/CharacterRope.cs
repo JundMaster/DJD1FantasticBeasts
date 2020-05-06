@@ -42,7 +42,8 @@ public class CharacterRope : MonoBehaviour
     void Update()
     {
         // Variables for rope position;
-        //Vector2 targetPosition = new Vector2(0, 0);
+        Vector2 targetPosition = new Vector2(0, 0);
+        Vector2 farPoint = new Vector2(0, 0);
 
         Vector2 ropePosition;
         ropePosition.x = ropeAnchor.position.x;
@@ -58,13 +59,6 @@ public class CharacterRope : MonoBehaviour
             {
                 if (Input.GetButtonDown("Fire3"))
                 {
-                    /* COLLIDER COM CLOSESTPOINT SE FOR PRECISO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                    Collider2D searchCollision = Physics2D.OverlapCircle(ropePosition, 2f, ceilingLayer);
-                    // Keeps the collision closest point in a vector
-                    if (searchCollision != null)
-                        targetPosition = searchCollision.ClosestPoint(ropePosition);
-                    */
-
                     // Creates a 2dRaycast to get the collision rigidbody
                     // Uses ropeX and ropeY to aim the rope hit
                     if (transform.right.x > 0)
@@ -72,7 +66,6 @@ public class CharacterRope : MonoBehaviour
                     else if (transform.right.x < 0)
                         hit = Physics2D.Raycast(ropePosition, ropePosition + new Vector2(-ropeX, ropeY) - ropePosition, ropeMaxDistance, ceilingLayer);
 
-                     
                     //  if it collides with something
                     if (hit.collider != null && hit.point.y > ropePosition.y && ropeUsed == false)
                     {
@@ -102,7 +95,7 @@ public class CharacterRope : MonoBehaviour
                     usingRope = true;
                     ropeRender.SetPosition(0, ropeAnchor.position);
 
-                        
+
                     /* Ainda pode dar jeito
                     if (transform.right.x > 0 && rope.distance < ropeMaxDistance)    // FALTA METER VELOCIDADE AQUI <<<<<<<<<<<<<<<<<<<<<<<<<
                     {
@@ -118,7 +111,7 @@ public class CharacterRope : MonoBehaviour
                         }
                     }
                     */
-
+                    //if (transform.right.x < 0 && CharacterMovement.rb.velocity.x > -0.4 && CharacterMovement.rb.velocity.x < 0)
                 }
 
                 if (Input.GetButtonUp("Fire3"))

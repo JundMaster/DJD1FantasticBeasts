@@ -19244,11 +19244,11 @@ MonoBehaviour:
   runSpeed: 2.5
   jumpSpeed: 3
   jumpMaxTime: 0.15
+  coyoteTime: 1.5
   groundCheck: {fileID: 2143292017}
   groundLayers:
     serializedVersion: 2
     m_Bits: 2304
-  jumpClicked: 0
   groundCheckRadius: 0
 --- !u!114 &1658509108
 MonoBehaviour:
