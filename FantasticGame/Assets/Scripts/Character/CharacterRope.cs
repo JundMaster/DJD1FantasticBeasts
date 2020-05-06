@@ -42,7 +42,7 @@ public class CharacterRope : MonoBehaviour
     void Update()
     {
         // Variables for rope position;
-        Vector2 targetPosition = new Vector2(0, 0);
+        //Vector2 targetPosition = new Vector2(0, 0);
 
         Vector2 ropePosition;
         ropePosition.x = ropeAnchor.position.x;

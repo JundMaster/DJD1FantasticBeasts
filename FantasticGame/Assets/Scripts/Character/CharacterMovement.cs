@@ -45,17 +45,6 @@ public class CharacterMovement : MonoBehaviour
         Collider2D groundCollision = Physics2D.OverlapCircle(groundCheck.position, 0.05f, groundLayers);
         onGround = groundCollision != null;
 
-        /*
-        if (CharacterRope.usingRope)
-        {
-
-            
-
-
-        }
-        */
-        
-        
 
         // JUMP
         // Jump conditions

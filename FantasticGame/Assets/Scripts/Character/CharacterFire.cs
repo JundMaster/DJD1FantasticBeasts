@@ -6,8 +6,9 @@ public class CharacterFire : MonoBehaviour
 {
     [SerializeField] Transform weapon;
     [SerializeField] GameObject ammunitionSprite;
-    
-    
+    [SerializeField] float maxMana;
+    [SerializeField] float spentMana;
+
 
 
     Animator anim;
@@ -22,20 +23,24 @@ public class CharacterFire : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        anim.SetBool("attack", false);
+        //anim.SetBool("attack", false);
 
         if (PauseMenu.gamePaused == false)
         {
-            if (Input.GetButtonDown("Fire2"))
+            if (maxMana > 0)
             {
-                anim.SetBool("attack", true);
-                Shoot();
+                if (Input.GetButtonDown("Fire2"))
+                {
+                    //anim.SetBool("attack", true);
+                    Shoot();
+                }
             }
         }
     }
 
     void Shoot()
     {
-         Instantiate(ammunitionSprite, weapon.position, weapon.rotation);
+        maxMana -= spentMana;
+        Instantiate(ammunitionSprite, weapon.position, weapon.rotation);
     }
 }
