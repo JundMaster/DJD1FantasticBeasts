@@ -2,8 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class character_fire : MonoBehaviour
+public class CharacterFire : MonoBehaviour
 {
+    [SerializeField] Transform weapon;
+    [SerializeField] GameObject ammunitionSprite;
+    
+    
+
+
     Animator anim;
     // Start is called before the first frame update
     void Start()
@@ -20,10 +26,16 @@ public class character_fire : MonoBehaviour
 
         if (PauseMenu.gamePaused == false)
         {
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown("Fire2"))
             {
                 anim.SetBool("attack", true);
+                Shoot();
             }
         }
+    }
+
+    void Shoot()
+    {
+         Instantiate(ammunitionSprite, weapon.position, weapon.rotation);
     }
 }

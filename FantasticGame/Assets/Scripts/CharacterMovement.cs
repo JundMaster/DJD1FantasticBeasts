@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class character_movement : MonoBehaviour
+public class CharacterMovement : MonoBehaviour
 {
     // VARIABLES DECLARATION
     // Moving Variables
@@ -16,14 +16,15 @@ public class character_movement : MonoBehaviour
     // groundChecking variables
     [SerializeField] Transform groundCheck;
     [SerializeField] LayerMask groundLayers;
-    [SerializeField] float groundCheckRadius; // For gizmos
-
     public static bool onGround;
-    [SerializeField] bool jumpClicked;
 
+    [SerializeField] bool jumpClicked;
 
     static public Rigidbody2D rb;
     Animator anim;
+
+    // FOR GIZMOS
+    [SerializeField] float groundCheckRadius;
 
     void Start()
     {
@@ -37,7 +38,7 @@ public class character_movement : MonoBehaviour
         // MOVEMENT
         Vector2 currentVelocity = rb.velocity;
 
-        if (!(Character_rope.usingRope))
+        if (!(CharacterRope.usingRope))
             currentVelocity = new Vector2(runSpeed * hAxis, currentVelocity.y);
 
         // Ground collision -> Checks if groundCheck position + 0.05f circle radius is in contact with the floor
@@ -45,46 +46,15 @@ public class character_movement : MonoBehaviour
         onGround = groundCollision != null;
 
         /*
-        if (Character_rope.usingRope)
+        if (CharacterRope.usingRope)
         {
-            
-            if (currentVelocity.x > 0.01f)
-            {
 
-                if (Input.GetKeyDown(KeyCode.D))
-                {
-                    currentVelocity.x += 1f *1;
-                }
-                if (Input.GetKeyDown(KeyCode.A))
-                {
-                    currentVelocity.x += -1f;
-                }
-            }
-            if (currentVelocity.x < -0.01f)
-            {
-        
-                if (Input.GetKeyDown(KeyCode.D))
-                {
-                    currentVelocity.x += 1f;
-                }
-                if (Input.GetKeyDown(KeyCode.A))
-                {
-                    currentVelocity.x += -1f;
-                }
-            }
-            if (currentVelocity.x > -0.01f && currentVelocity.x < 0.01)
-            {
-                if (Input.GetKeyDown(KeyCode.D))
-                {
-                    currentVelocity.x += 1f;
-                }
-                if (Input.GetKeyDown(KeyCode.A))
-                {
-                    currentVelocity.x += -1f;
-                }
-            }
+            
+
+
         }
         */
+        
         
 
         // JUMP
