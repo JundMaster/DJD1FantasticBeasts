@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Ammunition : MonoBehaviour
 {
-    [SerializeField] float speed;
-    [SerializeField] int damage;
+    [SerializeField] float speed = 4f;
+    [SerializeField] int damage = 50;
     [SerializeField] GameObject ammunitionHit;
 
     [SerializeField] Rigidbody2D rb;

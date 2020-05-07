@@ -6,10 +6,11 @@ public class CharacterMovement : MonoBehaviour
 {
     // VARIABLES DECLARATION
     // Moving Variables
+    Vector2 currentVelocity;
     float hAxis;
     [SerializeField] float runSpeed = 2.5f;
-    [SerializeField] float jumpSpeed;
-    [SerializeField] float jumpMaxTime;
+    [SerializeField] float jumpSpeed = 3f;
+    [SerializeField] float jumpMaxTime = 0.15f;
     float jumpTime;
     [SerializeField] float coyoteTime = 0.165f;
     float coyoteCounter;
@@ -42,43 +43,43 @@ public class CharacterMovement : MonoBehaviour
         hAxis = Input.GetAxis("Horizontal");
         jumpClicked = Input.GetButtonDown("Jump");
         jumpBeingClicked = Input.GetButton("Jump");
-        
-        // MOVEMENT
-        Vector2 currentVelocity = rb.velocity;
-        Vector2 rightBalance = new Vector2(1500f * Time.deltaTime, 0f);
-        Vector2 leftBalance = new Vector2(-1500f * Time.deltaTime, 0f);
+        bool slowMo = Input.GetKey(KeyCode.E);
+        currentVelocity = rb.velocity;
 
-        // If the character is using a rope, ignore this speed
-        if (!(CharacterRope.usingRope))
-            currentVelocity = new Vector2(runSpeed * hAxis, currentVelocity.y);
-        else
-            if (rb.velocity.x < 2 && rb.velocity.x > -2)
-            {
-                if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-                {
-                    Debug.Log(rightBalance);
-                    rb.AddForce(rightBalance);
-                }
-                if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-                {
-                    Debug.Log(leftBalance);
-                    rb.AddForce(leftBalance);
-                }
-            }
 
+        if (!(PauseMenu.gamePaused))
+        {
+            Movement();
+            Grounded();
+            Jump();
+            SpriteRotation();
+            // Sets rigidbody final velocity
+            rb.velocity = currentVelocity;
+
+
+
+            // Reference for animator movement
+            anim.SetFloat("absVelX", Mathf.Abs(currentVelocity.x));
+            anim.SetFloat("jumpVel", (currentVelocity.y));
+            anim.SetBool("grounded", onGround);
+        }  
+    }
+
+    void Grounded()
+    {
         // GROUND COLLISION
         // Ground collision -> Checks if groundCheck position + 0.05f circle radius is in contact with the floor
         Collider2D groundCollision = Physics2D.OverlapCircle(groundCheck.position, 0.05f, groundLayers);
         onGround = groundCollision != null;
-
         // If the character leaves the ground, it has some time (coyoteTime float) to jump
         if (onGround)
-        {
             coyoteCounter = coyoteTime;
-        }
         else
             coyoteCounter -= Time.deltaTime;
+    }
 
+    void Jump()
+    {
         // JUMP
         // Jump conditions
         if ((jumpClicked) && coyoteCounter > 0)
@@ -98,11 +99,38 @@ public class CharacterMovement : MonoBehaviour
         {
             rb.gravityScale = 5.0f;
         }
+    }
 
-        // Sets rigidbody final velocity
-        rb.velocity = currentVelocity;
+    void Movement()
+    {
+        // Rope movement
+        Vector2 rightBalance = new Vector2(1500f * Time.deltaTime, 0f);
+        Vector2 leftBalance = new Vector2(-1500f * Time.deltaTime, 0f);
 
+        // If the character is using a rope, ignore this speed
+        if (!(CharacterRope.usingRope))
+            currentVelocity = new Vector2(runSpeed * hAxis, currentVelocity.y);
 
+        else
+        {
+            if (rb.velocity.x < 2 && rb.velocity.x > -2)
+            {
+                if (Input.GetKeyDown("d") || Input.GetKeyDown("right"))
+                {
+                    Debug.Log(rightBalance);
+                    rb.AddForce(rightBalance);
+                }
+                if (Input.GetKeyDown("a") || Input.GetKeyDown("left"))
+                {
+                    Debug.Log(leftBalance);
+                    rb.AddForce(leftBalance);
+                }
+            }
+        }
+    }
+
+    void SpriteRotation()
+    {
         // SPRITE ROTATION
         // If velocity is negative and the sprite is positive, rotates the sprite to the left
         if (currentVelocity.x < -0.1f)
@@ -116,13 +144,9 @@ public class CharacterMovement : MonoBehaviour
             if (transform.right.x < 0)
                 transform.rotation = Quaternion.identity;
         }
-
-        // Reference for animator movement
-        anim.SetFloat("absVelX", Mathf.Abs(currentVelocity.x));
-        anim.SetFloat("jumpVel", (currentVelocity.y));
-        anim.SetBool("grounded", onGround);
-
     }
+
+
 
     // Draws groundCheck RADIUS CIRCLE on screen  ( can delete )
     private void OnDrawGizmos()

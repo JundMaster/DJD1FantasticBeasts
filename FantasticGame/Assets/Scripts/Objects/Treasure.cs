@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Treasure : MonoBehaviour
 {
-    [SerializeField] int maxHP;
+    [SerializeField] int maxHP = 100;
     int currentHP;
 
     private void Start()

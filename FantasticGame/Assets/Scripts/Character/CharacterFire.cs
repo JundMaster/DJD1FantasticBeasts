@@ -6,9 +6,10 @@ public class CharacterFire : MonoBehaviour
 {
     [SerializeField] Transform weapon;
     [SerializeField] GameObject ammunitionSprite;
-    [SerializeField] float maxMana;
-    [SerializeField] float spentMana;
-
+    [SerializeField] float maxTimeDelay = 0.5f;
+    float timeDelay;
+    bool canAttack;
+    public static bool fire = false;
 
 
     Animator anim;
@@ -16,31 +17,49 @@ public class CharacterFire : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
-        // Fixes a bug where character atacked on pause menu
-        PauseMenu.gamePaused = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //anim.SetBool("attack", false);
+        //anim.SetBool("attack", false);  
+
+        // Says if the character used a magic
+        fire = false;
+
+        if (canAttack == false)
+        {
+            // Everytime the player attacks, it starts a timer and sets canAttack to false
+            timeDelay -= Time.deltaTime;
+        }
+        // If timeDelay gets < 0, the character can attack again
+        if (timeDelay < 0)
+        {   // Sets time delay to maxTimeDelayAgain
+            timeDelay = maxTimeDelay;
+            canAttack = true;
+        }
+
 
         if (PauseMenu.gamePaused == false)
         {
-            if (maxMana > 0)
+            if (CharacterInfo.hasMana)
             {
-                if (Input.GetButtonDown("Fire2"))
+                if (canAttack)
                 {
-                    //anim.SetBool("attack", true);
-                    Shoot();
+                    if (Input.GetButtonDown("Fire2"))
+                    {
+                        //anim.SetBool("attack", true);
+                        Shoot();
+                    }
                 }
             }
         }
     }
 
-    void Shoot()
+    public void Shoot()
     {
-        maxMana -= spentMana;
+        fire = true;
+        canAttack = false;  
         Instantiate(ammunitionSprite, weapon.position, weapon.rotation);
     }
 }

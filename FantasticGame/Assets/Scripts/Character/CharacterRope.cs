@@ -7,12 +7,12 @@ public class CharacterRope : MonoBehaviour
     [SerializeField] DistanceJoint2D rope;
     [SerializeField] Transform ropeAnchor;
     [SerializeField] LineRenderer ropeRender;
-    [SerializeField] float ropeMaxDistance;
+    [SerializeField] float ropeMaxDistance = 1.2f;
     [SerializeField] LayerMask ceilingLayer;
     RaycastHit2D hit;
-    [SerializeField] float ropeY;
-    [SerializeField] float ropeX;
-    [SerializeField] float ropeLastSling;
+    [SerializeField] float ropeY = 0.6f;
+    [SerializeField] float ropeX = 0.6f;
+    [SerializeField] float ropeLastSling = 100f;
     // Returns true if rope is being used
     static public bool usingRope;
 
@@ -24,7 +24,7 @@ public class CharacterRope : MonoBehaviour
     //RaycastHit2D aimHit;
 
     // GIZMOS VARIABLES
-    [SerializeField] float ropeAnchorRadius; // For gizmos
+    [SerializeField] float ropeAnchorRadius = 1.2f; // For gizmos
 
     // Start is called before the first frame update
     void Start()
@@ -86,6 +86,10 @@ public class CharacterRope : MonoBehaviour
                         ropeRender.enabled = true;
                         ropeRender.SetPosition(0, ropeAnchor.position);
                         ropeRender.SetPosition(1, new Vector3(rope.connectedAnchor.x, rope.connectedAnchor.y - 0.15f, 0));
+
+
+                        // TESTING ROPE RENDER
+                        //ropeRender.SetPosition(1, ropeAnchor.position);
                     }
                 }
 
@@ -95,23 +99,17 @@ public class CharacterRope : MonoBehaviour
                     usingRope = true;
                     ropeRender.SetPosition(0, ropeAnchor.position);
 
-
-                    /* Ainda pode dar jeito
-                    if (transform.right.x > 0 && rope.distance < ropeMaxDistance)    // FALTA METER VELOCIDADE AQUI <<<<<<<<<<<<<<<<<<<<<<<<<
+                    // ADD ROPE SIZE // RENDER
+                    /*
+                    Vector3 thisRopePosition = ropeAnchor.position;
+                    if (ropeRender.GetPosition(1) != new Vector3(rope.connectedAnchor.x, rope.connectedAnchor.y - 0.15f, 0))
                     {
-                        if (CharacterMovement.rb.velocity.y > -2)
-                            CharacterMovement.rb.position += new Vector2(-0.02f, 0f);
-
-                        else
-                        {
-                            CharacterMovement.rb.position += new Vector2(-0.07f, -0.025f);
-                            rope.distance += 0.1f;
-
-                            //fixe
-                        }
+                        thisRopePosition += new Vector3(0.1f, 0.1f, 0);
+                        ropeRender.SetPosition(1, thisRopePosition);
                     }
                     */
-                    //if (transform.right.x < 0 && CharacterMovement.rb.velocity.x > -0.4 && CharacterMovement.rb.velocity.x < 0)
+
+
                 }
 
                 if (Input.GetButtonUp("Fire3"))
