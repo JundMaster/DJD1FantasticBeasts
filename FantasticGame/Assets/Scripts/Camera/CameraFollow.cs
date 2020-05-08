@@ -2,12 +2,10 @@
 
 public class CameraFollow : MonoBehaviour
 {
-    // VARIABLES DECLARATION
     [SerializeField] Transform target;
-    [SerializeField] float camSpeed = 4f;
-    [SerializeField] Vector3 offset;
-
     [SerializeField] Rect cameraTrap;
+    [SerializeField] Vector3 offset;
+    float camSpeed = 2f;
 
     // Runs after update()
     private void FixedUpdate()
@@ -31,16 +29,6 @@ public class CameraFollow : MonoBehaviour
 
         Vector3 newPos = movePos - transform.position;
         transform.position += newPos * camSpeed;
-        
-
-        
-        // Gets vAxis
-        float vAxis = Input.GetAxis("Vertical");
-        // If the player isn't moving and pressed down
-        if (vAxis < 0) // Isn't moving >> missing
-        {
-        }
-
     }
 
     Rect CreateRect()

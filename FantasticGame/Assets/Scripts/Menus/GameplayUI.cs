@@ -1,21 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class GameplayUI : MonoBehaviour
 {
-    [SerializeField] Text currentHP;
-    [SerializeField] Text currentMana;
+    [SerializeField] TextMeshProUGUI currentHP;
+    [SerializeField] TextMeshProUGUI currentMana;
 
     int HP;
     int mana;
+    Stats stats;
+    /*
     // Start is called before the first frame update
     void Start()
     {
-        
-        mana = (int)(CharacterInfo.MANA);
-        HP = (int)(CharacterInfo.HP);
+        stats = GetComponent<Stats>();
+
+        mana = (int)(stats.MANA);
+        HP = (int)(stats.HP);
         currentHP.text = "HP: " + HP.ToString();
         currentMana.text = "MANA: " + mana.ToString();
 
@@ -24,14 +27,15 @@ public class GameplayUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        HP = (int)(CharacterInfo.HP);
-        mana = (int)(CharacterInfo.MANA);
+        HP = (int)(stats.HP);
+        mana = (int)(stats.MANA);
 
-        if (CharacterInfo.HP > 0)
+        if (stats.HP > 0)
             currentHP.text = "HP: " + HP.ToString();
 
-        if (CharacterInfo.MANA > 0)
+        if (stats.MANA > 0)
             currentMana.text = "MANA: " + mana.ToString();
 
     }
+    */
 }

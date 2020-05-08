@@ -24,16 +24,27 @@ public class Ammunition : MonoBehaviour
         //Debug.Log(hitInfo.name);
 
         Treasure treasure = hitInfo.transform.GetComponent<Treasure>();
-
+        
         // If there's a collision with a treasure
         if (treasure != null)
         {
             treasure.takeDamage(damage);
         }
+        
 
 
         // Instantiates hit animation and destroys this object
         Instantiate(ammunitionHit, transform.position, transform.rotation);
         Destroy(gameObject);
+    }
+
+    void OnCollisionEnter2D(Collision2D hitInfo)
+    {
+        Enemy enemy = hitInfo.transform.GetComponent<Enemy>();
+
+        if (enemy != null)
+        {
+            enemy.takeDamage(damage);
+        }
     }
 }

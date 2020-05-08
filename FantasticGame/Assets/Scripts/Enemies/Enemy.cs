@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Treasure : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
-    [SerializeField] int maxHP = 100;
+    [SerializeField] int maxHP = 200;
+    [SerializeField] public int damage { get; } = 50;
     int currentHP;
 
     private void Start()
@@ -26,6 +27,4 @@ public class Treasure : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
-    
 }
