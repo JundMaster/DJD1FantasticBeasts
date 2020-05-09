@@ -41,6 +41,7 @@ public class CameraFollow : MonoBehaviour
         return rect;
     }
 
+    /*
     private void OnDrawGizmos()
     {
         Rect tempRect = CreateRect();
@@ -56,4 +57,5 @@ public class CameraFollow : MonoBehaviour
         Gizmos.DrawLine(p3, p4);
         Gizmos.DrawLine(p4, p1);
     }
+    */
 }

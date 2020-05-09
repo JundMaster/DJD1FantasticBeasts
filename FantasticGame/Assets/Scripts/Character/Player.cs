@@ -8,27 +8,33 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject     magicPrefab;
 
 
-    [SerializeField] Transform      meleeWeapon;
+    [SerializeField] Transform      meleePosition;
     [SerializeField] GameObject     meleePrefab;
 
+    [SerializeField] Transform      shieldPosition;
+    [SerializeField] GameObject     shieldPrefab;
 
     [SerializeField] LayerMask      treasureLayer;
     [SerializeField] LayerMask      enemyLayer;
 
 
-    public Stats                    stats { get; private set; }
+    public Stats                    stats           { get; private set; }
     private Animator                animator;
-    
+    private PlayerMovement          movement;
 
     
-    public float                    CurrentMana { get; private set; }
-    public float                    CurrentHP { get; private set; }
+    public float                    CurrentMana     { get; private set; }
+    public float                    CurrentHP       { get; private set; }
+    public bool                     usingShield     { get; private set; }
+    public Vector2                  ShieldPosition  { get; private set; }
+    private bool                    canUseShield;
 
 
     private void Awake()
     {
         stats = new Stats();
         animator = GetComponent<Animator>();
+        movement = GetComponent<PlayerMovement>();
     }
 
 
@@ -62,6 +68,19 @@ public class Player : MonoBehaviour
             CurrentHP = stats.CurrentHP;
             stats.RegenMana();
             animator.SetBool("attack", false);
+            animator.SetBool("rangedAttack", false);
+            // ---------------------------------------------------------------------------------------------
+
+            // SHIELD --------------------------------------------------------------------------------------
+            ShieldPosition = shieldPosition.position;
+            usingShield = false;
+            canUseShield = stats.CurrentMana > 1f ? true : false;
+
+            if (movement.onGround && Input.GetButton("Fire3") && canUseShield)
+            {             
+                Shield();
+            }
+
 
             // RANGED ATTACK -------------------------------------------------------------------------------
             // Everytime the player attacks, it starts a timer and sets canAttack to false
@@ -105,7 +124,7 @@ public class Player : MonoBehaviour
 
     void Shoot()
     {
-        //animation.SetBool("rangedAttack", true);
+        animator.SetBool("rangedAttack", true);
         stats.CanRangeAttack = false;
         stats.SpendMana();
         Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
@@ -116,8 +135,8 @@ public class Player : MonoBehaviour
         animator.SetBool("attack", true);
         stats.CanMeleeAttack = false;
         
-        Collider2D[] treasureHit = Physics2D.OverlapCircleAll(meleeWeapon.position, stats.MeleeAttackRange, treasureLayer);
-        Collider2D[] enemyHit = Physics2D.OverlapCircleAll(meleeWeapon.position, stats.MeleeAttackRange, enemyLayer);
+        Collider2D[] treasureHit = Physics2D.OverlapCircleAll(meleePosition.position, stats.MeleeAttackRange, treasureLayer);
+        Collider2D[] enemyHit = Physics2D.OverlapCircleAll(meleePosition.position, stats.MeleeAttackRange, enemyLayer);
 
         foreach (Collider2D treasure in treasureHit)
         {
@@ -131,6 +150,12 @@ public class Player : MonoBehaviour
         }
     }
 
+    void Shield()
+    {
+        Instantiate(shieldPrefab, shieldPosition.position, transform.rotation);
+        usingShield = true;
+        stats.CurrentMana -= 10f * Time.deltaTime;
+    }
 
 
 }

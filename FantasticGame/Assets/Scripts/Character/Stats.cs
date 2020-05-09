@@ -26,14 +26,6 @@ public class Stats : MonoBehaviour
     public float    MeleeAttackDelay     { get; set; }
     public float    MeleeAttackCounter   { get; set; }
 
-    public Stats() // For player / enemies
-    { }
-
-    public Stats (float currentHP) // For treasures
-    {
-        CurrentHP = currentHP;
-    }
-
 
     public void TakeDamage(float damage)
     {

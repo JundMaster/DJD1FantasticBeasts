@@ -8,9 +8,13 @@ public class Treasure : MonoBehaviour
 
     private void Awake()
     {
-        stats = new Stats(100f);
+        stats = new Stats();
     }
 
+    private void Start()
+    {
+        stats.CurrentHP = 100f;
+    }
 
     private void Update()
     {

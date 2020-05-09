@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     Vector2     currentVelocity;
     float       hAxis;
     float       jumpTime;
-    bool        onGround;
+    public bool        onGround { get; private set; }
 
     // groundChecking variables
     [SerializeField] Transform  groundCheck;
@@ -70,13 +70,14 @@ public class PlayerMovement : MonoBehaviour
             animator.SetFloat("absVelX", Mathf.Abs(currentVelocity.x));
             animator.SetFloat("jumpVel", (currentVelocity.y));
             animator.SetBool("grounded", onGround);
+            animator.SetBool("usingRope", usingRope);
         }        
     }
 
     void Grounded()
     {
         // GROUND COLLISION
-        float coyoteTime = 0.165f;
+        float coyoteTime = 0.15f;
         
         // Ground collision -> Checks if groundCheck position + 0.05f circle radius is in contact with the floor
         Collider2D groundCollision = Physics2D.OverlapCircle(groundCheck.position, 0.05f, groundLayers);
@@ -99,7 +100,7 @@ public class PlayerMovement : MonoBehaviour
         float jumpMaxTime = 0.15f;
         
         // Jump conditions
-        if ((Input.GetButtonDown("Jump") && coyoteCounter > 0))
+        if ((Input.GetButtonDown("Jump") && coyoteCounter > 0 && rb.velocity.y < 0.1))
         {
             // If the player jumps, gravityScale is set to 0
             currentVelocity.y = jumpSpeed;
@@ -213,6 +214,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // Running speed
         float runSpeed = 2f;
+        if (player.usingShield) runSpeed = 1f;
         // Rope movement
         Vector2 rightBalance = new Vector2(1500f * Time.deltaTime, 0f);
         Vector2 leftBalance = new Vector2(-1500f * Time.deltaTime, 0f);

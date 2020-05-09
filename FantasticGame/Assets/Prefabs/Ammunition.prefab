@@ -4708,6 +4708,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4805,9 +4806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4692d981b1b7ec84b83e4335efb0abf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 4
-  damage: 50
   ammunitionHit: {fileID: 7904367576784607624, guid: 1e8bbacd71d72e04d99fa72b96d41376,
     type: 3}
-  enemyHit: {fileID: 0}
+  ammunitionHitShield: {fileID: 0}
   rb: {fileID: 4357377087198178749}
