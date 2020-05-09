@@ -4,27 +4,19 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] int maxHP = 200;
-    [SerializeField] public int damage { get; } = 50;
-    int currentHP;
+    public Stats stats { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
-        currentHP = maxHP;
+        stats = new Stats(150f);
     }
 
-    public void takeDamage(int damage)
+
+    private void Update()
     {
-        currentHP -= damage;
-        Debug.Log(currentHP);
-        if (currentHP <= 0)
+        if (!(stats.IsAlive))
         {
-            Die();
+            stats.Die(gameObject);
         }
-    }
-
-    void Die()
-    {
-        Destroy(gameObject);
     }
 }

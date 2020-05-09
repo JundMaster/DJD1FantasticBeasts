@@ -4,47 +4,43 @@ using UnityEngine;
 
 public class Ammunition : MonoBehaviour
 {
-    [SerializeField] float speed = 4f;
-    [SerializeField] int damage = 50;
     [SerializeField] GameObject ammunitionHit;
-
     [SerializeField] Rigidbody2D rb;
+
+
+    private float speed;
+    private float rangedDamage;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        speed = 4f;
+        rangedDamage = 50f;
         rb.velocity = transform.right * speed;
+
         // Destroys the object if it doesn't hit anything
-        Destroy(gameObject, 250f*Time.deltaTime);
+        Destroy(gameObject, 250f * Time.deltaTime);
     }
 
-    // Checks for a collision
+
     void OnTriggerEnter2D(Collider2D hitInfo)
     {
-        //Debug.Log(hitInfo.name);
-
         Treasure treasure = hitInfo.transform.GetComponent<Treasure>();
-        
-        // If there's a collision with a treasure
+        Enemy enemy = hitInfo.transform.GetComponent<Enemy>();
+
+        // If there's a collision
         if (treasure != null)
         {
-            treasure.takeDamage(damage);
+            treasure.stats.TakeDamage(rangedDamage);
         }
-        
-
-
-        // Instantiates hit animation and destroys this object
-        Instantiate(ammunitionHit, transform.position, transform.rotation);
-        Destroy(gameObject);
-    }
-
-    void OnCollisionEnter2D(Collision2D hitInfo)
-    {
-        Enemy enemy = hitInfo.transform.GetComponent<Enemy>();
 
         if (enemy != null)
         {
-            enemy.takeDamage(damage);
+            enemy.stats.TakeDamage(rangedDamage);
         }
+
+        Instantiate(ammunitionHit, transform.position, transform.rotation);
+        Destroy(gameObject);
     }
 }

@@ -1,16 +1,66 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class GameplayUI : MonoBehaviour
 {
+    [SerializeField] RectTransform healthBar;
+    [SerializeField] RectTransform manaBar;
+
+    [SerializeField] Player player;
+
+    private void Awake()
+    {
+    }
+
+    private void Update()
+    {
+        if (manaBar)
+        {
+            manaBar.localScale = new Vector3(player.CurrentMana / 100f, 1f, 1f);
+        }
+        if (healthBar)
+        {
+            healthBar.localScale = new Vector3(player.CurrentHP / 100f, 1f, 1f);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
     [SerializeField] TextMeshProUGUI currentHP;
     [SerializeField] TextMeshProUGUI currentMana;
 
     int HP;
     int mana;
     Stats stats;
+
+
+
+
+
+
+    */
+
+
     /*
     // Start is called before the first frame update
     void Start()
@@ -38,4 +88,4 @@ public class GameplayUI : MonoBehaviour
 
     }
     */
-}
+

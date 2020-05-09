@@ -5,19 +5,24 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] Transform      magicPosition;
-    [SerializeField] GameObject     magicSprite;
+    [SerializeField] GameObject     magicPrefab;
 
 
     [SerializeField] Transform      meleeWeapon;
-    [SerializeField] GameObject     meleeHitSprite;
+    [SerializeField] GameObject     meleePrefab;
 
 
     [SerializeField] LayerMask      treasureLayer;
     [SerializeField] LayerMask      enemyLayer;
 
 
-    private Stats                   stats;
+    public Stats                    stats { get; private set; }
     private Animator                animator;
+    
+
+    
+    public float                    CurrentMana { get; private set; }
+    public float                    CurrentHP { get; private set; }
 
 
     private void Awake()
@@ -39,10 +44,9 @@ public class Player : MonoBehaviour
 
         stats.RangedDamage = 50f;
         stats.CanRangeAttack = true;
-        stats.RangedAttacking = false;
         stats.RangedAttackDelay = 0.5f;
 
-        stats.MeleeDamage = 25f;
+        stats.MeleeDamage = 30f;
         stats.CanMeleeAttack = true;
         stats.MeleeAttackRange = 0.15f;
         stats.MeleeAttackDelay = 0.45f;
@@ -54,8 +58,9 @@ public class Player : MonoBehaviour
         if (PauseMenu.gamePaused == false)
         {
             // UPDATE VARIABLES ----------------------------------------------------------------------------
+            CurrentMana = stats.CurrentMana;
+            CurrentHP = stats.CurrentHP;
             stats.RegenMana();
-            stats.RangedAttacking = false;
             animator.SetBool("attack", false);
 
             // RANGED ATTACK -------------------------------------------------------------------------------
@@ -90,7 +95,9 @@ public class Player : MonoBehaviour
 
             // ALIVE CONDITION ----------------------------------------------------------------------------
             if (!(stats.IsAlive))
-                stats.Die();
+            {
+                stats.Die(gameObject);
+            }
         }
     }
 
@@ -99,10 +106,9 @@ public class Player : MonoBehaviour
     void Shoot()
     {
         //animation.SetBool("rangedAttack", true);
-        stats.RangedAttacking = true;
         stats.CanRangeAttack = false;
         stats.SpendMana();
-        Instantiate(magicSprite, magicPosition.position, magicPosition.rotation);
+        Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
     }
 
     void MeleeAttack()
@@ -115,31 +121,21 @@ public class Player : MonoBehaviour
 
         foreach (Collider2D treasure in treasureHit)
         {
-            Instantiate(meleeHitSprite, treasure.GetComponent<Rigidbody2D>().position, transform.rotation);
-            treasure.GetComponent<Treasure>().takeDamage((int)stats.MeleeDamage);
+            Instantiate(meleePrefab, treasure.GetComponent<Rigidbody2D>().position, transform.rotation);
+            treasure.GetComponent<Treasure>().stats.TakeDamage(stats.MeleeDamage);
         }
         foreach (Collider2D enemy in enemyHit)
         {
-            Instantiate(meleeHitSprite, enemy.GetComponent<Rigidbody2D>().position, transform.rotation);
-            enemy.GetComponent<Enemy>().takeDamage((int)stats.MeleeDamage);
+            Instantiate(meleePrefab, enemy.GetComponent<Rigidbody2D>().position, transform.rotation);
+            enemy.GetComponent<Enemy>().stats.TakeDamage(stats.MeleeDamage);
         }
     }
+
+
+
 }
 
 
 
 
 
-
-
-/*
-void OnCollisionEnter2D(Collision2D hitInfo)
-{
-    Enemy enemy = hitInfo.transform.GetComponent<Enemy>();
-
-    if (enemy != null)
-    {
-        TakeDamage(enemy.damage);
-    }
-}
-*/

@@ -24,8 +24,8 @@ public class PlayerMovement : MonoBehaviour
     bool ropeUsed;
 
 
-    static public Rigidbody2D   rb;
-    Animator                    animator;
+    Rigidbody2D        rb;
+    Animator                            animator;
 
 
     // Layers
@@ -33,11 +33,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask groundLayers;
 
 
+    [SerializeField] Player player;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         rope = GetComponent<DistanceJoint2D>();
+        player = GetComponent<Player>();
     }
 
     void Start()
@@ -48,9 +51,10 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // Gets hAxis and sets velocity
+        // Gets hAxis and sets velocity // Update Variables
         hAxis = Input.GetAxis("Horizontal");
         currentVelocity = rb.velocity;
+
 
         if (!(PauseMenu.gamePaused))
         {
@@ -61,7 +65,6 @@ public class PlayerMovement : MonoBehaviour
             SpriteRotation();
             // Sets rigidbody final velocity
             rb.velocity = currentVelocity;
-
 
             // Reference for animatorator movement
             animator.SetFloat("absVelX", Mathf.Abs(currentVelocity.x));
@@ -235,6 +238,20 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+
+
+
+    void OnCollisionEnter2D(Collision2D hitInfo)
+    {
+        Enemy enemy = hitInfo.transform.GetComponent<Enemy>();
+
+        if (enemy != null)
+        {
+            // FALTA METER MOVIMENTO QND LEVA HIT
+            player.stats.TakeDamage(25f);
+        }
+    }
+
 
     void SpriteRotation()
     {

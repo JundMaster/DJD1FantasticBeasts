@@ -4,28 +4,22 @@ using UnityEngine;
 
 public class Treasure : MonoBehaviour
 {
-    [SerializeField] int maxHP = 100;
-    int currentHP;
+    public Stats stats { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
-        currentHP = maxHP;
+        stats = new Stats(100f);
     }
 
-    public void takeDamage(int damage)
+
+    private void Update()
     {
-        currentHP -= damage;
-        Debug.Log(currentHP);
-        if (currentHP <= 0)
+        if (!(stats.IsAlive))
         {
-            Die();
+            stats.Die(gameObject);
         }
     }
 
-    void Die()
-    {
-        Destroy(gameObject);
-    }
 
-    
+
 }
