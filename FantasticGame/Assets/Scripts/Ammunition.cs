@@ -7,16 +7,14 @@ public class Ammunition : MonoBehaviour
     [SerializeField] GameObject ammunitionHit;
     [SerializeField] GameObject ammunitionHitShield;
     [SerializeField] Rigidbody2D rb;
-
-
-    private float speed;
-    private float rangedDamage;
+    [SerializeField] float rangedDamage; 
+    [SerializeField] float speed;
+    
 
     // Start is called before the first frame update
     void Start()
     {
         speed = 4f;
-        rangedDamage = 25f;
         rb.velocity = transform.right * speed;
 
         // Destroys the object if it doesn't hit anything
@@ -45,12 +43,36 @@ public class Ammunition : MonoBehaviour
 
         if (player != null)
         {
-
             if (player.usingShield)
-                Instantiate(ammunitionHitShield, player.ShieldPosition, transform.rotation);
+            {
+                if (player.transform.right.x < 0) // Turned left
+                {
+                    if (player.transform.position.x > rb.transform.position.x)
+                    {
+                        Instantiate(ammunitionHitShield, player.ShieldPosition, transform.rotation);
+                    }
+                    else if (player.transform.position.x < rb.transform.position.x)
+                    {
+                        player.stats.TakeDamage(rangedDamage);
+                        Instantiate(ammunitionHit, transform.position, transform.rotation);
+                    }
+                }
+                else if (player.transform.right.x > 0) // Turned Right
+                {
+                    if (player.transform.position.x > rb.transform.position.x)
+                    {
+                        Instantiate(ammunitionHit, transform.position, transform.rotation);
+                        player.stats.TakeDamage(rangedDamage);
+                    }
+                    else if (player.transform.position.x < rb.transform.position.x)
+                    {
+                        Instantiate(ammunitionHitShield, player.ShieldPosition, transform.rotation);
+                    }
+                }
+            }
             else
             {
-                
+                player.stats.TakeDamage(rangedDamage);
                 Instantiate(ammunitionHit, transform.position, transform.rotation);
             }
         }

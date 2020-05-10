@@ -5339,7 +5339,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 546018433}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: meleePosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5471,6 +5471,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thisButton: {fileID: 748966185}
+--- !u!1 &654030947
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 654030948}
+  m_Layer: 13
+  m_Name: groundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &654030948
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 654030947}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.299, y: -0.293, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1943160470}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &748966183
 GameObject:
   m_ObjectHideFlags: 0
@@ -18877,7 +18907,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1373730395}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: shieldPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18908,7 +18938,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1404015951}
   - component: {fileID: 1404015952}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: ropeRender
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19856,6 +19886,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04053208e840c5d49b42b1284146a713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthPickUp: {fileID: 1343978244480085303, guid: 2c6e8ccc07e440647a15a67c8d702c63,
+    type: 3}
 --- !u!1 &1658509101
 GameObject:
   m_ObjectHideFlags: 0
@@ -20242,7 +20274,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1728897666}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: magicPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20463,7 +20495,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1943160466}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -20534,10 +20566,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1943160466}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.392, y: 0.69, z: 0}
+  m_LocalPosition: {x: -4.618, y: 0.559, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1896102523}
+  - {fileID: 654030948}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -20554,8 +20587,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   magicPosition: {fileID: 1896102523}
+  magicPositionLeft: {fileID: 0}
   magicPrefab: {fileID: 938036225051192266, guid: b31e39fa92235a94782fa88099db05bc,
     type: 3}
+  magicPrefabLeft: {fileID: 938036225051192266, guid: a0c227ad4cf806a448b22aa848476db0,
+    type: 3}
+  groundCheck: {fileID: 0}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1 &2022683366
 GameObject:
   m_ObjectHideFlags: 0
@@ -20602,6 +20642,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04053208e840c5d49b42b1284146a713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthPickUp: {fileID: 1343978244480085303, guid: 2c6e8ccc07e440647a15a67c8d702c63,
+    type: 3}
 --- !u!61 &2022683369
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -20797,7 +20839,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2090653570}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: ropeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20905,7 +20947,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2143292017}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: groundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}

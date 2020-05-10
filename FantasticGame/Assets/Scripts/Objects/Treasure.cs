@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Treasure : MonoBehaviour
 {
+    [SerializeField] GameObject     healthPickUp;
     public Stats stats { get; private set; }
 
     private void Awake()
@@ -20,6 +21,8 @@ public class Treasure : MonoBehaviour
     {
         if (!(stats.IsAlive))
         {
+            if (healthPickUp != null)
+                Instantiate(healthPickUp, transform.position, transform.rotation);
             stats.Die(gameObject);
         }
     }

@@ -4811,3 +4811,5 @@ MonoBehaviour:
   ammunitionHitShield: {fileID: 5852510515465811208, guid: c5b110e465861c144932b417d75313ce,
     type: 3}
   rb: {fileID: 5572836662360895071}
+  rangedDamage: 15
+  speed: 4

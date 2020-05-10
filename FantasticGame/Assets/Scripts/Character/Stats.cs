@@ -41,6 +41,22 @@ public class Stats : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public bool IsMaxHP()
+    {
+        bool isMaxHP = false;
+        if (CurrentHP >= MaxHP)
+            isMaxHP = true;
+        return isMaxHP;
+    }
+
+    public void HealHP(float heal)
+    {
+        if (CurrentHP + heal > MaxHP)
+            CurrentHP = MaxHP;
+        else
+            CurrentHP += heal;
+    }
+
 
     public bool CanUseSpell()
     {

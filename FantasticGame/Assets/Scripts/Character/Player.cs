@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField] Transform      meleePosition;
     [SerializeField] GameObject     meleePrefab;
 
-    [SerializeField] Transform      shieldPosition;
+    [SerializeField] Transform shieldPosition;
     [SerializeField] GameObject     shieldPrefab;
 
     [SerializeField] LayerMask      treasureLayer;
@@ -23,8 +23,8 @@ public class Player : MonoBehaviour
     private PlayerMovement          movement;
 
     
-    public float                    CurrentMana     { get; private set; }
-    public float                    CurrentHP       { get; private set; }
+    public float                    CurrentMana     { get; set; }
+    public float                    CurrentHP       { get; set; }
     public bool                     usingShield     { get; private set; }
     public Vector2                  ShieldPosition  { get; private set; }
     private bool                    canUseShield;

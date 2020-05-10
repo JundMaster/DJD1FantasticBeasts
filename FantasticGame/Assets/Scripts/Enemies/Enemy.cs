@@ -6,8 +6,30 @@ public class Enemy : MonoBehaviour
 {
     public Stats stats { get; private set; }
 
-    [SerializeField] Transform magicPosition;
-    [SerializeField] GameObject magicPrefab;
+    [SerializeField] Transform      magicPosition;
+    [SerializeField] Transform      magicPositionLeft;
+    [SerializeField] GameObject     magicPrefab;
+    [SerializeField] GameObject     magicPrefabLeft;
+    [SerializeField] Transform      groundCheck;
+    [SerializeField] LayerMask      playerLayer;
+
+
+    float           speed;
+
+    Vector2         startingPos;
+    float           limitRange;
+    bool            limitRangedReached;
+    Vector2         tempPosition;
+
+    float           waitingTimeCounter;
+    float           waitingTime;
+
+
+    //Collider2D      aimRange;
+    RaycastHit2D    aimRange;
+    float           maxAimRange;
+    bool            isShooting;
+
 
     private void Awake()
     {
@@ -16,13 +38,31 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        stats.RangedDamage = 25f;
         stats.CanRangeAttack = false;
-        stats.RangedAttackDelay = 3f;
+        stats.RangedAttackDelay = 2f;
+
+        startingPos = transform.position;
+
+        stats.CurrentHP = 100f;
+        speed = 0.5f;
+
+        limitRange = 0.5f;
+        limitRangedReached = false;
+        waitingTime = 2f;
+        waitingTimeCounter = waitingTime;
+
+        maxAimRange = 2f;
     }
 
     private void Update()
     {
+        // UPDATE VARIABLES ----------------------------------------------------------------------------
+        
+
+        
+
+
+        // SHOOT ---------------------------------------------------------------------------------------
         if (stats.CanRangeAttack == false)
             stats.RangedAttackCounter -= Time.deltaTime;
         if (stats.RangedAttackCounter < 0)
@@ -31,10 +71,25 @@ public class Enemy : MonoBehaviour
             stats.CanRangeAttack = true;
         }
 
-        if (stats.CanRangeAttack)
-            Shoot();
+        //aimRange = Physics2D.OverlapCircle(transform.position, maxAimRange, playerLayer);
+        aimRange = Physics2D.Raycast(magicPosition.position, magicPosition.right, maxAimRange, playerLayer);
+
+        if (aimRange)
+        {
+            isShooting = true;
+            if (stats.CanRangeAttack)
+                Shoot();
+        }
+        else
+            isShooting = false;
 
 
+        // Movement -----------------------------------------------------------------------------------
+        if (!(isShooting))
+            Movement();
+
+
+        // ALIVE --------------------------------------------------------------------------------------
         if (!(stats.IsAlive))
         {
             stats.Die(gameObject);
@@ -45,5 +100,37 @@ public class Enemy : MonoBehaviour
     {
         stats.CanRangeAttack = false;
         Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
+    }
+
+
+    void Movement()
+    {
+        transform.position += transform.right * speed * Time.deltaTime;
+
+        if ((transform.position.x > startingPos.x + limitRange || transform.position.x < startingPos.x - limitRange) && limitRangedReached == false)
+        {
+            limitRangedReached = true;
+            tempPosition = transform.position;
+        }
+
+        // WAITING TIME DELAY // If it reaches the limit distance, starts walking back
+        if (limitRangedReached)
+        {
+            waitingTimeCounter -= Time.deltaTime;
+            transform.position = tempPosition;
+        }
+        if (waitingTimeCounter < 0)
+        {
+            transform.Rotate(0f, 180f, 0f);
+            waitingTimeCounter = Random.Range(0f, 2f); // WAITING TIME <<<<<<<<<<< TA RANDOM NESTE 
+            transform.position += transform.right * speed * Time.deltaTime;
+            limitRangedReached = false;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        //Gizmos.DrawWireSphere(transform.position, maxAimRange);
+        Gizmos.DrawLine(magicPosition.position, magicPosition.position + new Vector3(maxAimRange,0f,0f));
     }
 }
