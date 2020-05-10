@@ -57,6 +57,23 @@ public class Stats : MonoBehaviour
             CurrentHP += heal;
     }
 
+    public bool IsMaxMana()
+    {
+        bool isMaxMana = false;
+        if (CurrentMana >= MaxMana)
+            isMaxMana = true;
+        return isMaxMana;
+    }
+
+    public void HealMana(float heal)
+    {
+        if (CurrentMana + heal > MaxMana)
+            CurrentMana = MaxMana;
+        else
+            CurrentMana += heal;
+    }
+
+
 
     public bool CanUseSpell()
     {

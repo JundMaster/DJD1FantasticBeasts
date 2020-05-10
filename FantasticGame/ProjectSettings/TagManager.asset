@@ -6,6 +6,8 @@ TagManager:
   tags:
   - enemy
   - treasure
+  - pickUp
+  - playerAmmunition
   layers:
   - Default
   - TransparentFX
@@ -17,13 +19,13 @@ TagManager:
   - 
   - floor
   - player
-  - coin
+  - 
   - ceiling
   - treasures
   - enemies
-  - 
-  - 
-  - 
+  - playerAmmunition
+  - pickUps
+  - enemyAmmunition
   - 
   - 
   - 

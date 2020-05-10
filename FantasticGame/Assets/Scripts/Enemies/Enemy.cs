@@ -7,11 +7,14 @@ public class Enemy : MonoBehaviour
     public Stats stats { get; private set; }
 
     [SerializeField] Transform      magicPosition;
-    [SerializeField] Transform      magicPositionLeft;
     [SerializeField] GameObject     magicPrefab;
-    [SerializeField] GameObject     magicPrefabLeft;
-    [SerializeField] Transform      groundCheck;
+
+
     [SerializeField] LayerMask      playerLayer;
+
+    // Drops
+    [SerializeField] GameObject     healthPickUp, manaPickUp;
+
 
 
     float           speed;
@@ -51,7 +54,7 @@ public class Enemy : MonoBehaviour
         waitingTime = 2f;
         waitingTimeCounter = waitingTime;
 
-        maxAimRange = 2f;
+        maxAimRange = 1f;
     }
 
     private void Update()
@@ -92,6 +95,13 @@ public class Enemy : MonoBehaviour
         // ALIVE --------------------------------------------------------------------------------------
         if (!(stats.IsAlive))
         {
+            int chance = Random.Range(0, 10);
+            if (chance > 6)
+            {
+                if (healthPickUp != null && chance >= 5) Instantiate(healthPickUp, transform.position, transform.rotation);
+                else if (manaPickUp != null) Instantiate(manaPickUp, transform.position, transform.rotation);
+            }
+               
             stats.Die(gameObject);
         }
     }

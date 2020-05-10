@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthPickUp : MonoBehaviour
+public class ManaPickUp : MonoBehaviour
 {
-    [SerializeField] GameObject     pickedUp;
+    [SerializeField] GameObject pickedUp;
     // Start is called before the first frame update
     void Start()
     {
+
     }
 
     // Update is called once per frame
     void Update()
     {
+
     }
 
 
@@ -22,9 +24,9 @@ public class HealthPickUp : MonoBehaviour
 
         if (player != null)
         {
-            if (!(player.stats.IsMaxHP()))
+            if (!(player.stats.IsMaxMana()))
             {
-                player.stats.HealHP(30f);
+                player.stats.HealMana(30f);
                 Instantiate(pickedUp, transform.position, transform.rotation);
                 Destroy(gameObject);
             }

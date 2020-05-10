@@ -9,7 +9,6 @@ public class Ammunition : MonoBehaviour
     [SerializeField] Rigidbody2D rb;
     [SerializeField] float rangedDamage; 
     [SerializeField] float speed;
-    
 
     // Start is called before the first frame update
     void Start()
@@ -33,12 +32,14 @@ public class Ammunition : MonoBehaviour
         {
             treasure.stats.TakeDamage(rangedDamage);
             Instantiate(ammunitionHit, transform.position, transform.rotation);
+            Destroy(gameObject);
         }
 
         if (enemy != null)
         {
             enemy.stats.TakeDamage(rangedDamage);
             Instantiate(ammunitionHit, transform.position, transform.rotation);
+            Destroy(gameObject);
         }
 
         if (player != null)
@@ -75,11 +76,15 @@ public class Ammunition : MonoBehaviour
                 player.stats.TakeDamage(rangedDamage);
                 Instantiate(ammunitionHit, transform.position, transform.rotation);
             }
+            
         }
-        
         else
+        {
             Instantiate(ammunitionHit, transform.position, transform.rotation);
+        }
 
         Destroy(gameObject);
+
+
     }
 }

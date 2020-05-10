@@ -6,25 +6,26 @@ public class PlayerMovement : MonoBehaviour
 {
     // VARIABLES DECLARATION
     // Movement Variables
-    Vector2     currentVelocity;
-    float       hAxis;
-    float       jumpTime;
-    public bool        onGround { get; private set; }
+    Vector2                         currentVelocity;
+    float                           hAxis;
+    float                           jumpTime;
+    public bool                     onGround { get; private set; }
+    public Vector3                  Position { get; private set; }
 
     // groundChecking variables
-    [SerializeField] Transform  groundCheck;
-    float                       coyoteCounter;
+    bool                            noVelY;
+    float                           coyoteCounter;
 
     // Rope
-    RaycastHit2D ropeHit;
+    RaycastHit2D                        ropeHit;
     [SerializeField] DistanceJoint2D    rope;
     [SerializeField] Transform          ropeAnchor;
     [SerializeField] LineRenderer       ropeRender;
-    bool usingRope;
-    bool ropeUsed;
+    bool                                usingRope;
+    bool                                ropeUsed;
 
 
-    Rigidbody2D        rb;
+    public Rigidbody2D                  rb { get; private set; }
     Animator                            animator;
 
 
@@ -32,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask ceilingLayer;
     [SerializeField] LayerMask groundLayers;
 
-
+    [SerializeField] BoxCollider2D boxCollider;
     [SerializeField] Player player;
 
     private void Awake()
@@ -47,12 +48,14 @@ public class PlayerMovement : MonoBehaviour
     {
         rope.enabled = false;
         ropeRender.enabled = false;
+        noVelY = false;
     }
 
     void Update()
     {
         // Gets hAxis and sets velocity // Update Variables
         hAxis = Input.GetAxis("Horizontal");
+        Position = transform.position;
         currentVelocity = rb.velocity;
 
 
@@ -66,22 +69,33 @@ public class PlayerMovement : MonoBehaviour
             // Sets rigidbody final velocity
             rb.velocity = currentVelocity;
 
+
+            if (rb.velocity.y == 0)
+                noVelY = true;
+            else noVelY = false;
             // Reference for animatorator movement
+
             animator.SetFloat("absVelX", Mathf.Abs(currentVelocity.x));
             animator.SetFloat("jumpVel", (currentVelocity.y));
             animator.SetBool("grounded", onGround);
             animator.SetBool("usingRope", usingRope);
+            animator.SetBool("noVelY", noVelY);
         }        
     }
 
     void Grounded()
     {
         // GROUND COLLISION
-        float coyoteTime = 0.15f;
-        
+        float coyoteTime = 0.125f;
+
         // Ground collision -> Checks if groundCheck position + 0.05f circle radius is in contact with the floor
-        Collider2D groundCollision = Physics2D.OverlapCircle(groundCheck.position, 0.05f, groundLayers);
-        onGround = groundCollision != null;
+        RaycastHit2D groundCollisionLeft = Physics2D.Raycast(boxCollider.bounds.center - new Vector3(0.105f,0f,0f), Vector2.down, boxCollider.bounds.extents.y + 0.02f, groundLayers);
+        RaycastHit2D groundCollisionRight = Physics2D.Raycast(boxCollider.bounds.center + new Vector3(0.105f, 0f, 0f), Vector2.down, boxCollider.bounds.extents.y + 0.02f, groundLayers);
+        if (groundCollisionLeft.collider != null || groundCollisionRight.collider != null)
+            onGround = true;
+        else
+            onGround = false;
+
         // If the character leaves the ground, it has some time (coyoteTime float) to jump
         if (onGround)
             coyoteCounter = coyoteTime;
@@ -106,7 +120,7 @@ public class PlayerMovement : MonoBehaviour
             currentVelocity.y = jumpSpeed;
             rb.gravityScale = 0.0f;
             jumpTime = Time.time;
-
+            Debug.Log(coyoteCounter);
         }
         else if ((Input.GetButton("Jump") && ((Time.time - jumpTime) < jumpMaxTime)))
         {
@@ -271,5 +285,4 @@ public class PlayerMovement : MonoBehaviour
                 transform.rotation = Quaternion.identity;
         }
     }
-
 }

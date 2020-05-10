@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField] Transform      meleePosition;
     [SerializeField] GameObject     meleePrefab;
 
-    [SerializeField] Transform shieldPosition;
+    [SerializeField] Transform      shieldPosition;
     [SerializeField] GameObject     shieldPrefab;
 
     [SerializeField] LayerMask      treasureLayer;
@@ -51,11 +51,13 @@ public class Player : MonoBehaviour
         stats.RangedDamage = 50f;
         stats.CanRangeAttack = true;
         stats.RangedAttackDelay = 0.5f;
+        stats.RangedAttackCounter = stats.RangedAttackDelay;
 
         stats.MeleeDamage = 30f;
         stats.CanMeleeAttack = true;
         stats.MeleeAttackRange = 0.15f;
         stats.MeleeAttackDelay = 0.45f;
+        stats.MeleeAttackCounter = stats.MeleeAttackDelay;
     }
 
     // Update is called once per frame
