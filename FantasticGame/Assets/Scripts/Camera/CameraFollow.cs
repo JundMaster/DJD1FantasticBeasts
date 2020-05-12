@@ -2,7 +2,8 @@
 
 public class CameraFollow : MonoBehaviour
 {
-    [SerializeField] PlayerMovement player;
+    [SerializeField] PlayerMovement playerMove;
+
     [SerializeField] Rect           cameraTrap;
     [SerializeField] Vector3        offset;
     [SerializeField] float          feedBackLoop = 1f;
@@ -11,18 +12,24 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] Vector3        maxLevelRangeXmin;
     [SerializeField] Vector3        maxLevelRangeYmin;
 
-
     private void Awake()
     {
-        player = player.GetComponent<PlayerMovement>();
+
     }
 
     private void Start()
     {
+        /* test lvl
         maxLevelRangeXmax = new Vector3 (8f, 0f, 0f);
         maxLevelRangeXmin = new Vector3(-6f, 0f, 0f);
 
         maxLevelRangeYmin = new Vector3(0f, -1f, 0f);
+        */
+
+        maxLevelRangeXmax = new Vector3(10000f, 0f, 0f);
+        maxLevelRangeXmin = new Vector3(-1000000f, 0f, 0f);
+
+        maxLevelRangeYmin = new Vector3(0f, -100000f, 0f);
     }
 
     private void FixedUpdate()
@@ -36,10 +43,10 @@ public class CameraFollow : MonoBehaviour
         if (transform.position.y <= maxLevelRangeYmin.x)
             transform.position = new Vector3(transform.position.x, maxLevelRangeYmin.y + 1f , transform.position.z);
 
-        if (player.Position.x < maxLevelRangeXmax.x)
+        if (playerMove.Position.x < maxLevelRangeXmax.x)
         {
-            // player Pos
-            Vector3 targetPos = player.Position + offset;
+            // playerMove Pos
+            Vector3 targetPos = playerMove.Position + offset;
             targetPos.z = transform.position.z;
 
             Rect rect = CreateRect();
@@ -50,11 +57,8 @@ public class CameraFollow : MonoBehaviour
             if (targetPos.y < rect.yMin) rect.yMin = targetPos.y;
             else if (targetPos.y > rect.yMax) rect.yMax = targetPos.y;
 
-            if (player.onGround)
+            if (playerMove.onGround)
                 rect.yMin = targetPos.y - 0.1f;
-
-
-
 
 
             // Center of rectangle

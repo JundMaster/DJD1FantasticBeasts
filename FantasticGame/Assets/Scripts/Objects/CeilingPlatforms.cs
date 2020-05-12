@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FastDestroyTimer : MonoBehaviour
+public class CeilingPlatforms : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
     {
-        Destroy(gameObject, 25f * Time.deltaTime);
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 }

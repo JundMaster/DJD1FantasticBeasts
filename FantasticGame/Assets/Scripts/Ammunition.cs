@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class Ammunition : MonoBehaviour
 {
-    [SerializeField] GameObject ammunitionHit;
-    [SerializeField] GameObject ammunitionHitShield;
-    [SerializeField] Rigidbody2D rb;
-    [SerializeField] float rangedDamage; 
-    [SerializeField] float speed;
+    [SerializeField] GameObject     ammunitionHit;
+    [SerializeField] GameObject     ammunitionHitShield;
+    [SerializeField] Rigidbody2D    rb;
+    [SerializeField] float          rangedDamage; 
+    [SerializeField] float          speed;
+    GameObject                      p1;
+
+
 
     // Start is called before the first frame update
     void Start()
     {
+        p1 = GameObject.Find("Player");
         speed = 4f;
         rb.velocity = transform.right * speed;
 

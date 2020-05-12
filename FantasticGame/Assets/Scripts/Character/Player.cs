@@ -4,31 +4,39 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] Transform      magicPosition;
-    [SerializeField] GameObject     magicPrefab;
+    [SerializeField] Transform          magicPosition;
+    [SerializeField] GameObject         magicPrefab;
 
+    [SerializeField] Transform          meleePosition;
+    [SerializeField] GameObject         meleePrefab;
 
-    [SerializeField] Transform      meleePosition;
-    [SerializeField] GameObject     meleePrefab;
+    [SerializeField] Transform          shieldPosition;
+    [SerializeField] GameObject         shieldPrefab;
 
-    [SerializeField] Transform      shieldPosition;
-    [SerializeField] GameObject     shieldPrefab;
+    [SerializeField] LayerMask          treasureLayer;
+    [SerializeField] LayerMask          enemyLayer;
 
-    [SerializeField] LayerMask      treasureLayer;
-    [SerializeField] LayerMask      enemyLayer;
+    [SerializeField] CameraShake        cameraShake;
+    [SerializeField] float              shakeTime;
+    [SerializeField] float              shakeForce;
 
-
-    public Stats                    stats           { get; private set; }
-    private Animator                animator;
-    private PlayerMovement          movement;
+    public Stats                        stats           { get; private set; }
+    private Animator                    animator;
+    private PlayerMovement              movement;
 
     
-    public float                    CurrentMana     { get; set; }
-    public float                    CurrentHP       { get; set; }
-    public bool                     usingShield     { get; private set; }
-    public Vector2                  ShieldPosition  { get; private set; }
-    private bool                    canUseShield;
+    public float                    CurrentMana         { get; set; }
+    public float                    CurrentHP           { get; set; }
+    public bool                     RangedAttacked      { get; private set; }
+    public bool                     usingShield         { get; private set; }
+    public Vector2                  ShieldPosition      { get; private set; }
+    public Vector2                  NewMagicPosition    { get; set; }
+    public Vector2                  MagicPosition       { get; private set; }
+    public Vector2                  NewShieldPosition   { get; set; }
 
+
+    private bool                    canUseShield;
+    private bool                    canScreenShake;
 
     private void Awake()
     {
@@ -58,6 +66,8 @@ public class Player : MonoBehaviour
         stats.MeleeAttackRange = 0.15f;
         stats.MeleeAttackDelay = 0.45f;
         stats.MeleeAttackCounter = stats.MeleeAttackDelay;
+
+        canScreenShake = false;
     }
 
     // Update is called once per frame
@@ -68,10 +78,14 @@ public class Player : MonoBehaviour
             // UPDATE VARIABLES ----------------------------------------------------------------------------
             CurrentMana = stats.CurrentMana;
             CurrentHP = stats.CurrentHP;
+            RangedAttacked = false;
             stats.RegenMana();
             animator.SetBool("attack", false);
             animator.SetBool("rangedAttack", false);
+            MagicPosition = magicPosition.position;
             // ---------------------------------------------------------------------------------------------
+
+
 
             // SHIELD --------------------------------------------------------------------------------------
             ShieldPosition = shieldPosition.position;
@@ -87,16 +101,27 @@ public class Player : MonoBehaviour
             // RANGED ATTACK -------------------------------------------------------------------------------
             // Everytime the player attacks, it starts a timer and sets canAttack to false
             if (stats.CanRangeAttack == false)
+            {
                 stats.RangedAttackCounter -= Time.deltaTime;
+                if (stats.RangedAttackCounter < 0.45f && canScreenShake) // SCREEN SHAKE WITH DELAY
+                {
+                    StartCoroutine(cameraShake.Shake(shakeTime, shakeForce));
+                    canScreenShake = false;
+                }
+            }
             if (stats.RangedAttackCounter < 0)
             {   // If timeDelay gets < 0, sets timer back to AttackDelay again and the character can attack
                 stats.RangedAttackCounter = stats.RangedAttackDelay;
                 stats.CanRangeAttack = true;
+                canScreenShake = true;
             }
 
             if (Input.GetButtonDown("Fire2"))
                 if (stats.CanUseSpell() && stats.CanRangeAttack)
                     Shoot();
+
+
+
 
             // MELEE ATTACK -------------------------------------------------------------------------------
             // Everytime the player attacks, it starts a timer and sets canAttack to false
@@ -114,6 +139,9 @@ public class Player : MonoBehaviour
                     MeleeAttack();
                 }
 
+
+
+
             // ALIVE CONDITION ----------------------------------------------------------------------------
             if (!(stats.IsAlive))
             {
@@ -126,17 +154,20 @@ public class Player : MonoBehaviour
 
     void Shoot()
     {
+        RangedAttacked = true;
         animator.SetBool("rangedAttack", true);
         stats.CanRangeAttack = false;
         stats.SpendMana();
-        Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
+        // When Crouched
+        if (movement.IsCrouched) Instantiate(magicPrefab, NewMagicPosition, magicPosition.rotation);
+        else Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
     }
 
     void MeleeAttack()
     {
         animator.SetBool("attack", true);
         stats.CanMeleeAttack = false;
-        
+
         Collider2D[] treasureHit = Physics2D.OverlapCircleAll(meleePosition.position, stats.MeleeAttackRange, treasureLayer);
         Collider2D[] enemyHit = Physics2D.OverlapCircleAll(meleePosition.position, stats.MeleeAttackRange, enemyLayer);
 
@@ -154,9 +185,12 @@ public class Player : MonoBehaviour
 
     void Shield()
     {
-        Instantiate(shieldPrefab, shieldPosition.position, transform.rotation);
+        if (Physics2D.OverlapCircle(shieldPosition.position, 0.1f, enemyLayer)) StartCoroutine(cameraShake.Shake(0.015f, 0.04f));
+        if (movement.IsCrouched) Instantiate(shieldPrefab, NewShieldPosition, transform.rotation);
+        else Instantiate(shieldPrefab, shieldPosition.position, transform.rotation);
         usingShield = true;
         stats.CurrentMana -= 10f * Time.deltaTime;
+
     }
 
 

@@ -9,29 +9,38 @@ public class PlayerMovement : MonoBehaviour
     Vector2                         currentVelocity;
     float                           hAxis;
     float                           jumpTime;
-    public bool                     onGround { get; private set; }
-    public Vector3                  Position { get; private set; }
+
+    // Crouched
+    [SerializeField] BoxCollider2D  collider;
+    public bool                     IsCrouched { get; private set; }
+    
+    // Position
+    public Vector3                  Position    { get; private set; }
+
 
     // groundChecking variables
     bool                            noVelY;
     float                           coyoteCounter;
-
+    public bool                     onGround    { get; private set; }
     // Rope
+
     RaycastHit2D                        ropeHit;
+    RaycastHit2D                        notPossibleRope;
     [SerializeField] DistanceJoint2D    rope;
     [SerializeField] Transform          ropeAnchor;
     [SerializeField] LineRenderer       ropeRender;
+    [SerializeField] Transform          ropeWallCollider;
     bool                                usingRope;
     bool                                ropeUsed;
 
 
-    public Rigidbody2D                  rb { get; private set; }
+    public Rigidbody2D                  rb      { get; private set; }
     Animator                            animator;
 
 
     // Layers
     [SerializeField] LayerMask ceilingLayer;
-    [SerializeField] LayerMask groundLayers;
+    [SerializeField] LayerMask onGroundLayers;
 
     [SerializeField] BoxCollider2D boxCollider;
     [SerializeField] Player player;
@@ -57,6 +66,7 @@ public class PlayerMovement : MonoBehaviour
         hAxis = Input.GetAxis("Horizontal");
         Position = transform.position;
         currentVelocity = rb.velocity;
+        bool pressCrouch = Input.GetKey("s") || Input.GetKey("down");
 
 
         if (!(PauseMenu.gamePaused))
@@ -65,14 +75,13 @@ public class PlayerMovement : MonoBehaviour
             Grounded();
             Jump();
             Rope();
+            NeutralVelY();
+            IsCrouched = pressCrouch && onGround ? true : false;
+            Crouched();
             SpriteRotation();
             // Sets rigidbody final velocity
             rb.velocity = currentVelocity;
 
-
-            if (rb.velocity.y == 0)
-                noVelY = true;
-            else noVelY = false;
             // Reference for animatorator movement
 
             animator.SetFloat("absVelX", Mathf.Abs(currentVelocity.x));
@@ -82,16 +91,33 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("noVelY", noVelY);
         }        
     }
+    // CORRIGIR <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    void Crouched()
+    {
+        if (IsCrouched)
+        {
+            collider.size = new Vector2(0.20f, 0.275f);
+            collider.offset = new Vector2(0.03f, 0.14f);
+            player.NewMagicPosition = new Vector2(player.MagicPosition.x, player.transform.localScale.y / 1.6f);
+            player.NewShieldPosition = new Vector2(player.ShieldPosition.x, player.transform.localScale.y / 1.6f);
+        }
+        else
+        {
+            collider.size = new Vector2(0.20f, 0.55f);
+            collider.offset = new Vector2(0.03f, 0.28f);
+        }
+
+    }
 
     void Grounded()
     {
         // GROUND COLLISION
-        float coyoteTime = 0.125f;
+        float coyoteTime = 0.15f;
 
-        // Ground collision -> Checks if groundCheck position + 0.05f circle radius is in contact with the floor
-        RaycastHit2D groundCollisionLeft = Physics2D.Raycast(boxCollider.bounds.center - new Vector3(0.105f,0f,0f), Vector2.down, boxCollider.bounds.extents.y + 0.02f, groundLayers);
-        RaycastHit2D groundCollisionRight = Physics2D.Raycast(boxCollider.bounds.center + new Vector3(0.105f, 0f, 0f), Vector2.down, boxCollider.bounds.extents.y + 0.02f, groundLayers);
-        if (groundCollisionLeft.collider != null || groundCollisionRight.collider != null)
+        // Ground collision
+        RaycastHit2D groundCollision = Physics2D.Raycast(boxCollider.bounds.center, Vector2.down, boxCollider.bounds.extents.y + 0.02f, onGroundLayers);
+
+        if (groundCollision.collider != null)
             onGround = true;
         else
             onGround = false;
@@ -120,7 +146,6 @@ public class PlayerMovement : MonoBehaviour
             currentVelocity.y = jumpSpeed;
             rb.gravityScale = 0.0f;
             jumpTime = Time.time;
-            Debug.Log(coyoteCounter);
         }
         else if ((Input.GetButton("Jump") && ((Time.time - jumpTime) < jumpMaxTime)))
         {
@@ -139,12 +164,20 @@ public class PlayerMovement : MonoBehaviour
         float ropeY = 0.6f;
         float ropeX = 0.6f;
         float ropeLastSling = 100f;
-
+        bool canUseRope = true;
+        
         Vector2 ropePosition;
         ropePosition.x = ropeAnchor.position.x;
         ropePosition.y = ropeAnchor.position.y;
 
-        if (onGround == false)
+
+        if (transform.right.x > 0)
+            notPossibleRope = Physics2D.Raycast(ropePosition, ropePosition + new Vector2(ropeX, ropeY), 0.3f, ceilingLayer);
+        else if (transform.right.x < 0)
+            notPossibleRope = Physics2D.Raycast(ropePosition, ropePosition + new Vector2(-ropeX, ropeY), 0.3f, ceilingLayer);
+        if (notPossibleRope) canUseRope = false;
+
+        if (onGround == false && canUseRope)
         {
             if (Input.GetButtonDown("Fire3"))
             {
@@ -160,7 +193,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     // Only one rope per jump
                     ropeUsed = true;
-
+               
                     rope.enabled = true;
 
                     // Connects the joint final position to the rigidbody it hits
@@ -175,7 +208,7 @@ public class PlayerMovement : MonoBehaviour
                     ropeRender.enabled = true;
                     ropeRender.SetPosition(0, ropeAnchor.position);
                     ropeRender.SetPosition(1, new Vector3(rope.connectedAnchor.x, rope.connectedAnchor.y - 0.15f, 0));
-
+                    
 
                     // TESTING ROPE RENDER
                     //ropeRender.SetPosition(1, ropeAnchor.position);
@@ -188,6 +221,9 @@ public class PlayerMovement : MonoBehaviour
                 usingRope = true;
                 ropeRender.SetPosition(0, ropeAnchor.position);
 
+                Collider2D wallCol = Physics2D.OverlapCircle(ropeWallCollider.position, 0.02f, onGroundLayers);
+                if (wallCol != null)
+                    rope.enabled = false;
 
                 // ADD ROPE SIZE // RENDER
                 /*
@@ -229,6 +265,7 @@ public class PlayerMovement : MonoBehaviour
         // Running speed
         float runSpeed = 2f;
         if (player.usingShield) runSpeed = 1f;
+        if (IsCrouched) runSpeed = 1f;
         // Rope movement
         Vector2 rightBalance = new Vector2(1500f * Time.deltaTime, 0f);
         Vector2 leftBalance = new Vector2(-1500f * Time.deltaTime, 0f);
@@ -255,6 +292,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+
+    void NeutralVelY()
+    {
+        if (rb.velocity.y == 0)
+            noVelY = true;
+        else
+            noVelY = false;
+    }
 
 
     void OnCollisionEnter2D(Collision2D hitInfo)
@@ -285,4 +330,5 @@ public class PlayerMovement : MonoBehaviour
                 transform.rotation = Quaternion.identity;
         }
     }
+
 }

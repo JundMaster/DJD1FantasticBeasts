@@ -32,7 +32,7 @@ public class Enemy : MonoBehaviour
     RaycastHit2D    aimRange;
     float           maxAimRange;
     bool            isShooting;
-
+    [SerializeField] LineRenderer aimDraw; //Drawing range
 
     private void Awake()
     {
@@ -52,7 +52,8 @@ public class Enemy : MonoBehaviour
         limitRange = 0.5f;
         limitRangedReached = false;
         waitingTime = 2f;
-        waitingTimeCounter = waitingTime;
+        //waitingTimeCounter = waitingTime;
+        waitingTimeCounter = Random.Range(0f, 4f);
 
         maxAimRange = 1f;
     }
@@ -86,6 +87,11 @@ public class Enemy : MonoBehaviour
         else
             isShooting = false;
 
+        // DRAW MAX RANGE OF ATTACK
+        aimDraw.enabled = true;
+        aimDraw.SetPosition(0, magicPosition.position);
+        if (transform.right.x > 0) aimDraw.SetPosition(1, magicPosition.position + new Vector3 (maxAimRange, 0f,0f));
+        else aimDraw.SetPosition(1, magicPosition.position - new Vector3(maxAimRange, 0f, 0f));
 
         // Movement -----------------------------------------------------------------------------------
         if (!(isShooting))
@@ -132,15 +138,10 @@ public class Enemy : MonoBehaviour
         if (waitingTimeCounter < 0)
         {
             transform.Rotate(0f, 180f, 0f);
-            waitingTimeCounter = Random.Range(0f, 2f); // WAITING TIME <<<<<<<<<<< TA RANDOM NESTE 
+            waitingTimeCounter = Random.Range(0f, 4f); // WAITING TIME <<<<<<<<<<< TA RANDOM NESTE ;
             transform.position += transform.right * speed * Time.deltaTime;
             limitRangedReached = false;
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        //Gizmos.DrawWireSphere(transform.position, maxAimRange);
-        Gizmos.DrawLine(magicPosition.position, magicPosition.position + new Vector3(maxAimRange,0f,0f));
-    }
 }
