@@ -5,12 +5,14 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] Transform          magicPosition;
+    [SerializeField] Transform          crouchedMagicPosition;
     [SerializeField] GameObject         magicPrefab;
 
     [SerializeField] Transform          meleePosition;
     [SerializeField] GameObject         meleePrefab;
 
     [SerializeField] Transform          shieldPosition;
+    [SerializeField] Transform          crouchedShieldPosition;
     [SerializeField] GameObject         shieldPrefab;
 
     [SerializeField] LayerMask          treasureLayer;
@@ -25,14 +27,12 @@ public class Player : MonoBehaviour
     private PlayerMovement              movement;
 
     
-    public float                    CurrentMana         { get; set; }
-    public float                    CurrentHP           { get; set; }
-    public bool                     RangedAttacked      { get; private set; }
-    public bool                     usingShield         { get; private set; }
-    public Vector2                  ShieldPosition      { get; private set; }
-    public Vector2                  NewMagicPosition    { get; set; }
-    public Vector2                  MagicPosition       { get; private set; }
-    public Vector2                  NewShieldPosition   { get; set; }
+    public float                    CurrentMana             { get; set; }
+    public float                    CurrentHP               { get; set; }
+    public bool                     RangedAttacked          { get; private set; }
+    public bool                     usingShield             { get; private set; }
+    public Vector2                  ShieldPosition          { get; private set; }
+    public Vector2                  MagicPosition           { get; private set; }
 
 
     private bool                    canUseShield;
@@ -92,7 +92,7 @@ public class Player : MonoBehaviour
             usingShield = false;
             canUseShield = stats.CurrentMana > 1f ? true : false;
 
-            if (movement.onGround && Input.GetButton("Fire3") && canUseShield)
+            if (movement.onGround && Input.GetKey("w") || Input.GetKey("up") && canUseShield)
             {             
                 Shield();
             }
@@ -117,7 +117,7 @@ public class Player : MonoBehaviour
             }
 
             if (Input.GetButtonDown("Fire2"))
-                if (stats.CanUseSpell() && stats.CanRangeAttack)
+                if (stats.CanUseSpell() && stats.CanRangeAttack && !usingShield)
                     Shoot();
 
 
@@ -159,7 +159,7 @@ public class Player : MonoBehaviour
         stats.CanRangeAttack = false;
         stats.SpendMana();
         // When Crouched
-        if (movement.IsCrouched) Instantiate(magicPrefab, NewMagicPosition, magicPosition.rotation);
+        if (movement.IsCrouched) Instantiate(magicPrefab, crouchedMagicPosition.position, magicPosition.rotation);
         else Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
     }
 
@@ -186,7 +186,7 @@ public class Player : MonoBehaviour
     void Shield()
     {
         if (Physics2D.OverlapCircle(shieldPosition.position, 0.1f, enemyLayer)) StartCoroutine(cameraShake.Shake(0.015f, 0.04f));
-        if (movement.IsCrouched) Instantiate(shieldPrefab, NewShieldPosition, transform.rotation);
+        if (movement.IsCrouched) Instantiate(shieldPrefab, crouchedShieldPosition.position, transform.rotation);
         else Instantiate(shieldPrefab, shieldPosition.position, transform.rotation);
         usingShield = true;
         stats.CurrentMana -= 10f * Time.deltaTime;

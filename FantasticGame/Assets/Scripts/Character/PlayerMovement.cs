@@ -22,10 +22,11 @@ public class PlayerMovement : MonoBehaviour
     bool                            noVelY;
     float                           coyoteCounter;
     public bool                     onGround    { get; private set; }
+    [SerializeField] Transform      groundCheck;
     // Rope
 
     RaycastHit2D                        ropeHit;
-    RaycastHit2D                        notPossibleRope;
+    Collider2D                          notPossibleRope;
     [SerializeField] DistanceJoint2D    rope;
     [SerializeField] Transform          ropeAnchor;
     [SerializeField] LineRenderer       ropeRender;
@@ -96,17 +97,15 @@ public class PlayerMovement : MonoBehaviour
     {
         if (IsCrouched)
         {
-            collider.size = new Vector2(0.20f, 0.275f);
-            collider.offset = new Vector2(0.03f, 0.14f);
-            player.NewMagicPosition = new Vector2(player.MagicPosition.x, player.transform.localScale.y / 1.6f);
-            player.NewShieldPosition = new Vector2(player.ShieldPosition.x, player.transform.localScale.y / 1.6f);
+            collider.size = new Vector2(0.29f, 0.30f);
+            collider.offset = new Vector2(-0.02f, 0.15f);
         }
         else
         {
-            collider.size = new Vector2(0.20f, 0.55f);
-            collider.offset = new Vector2(0.03f, 0.28f);
+            collider.size = new Vector2(0.29f, 0.60f);
+            collider.offset = new Vector2(-0.02f, 0.3f);
         }
-
+        
     }
 
     void Grounded()
@@ -115,12 +114,17 @@ public class PlayerMovement : MonoBehaviour
         float coyoteTime = 0.15f;
 
         // Ground collision
-        RaycastHit2D groundCollision = Physics2D.Raycast(boxCollider.bounds.center, Vector2.down, boxCollider.bounds.extents.y + 0.02f, onGroundLayers);
+        Collider2D groundCollision = Physics2D.OverlapCircle(groundCheck.position, 0.05f, onGroundLayers);
 
-        if (groundCollision.collider != null)
+
+        if (groundCollision != null)
+        {
             onGround = true;
+        }
         else
             onGround = false;
+
+        
 
         // If the character leaves the ground, it has some time (coyoteTime float) to jump
         if (onGround)
@@ -146,15 +150,18 @@ public class PlayerMovement : MonoBehaviour
             currentVelocity.y = jumpSpeed;
             rb.gravityScale = 0.0f;
             jumpTime = Time.time;
+            onGround = false;
         }
         else if ((Input.GetButton("Jump") && ((Time.time - jumpTime) < jumpMaxTime)))
         {
             // While pressing jump, how much time has passed since jump was pressed
             // Jumps until jumpTime reaches jumpMaxTime
+            onGround = false;
         }
         else
         {
             rb.gravityScale = 5.0f;
+   
         }
     }
 
@@ -171,11 +178,9 @@ public class PlayerMovement : MonoBehaviour
         ropePosition.y = ropeAnchor.position.y;
 
 
-        if (transform.right.x > 0)
-            notPossibleRope = Physics2D.Raycast(ropePosition, ropePosition + new Vector2(ropeX, ropeY), 0.3f, ceilingLayer);
-        else if (transform.right.x < 0)
-            notPossibleRope = Physics2D.Raycast(ropePosition, ropePosition + new Vector2(-ropeX, ropeY), 0.3f, ceilingLayer);
-        if (notPossibleRope) canUseRope = false;
+        notPossibleRope = Physics2D.OverlapCircle(ropePosition, 0.3f, ceilingLayer);
+
+        if (notPossibleRope != null) canUseRope = false;
 
         if (onGround == false && canUseRope)
         {
@@ -264,8 +269,9 @@ public class PlayerMovement : MonoBehaviour
     {
         // Running speed
         float runSpeed = 2f;
-        if (player.usingShield) runSpeed = 1f;
-        if (IsCrouched) runSpeed = 1f;
+        if (player.usingShield) runSpeed = 0f;
+        if (player.usingShield && IsCrouched) runSpeed = 0f;
+        if (IsCrouched && !IsCrouched) runSpeed = 1f;
         // Rope movement
         Vector2 rightBalance = new Vector2(1500f * Time.deltaTime, 0f);
         Vector2 leftBalance = new Vector2(-1500f * Time.deltaTime, 0f);

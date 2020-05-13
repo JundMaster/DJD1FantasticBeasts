@@ -11,29 +11,37 @@ public class Enemy : MonoBehaviour
 
 
     [SerializeField] LayerMask      playerLayer;
+    [SerializeField] LayerMask      groundLayer;
+    [SerializeField] LayerMask      breakRaycast;
 
     // Drops
     [SerializeField] GameObject     healthPickUp, manaPickUp;
+    [SerializeField] Transform      groundRangeCheck, groundCheck, wallCheck;
 
-
-
-    float           speed;
-
-    Vector2         startingPos;
-    float           limitRange;
-    bool            limitRangedReached;
-    Vector2         tempPosition;
-
-    float           waitingTimeCounter;
-    float           waitingTime;
-
-
-    //Collider2D      aimRange;
-    RaycastHit2D    aimRange;
-    float           maxAimRange;
-    bool            isShooting;
     [SerializeField] LineRenderer aimDraw; //Drawing range
 
+
+
+    [SerializeField] float  speed;       // WALKING SPEED
+    [SerializeField] float  limitRange;  // RANGE FOR WALKING
+    [SerializeField] float  userInputRange; // RANGE FOR SHOOTING
+    [SerializeField] float  attackDelay; // ATTACK DELAY
+    [SerializeField] float  HP;          // CURRENT HP
+    [SerializeField] int    lootChance;    // LOOT CHANCE 1 - 10
+    [SerializeField] bool   holdPosition;
+
+    Vector2         startingPos;
+    
+    bool            limitWalkingRangeReached;
+    Vector2         tempPosition;
+    float           waitingTimeCounter;
+
+    float           maxAimRange;
+    RaycastHit2D    aimRange;
+    bool            isShooting;
+
+
+    
     private void Awake()
     {
         stats = new Stats();
@@ -42,30 +50,21 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         stats.CanRangeAttack = false;
-        stats.RangedAttackDelay = 2f;
+        stats.RangedAttackDelay = attackDelay;
 
         startingPos = transform.position;
+        stats.CurrentHP = HP;
 
-        stats.CurrentHP = 100f;
-        speed = 0.5f;
+        limitWalkingRangeReached = false;
 
-        limitRange = 0.5f;
-        limitRangedReached = false;
-        waitingTime = 2f;
+        maxAimRange = userInputRange;
+
         //waitingTimeCounter = waitingTime;
         waitingTimeCounter = Random.Range(0f, 4f);
-
-        maxAimRange = 1f;
     }
 
     private void Update()
     {
-        // UPDATE VARIABLES ----------------------------------------------------------------------------
-        
-
-        
-
-
         // SHOOT ---------------------------------------------------------------------------------------
         if (stats.CanRangeAttack == false)
             stats.RangedAttackCounter -= Time.deltaTime;
@@ -75,9 +74,16 @@ public class Enemy : MonoBehaviour
             stats.CanRangeAttack = true;
         }
 
-        //aimRange = Physics2D.OverlapCircle(transform.position, maxAimRange, playerLayer);
-        aimRange = Physics2D.Raycast(magicPosition.position, magicPosition.right, maxAimRange, playerLayer);
+        
 
+        //RaycastHit2D wallRange = Physics2D.Raycast(magicPosition.position, magicPosition.right, maxAimRange, groundLayer);
+        //if (wallRange)
+        //    maxAimRange = 0f;
+        //else
+        //    maxAimRange = userInputRange;
+
+
+        aimRange = Physics2D.Raycast(magicPosition.position, magicPosition.right, maxAimRange, playerLayer);
         if (aimRange)
         {
             isShooting = true;
@@ -86,6 +92,8 @@ public class Enemy : MonoBehaviour
         }
         else
             isShooting = false;
+
+
 
         // DRAW MAX RANGE OF ATTACK
         aimDraw.enabled = true;
@@ -102,7 +110,7 @@ public class Enemy : MonoBehaviour
         if (!(stats.IsAlive))
         {
             int chance = Random.Range(0, 10);
-            if (chance > 6)
+            if (chance > lootChance)
             {
                 if (healthPickUp != null && chance >= 5) Instantiate(healthPickUp, transform.position, transform.rotation);
                 else if (manaPickUp != null) Instantiate(manaPickUp, transform.position, transform.rotation);
@@ -121,27 +129,56 @@ public class Enemy : MonoBehaviour
 
     void Movement()
     {
-        transform.position += transform.right * speed * Time.deltaTime;
+        if (!holdPosition) //static enemmy
+        {
+            Collider2D isGroundedCheck = Physics2D.OverlapCircle(groundCheck.position, 0.02f, groundLayer);
+            if (isGroundedCheck)
+            {
+                transform.position += transform.right * speed * Time.deltaTime;
 
-        if ((transform.position.x > startingPos.x + limitRange || transform.position.x < startingPos.x - limitRange) && limitRangedReached == false)
-        {
-            limitRangedReached = true;
-            tempPosition = transform.position;
-        }
+                // FRONT WALLS
+                Collider2D frontWall = Physics2D.OverlapCircle(wallCheck.position, 0.02f, groundLayer);
+                if (frontWall != null && limitWalkingRangeReached == false)
+                {
+                    limitWalkingRangeReached = true;
+                    tempPosition = transform.position;
+                }
 
-        // WAITING TIME DELAY // If it reaches the limit distance, starts walking back
-        if (limitRangedReached)
-        {
-            waitingTimeCounter -= Time.deltaTime;
-            transform.position = tempPosition;
+                Collider2D goundRangeCheck = Physics2D.OverlapCircle(groundRangeCheck.position, 0.1f, groundLayer);
+                // NO FLOOR
+                if (goundRangeCheck == null && limitWalkingRangeReached == false)
+                {
+                    limitWalkingRangeReached = true;
+                    tempPosition = transform.position;
+                }
+
+                // MAX RANGE
+                if ((transform.position.x > startingPos.x + limitRange || transform.position.x < startingPos.x - limitRange) && limitWalkingRangeReached == false)
+                {
+                    limitWalkingRangeReached = true;
+                    tempPosition = transform.position;
+                }
+
+                // WAITING TIME DELAY // If it reaches the limit distance, starts walking back
+                if (limitWalkingRangeReached)
+                {
+                    waitingTimeCounter -= Time.deltaTime;
+                    transform.position = tempPosition;
+                }
+                if (waitingTimeCounter < 0)
+                {
+                    transform.Rotate(0f, 180f, 0f);
+                    waitingTimeCounter = Random.Range(0f, 4f); // WAITING TIME <<<<<<<<<<< TA RANDOM NESTE ;
+                    transform.position += transform.right * speed * Time.deltaTime;
+                    limitWalkingRangeReached = false;
+                }
+            }
         }
-        if (waitingTimeCounter < 0)
-        {
-            transform.Rotate(0f, 180f, 0f);
-            waitingTimeCounter = Random.Range(0f, 4f); // WAITING TIME <<<<<<<<<<< TA RANDOM NESTE ;
-            transform.position += transform.right * speed * Time.deltaTime;
-            limitRangedReached = false;
-        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(wallCheck.position, 0.02f);
     }
 
 }
