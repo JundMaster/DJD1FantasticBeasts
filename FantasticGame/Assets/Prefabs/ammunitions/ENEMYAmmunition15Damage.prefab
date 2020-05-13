@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 3667137456875580276}
   - component: {fileID: 5572836662360895071}
   - component: {fileID: 283483624359553880}
-  - component: {fileID: 4697897524873395975}
-  m_Layer: 13
-  m_Name: ENEMYAmmunition
+  - component: {fileID: 5915356278669746039}
+  m_Layer: 16
+  m_Name: ENEMYAmmunition15Damage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4794,7 +4794,7 @@ CircleCollider2D:
   m_Offset: {x: 9.094947e-13, y: 0}
   serializedVersion: 2
   m_Radius: 4.01
---- !u!114 &4697897524873395975
+--- !u!114 &5915356278669746039
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4803,7 +4803,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 938036225051192266}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4692d981b1b7ec84b83e4335efb0abf5, type: 3}
+  m_Script: {fileID: 11500000, guid: 8513424c711f61243b2de65ac453e820, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ammunitionHit: {fileID: 6844347999365019976, guid: 19da508e0b8c3694cb282b2dce1c4304,

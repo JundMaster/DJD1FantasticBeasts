@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject         shieldPrefab;
 
     [SerializeField] LayerMask          treasureLayer;
-    [SerializeField] LayerMask          enemyLayer;
+    [SerializeField] LayerMask          enemyLayer, enemyAmmunitionLayer;
 
     [SerializeField] CameraShake        cameraShake;
     [SerializeField] float              shakeTime;
@@ -24,7 +24,7 @@ public class Player : MonoBehaviour
 
     public Stats                        stats           { get; private set; }
     private Animator                    animator;
-    private PlayerMovement              movement;
+    public PlayerMovement               movement        { get; private set; }
 
     
     public float                    CurrentMana             { get; set; }
@@ -37,6 +37,9 @@ public class Player : MonoBehaviour
 
     private bool                    canUseShield;
     private bool                    canScreenShake;
+
+    [SerializeField] bool           godMode;
+    [SerializeField] bool           fly;
 
     private void Awake()
     {
@@ -147,6 +150,9 @@ public class Player : MonoBehaviour
             {
                 stats.Die(gameObject);
             }
+
+            if (godMode) stats.CurrentHP = 10000000000;
+            if (fly) if (Input.GetButton("Jump")) movement.rb.gravityScale = 0f;
         }
     }
 
@@ -185,7 +191,7 @@ public class Player : MonoBehaviour
 
     void Shield()
     {
-        if (Physics2D.OverlapCircle(shieldPosition.position, 0.1f, enemyLayer)) StartCoroutine(cameraShake.Shake(0.015f, 0.04f));
+        if (Physics2D.OverlapCircle(shieldPosition.position, 0.1f, enemyAmmunitionLayer)) StartCoroutine(cameraShake.Shake(0.015f, 0.04f));
         if (movement.IsCrouched) Instantiate(shieldPrefab, crouchedShieldPosition.position, transform.rotation);
         else Instantiate(shieldPrefab, shieldPosition.position, transform.rotation);
         usingShield = true;

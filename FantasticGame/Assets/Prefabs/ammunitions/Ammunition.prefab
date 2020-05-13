@@ -4808,13 +4808,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ammunitionHit: {fileID: 7904367576784607624, guid: 1e8bbacd71d72e04d99fa72b96d41376,
     type: 3}
-  ammunitionHitShield: {fileID: 0}
   rb: {fileID: 4357377087198178749}
   rangedDamage: 25
-  speed: 0
-  layer1:
-    serializedVersion: 2
-    m_Bits: 16384
-  layer2:
-    serializedVersion: 2
-    m_Bits: 32768
+  speed: 4

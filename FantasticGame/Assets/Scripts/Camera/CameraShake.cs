@@ -13,7 +13,6 @@ public class CameraShake : MonoBehaviour
     public IEnumerator Shake(float durantion, float force)
     {
         Vector3 origin = camera.transform.position;
-        Debug.Log(origin);
         float elapsedTime = 0.0f;
 
         while (elapsedTime < durantion)

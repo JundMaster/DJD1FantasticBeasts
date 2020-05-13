@@ -7,6 +7,6 @@ public class FastDestroyTimer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Destroy(gameObject, 25f * Time.deltaTime);
+        Destroy(gameObject, 100f * Time.deltaTime);
     }
 }

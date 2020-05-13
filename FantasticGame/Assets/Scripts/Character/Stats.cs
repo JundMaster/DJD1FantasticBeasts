@@ -30,7 +30,6 @@ public class Stats : MonoBehaviour
     public void TakeDamage(float damage)
     {
         CurrentHP -= damage;
-        Debug.Log(CurrentHP);
         if (CurrentHP <= 0)
             IsAlive = false;
     }

@@ -6,29 +6,34 @@ public class Enemy : MonoBehaviour
 {
     public Stats stats { get; private set; }
 
-    [SerializeField] Transform      magicPosition;
-    [SerializeField] GameObject     magicPrefab;
+    [SerializeField] Transform          magicPosition;
+    [SerializeField] GameObject         magicPrefab;
 
 
-    [SerializeField] LayerMask      playerLayer;
-    [SerializeField] LayerMask      groundLayer;
-    [SerializeField] LayerMask      breakRaycast;
+    [SerializeField] LayerMask          playerLayer;
+    [SerializeField] LayerMask          groundLayer;
+    [SerializeField] LayerMask          boxesAndwalls;
 
     // Drops
-    [SerializeField] GameObject     healthPickUp, manaPickUp;
-    [SerializeField] Transform      groundRangeCheck, groundCheck, wallCheck;
+    [SerializeField] GameObject         healthPickUp, manaPickUp;
+    [SerializeField] Transform          groundRangeCheck, groundCheck, wallCheck, backStab;
 
-    [SerializeField] LineRenderer aimDraw; //Drawing range
+    [SerializeField] LineRenderer       aimDraw; //Drawing range
 
+
+    [SerializeField] Player             player;
+  
 
 
     [SerializeField] float  speed;       // WALKING SPEED
     [SerializeField] float  limitRange;  // RANGE FOR WALKING
-    [SerializeField] float  userInputRange; // RANGE FOR SHOOTING
+    [SerializeField] float  maxAimRange; // RANGE FOR SHOOTING
     [SerializeField] float  attackDelay; // ATTACK DELAY
     [SerializeField] float  HP;          // CURRENT HP
     [SerializeField] int    lootChance;    // LOOT CHANCE 1 - 10
-    [SerializeField] bool   holdPosition;
+    [SerializeField] bool   holdPosition;   // HOLDS ENEMY POS
+    [SerializeField] bool   staticEnemy;    // IF ENEMY IS A STATIC ENEMY
+
 
     Vector2         startingPos;
     
@@ -36,12 +41,13 @@ public class Enemy : MonoBehaviour
     Vector2         tempPosition;
     float           waitingTimeCounter;
 
-    float           maxAimRange;
-    RaycastHit2D    aimRange;
-    bool            isShooting;
+
+    bool            backStabCheckerEnabled;
 
 
     
+
+
     private void Awake()
     {
         stats = new Stats();
@@ -57,10 +63,11 @@ public class Enemy : MonoBehaviour
 
         limitWalkingRangeReached = false;
 
-        maxAimRange = userInputRange;
-
         //waitingTimeCounter = waitingTime;
         waitingTimeCounter = Random.Range(0f, 4f);
+
+        backStabCheckerEnabled = false;
+
     }
 
     private void Update()
@@ -74,36 +81,29 @@ public class Enemy : MonoBehaviour
             stats.CanRangeAttack = true;
         }
 
-        
-
-        //RaycastHit2D wallRange = Physics2D.Raycast(magicPosition.position, magicPosition.right, maxAimRange, groundLayer);
-        //if (wallRange)
-        //    maxAimRange = 0f;
-        //else
-        //    maxAimRange = userInputRange;
+        // CHECKS IF PLAYER IS ON THE ENEMY'S BACK ----------------------------------------------------
+        BackStabCheck();
 
 
-        aimRange = Physics2D.Raycast(magicPosition.position, magicPosition.right, maxAimRange, playerLayer);
-        if (aimRange)
-        {
-            isShooting = true;
-            if (stats.CanRangeAttack)
-                Shoot();
-        }
-        else
-            isShooting = false;
+
+        //  AIMING CHECK ------------------------------------------------------------------------------
+        AimCheck();
 
 
 
         // DRAW MAX RANGE OF ATTACK
         aimDraw.enabled = true;
         aimDraw.SetPosition(0, magicPosition.position);
-        if (transform.right.x > 0) aimDraw.SetPosition(1, magicPosition.position + new Vector3 (maxAimRange, 0f,0f));
-        else aimDraw.SetPosition(1, magicPosition.position - new Vector3(maxAimRange, 0f, 0f));
+        if (transform.right.x > 0) aimDraw.SetPosition(1, magicPosition.position + magicPosition.right * maxAimRange);
+        if (transform.right.x < 0) aimDraw.SetPosition(1, magicPosition.position + new Vector3(-maxAimRange, 0f, 0f));
+
 
         // Movement -----------------------------------------------------------------------------------
-        if (!(isShooting))
-            Movement();
+        
+        if (!(staticEnemy)) //if not a static enemy
+            if (!(holdPosition)) //holding position
+                Movement();
+
 
 
         // ALIVE --------------------------------------------------------------------------------------
@@ -120,65 +120,103 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    
+    // Checks if the player is behind the enemy, if this is true, rotates the enemy
+    void BackStabCheck()
+    {
+        if (backStabCheckerEnabled)
+        {
+            Collider2D checkSurround = Physics2D.OverlapCircle(backStab.position, 0.3f, playerLayer);
+
+            if (checkSurround)
+            {
+                transform.Rotate(0f, 180f, 0f);
+                if (limitWalkingRangeReached == true) limitWalkingRangeReached = false;
+            }
+        }
+    }
+    
+
+    // Checks if the the player is in range and if there's an object between the enemy and player
+    void AimCheck()
+    {
+
+        RaycastHit2D aim = Physics2D.Raycast(magicPosition.position, magicPosition.right, maxAimRange);
+        if (aim)
+        {
+            if (aim.rigidbody == player.movement.rb)
+            {
+                if (staticEnemy == false) holdPosition = true;  // ONLY FOR MOVING ENEMIES
+                if (stats.CanRangeAttack) Shoot();
+            }
+            else
+            {
+                holdPosition = false;
+            }
+        }
+
+
+
+    }
+
+    // Shoots
     void Shoot()
     {
+        backStabCheckerEnabled = true; // first time the enemy shoots, it enabled the backstabchecker
         stats.CanRangeAttack = false;
         Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
     }
 
-
+    // Movement, turns 180 if reaches max position || if collides against a wall || if doesn't detect ground
+    // Uses a random timer to turn the enemy
     void Movement()
     {
-        if (!holdPosition) //static enemmy
+        Collider2D isGroundedCheck = Physics2D.OverlapCircle(groundCheck.position, 0.02f, groundLayer);
+        if (isGroundedCheck)
         {
-            Collider2D isGroundedCheck = Physics2D.OverlapCircle(groundCheck.position, 0.02f, groundLayer);
-            if (isGroundedCheck)
+            transform.position += transform.right * speed * Time.deltaTime;
+
+            // FRONT WALLS
+            Collider2D frontWall = Physics2D.OverlapCircle(wallCheck.position, 0.02f, boxesAndwalls);
+            if (frontWall != null && limitWalkingRangeReached == false)
             {
+                limitWalkingRangeReached = true;
+                tempPosition = transform.position;
+            }
+
+            Collider2D goundRangeCheck = Physics2D.OverlapCircle(groundRangeCheck.position, 0.1f, groundLayer);
+            // NO FLOOR
+            if (goundRangeCheck == null && limitWalkingRangeReached == false)
+            {
+                limitWalkingRangeReached = true;
+                tempPosition = transform.position;
+            }
+
+            // MAX RANGE
+            if ((transform.position.x > startingPos.x + limitRange || transform.position.x < startingPos.x - limitRange) && limitWalkingRangeReached == false)
+            {
+                limitWalkingRangeReached = true;
+                tempPosition = transform.position;
+            }
+
+            // WAITING TIME DELAY // If it reaches the limit distance, starts walking back
+            if (limitWalkingRangeReached)
+            {
+                waitingTimeCounter -= Time.deltaTime;
+                transform.position = tempPosition;
+            }
+            if (waitingTimeCounter < 0)
+            {
+                transform.Rotate(0f, 180f, 0f);
+                waitingTimeCounter = Random.Range(0f, 4f); // WAITING TIME <<<<<<<<<<< TA RANDOM NESTE ;
                 transform.position += transform.right * speed * Time.deltaTime;
-
-                // FRONT WALLS
-                Collider2D frontWall = Physics2D.OverlapCircle(wallCheck.position, 0.02f, groundLayer);
-                if (frontWall != null && limitWalkingRangeReached == false)
-                {
-                    limitWalkingRangeReached = true;
-                    tempPosition = transform.position;
-                }
-
-                Collider2D goundRangeCheck = Physics2D.OverlapCircle(groundRangeCheck.position, 0.1f, groundLayer);
-                // NO FLOOR
-                if (goundRangeCheck == null && limitWalkingRangeReached == false)
-                {
-                    limitWalkingRangeReached = true;
-                    tempPosition = transform.position;
-                }
-
-                // MAX RANGE
-                if ((transform.position.x > startingPos.x + limitRange || transform.position.x < startingPos.x - limitRange) && limitWalkingRangeReached == false)
-                {
-                    limitWalkingRangeReached = true;
-                    tempPosition = transform.position;
-                }
-
-                // WAITING TIME DELAY // If it reaches the limit distance, starts walking back
-                if (limitWalkingRangeReached)
-                {
-                    waitingTimeCounter -= Time.deltaTime;
-                    transform.position = tempPosition;
-                }
-                if (waitingTimeCounter < 0)
-                {
-                    transform.Rotate(0f, 180f, 0f);
-                    waitingTimeCounter = Random.Range(0f, 4f); // WAITING TIME <<<<<<<<<<< TA RANDOM NESTE ;
-                    transform.position += transform.right * speed * Time.deltaTime;
-                    limitWalkingRangeReached = false;
-                }
+                limitWalkingRangeReached = false;
             }
         }
     }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(wallCheck.position, 0.02f);
-    }
-
 }
+
+
+
+
+

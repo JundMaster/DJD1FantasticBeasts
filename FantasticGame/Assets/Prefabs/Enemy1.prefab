@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 98882452}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: groundRangeCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1058641897}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: groundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,7 +69,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1427029996}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: wallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,11 +84,41 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1427029995}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.205, y: -0.036, z: 0}
+  m_LocalPosition: {x: 0.312, y: -0.036, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5849754886814068402}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1774078115
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1774078116}
+  m_Layer: 13
+  m_Name: backStabCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1774078116
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774078115}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.445, y: -0.144, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5849754886814068402}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5849754886814068401
 GameObject:
@@ -104,7 +134,7 @@ GameObject:
   - component: {fileID: 5849754886814068406}
   - component: {fileID: 5849754886814068405}
   - component: {fileID: 5849754886814068407}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Enemy1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,6 +156,7 @@ Transform:
   - {fileID: 98882452}
   - {fileID: 1058641897}
   - {fileID: 1427029996}
+  - {fileID: 1774078116}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -150,9 +181,9 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 133376
-  breakRaycast:
+  boxesAndwalls:
     serializedVersion: 2
-    m_Bits: 260407
+    m_Bits: 131072
   healthPickUp: {fileID: 1343978244480085303, guid: 83ede7248b1352943a52dbf5ab5f5be2,
     type: 3}
   manaPickUp: {fileID: 1343978244480085303, guid: 2c6e8ccc07e440647a15a67c8d702c63,
@@ -160,14 +191,17 @@ MonoBehaviour:
   groundRangeCheck: {fileID: 98882452}
   groundCheck: {fileID: 1058641897}
   wallCheck: {fileID: 1427029996}
+  backStab: {fileID: 1774078116}
   aimDraw: {fileID: 5849754886814068407}
+  player: {fileID: 0}
   speed: 1
   limitRange: 1
-  userInputRange: 2
+  maxAimRange: 2
   attackDelay: 2
   HP: 50
-  lootChance: 3
+  lootChance: 0
   holdPosition: 0
+  staticEnemy: 0
 --- !u!212 &5849754886814068403
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -235,7 +269,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: aa5e0d28f5f4fec4dbb01f807945ec3f, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -372,7 +406,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5849754887289469781}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: magicPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -387,7 +421,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5849754887289469780}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.23, y: 0.035, z: 0}
+  m_LocalPosition: {x: 0.284, y: 0.035, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5849754886814068402}

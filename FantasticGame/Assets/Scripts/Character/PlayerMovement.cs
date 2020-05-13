@@ -9,10 +9,22 @@ public class PlayerMovement : MonoBehaviour
     Vector2                         currentVelocity;
     float                           hAxis;
     float                           jumpTime;
+    /*
+    bool                            gotHit;
+    float                           gotHitDelay;
+    float                           gotHitDelayCounter;
+    bool                            invulnerable;
+    float                           invulnerableDelay;
+    float                           invulnerableCounter;
+    float                           temporaryHP;
+    */
 
     // Crouched
-    [SerializeField] BoxCollider2D  collider;
-    public bool                     IsCrouched { get; private set; }
+    [SerializeField] BoxCollider2D  boxCol;
+    public bool                     IsCrouched      { get; private set; }
+    [SerializeField] Transform      playerScale;
+    Vector3                         originalScale;
+    Vector3                         crouchedScale;
     
     // Position
     public Vector3                  Position    { get; private set; }
@@ -23,8 +35,9 @@ public class PlayerMovement : MonoBehaviour
     float                           coyoteCounter;
     public bool                     onGround    { get; private set; }
     [SerializeField] Transform      groundCheck;
-    // Rope
 
+
+    // Rope
     RaycastHit2D                        ropeHit;
     Collider2D                          notPossibleRope;
     [SerializeField] DistanceJoint2D    rope;
@@ -32,7 +45,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LineRenderer       ropeRender;
     [SerializeField] Transform          ropeWallCollider;
     bool                                usingRope;
-    bool                                ropeUsed;
+    float                               ropeDelay;
+    float                               ropeTimer;
+    int                                 ropesLeft;
 
 
     public Rigidbody2D                  rb      { get; private set; }
@@ -43,7 +58,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask ceilingLayer;
     [SerializeField] LayerMask onGroundLayers;
 
-    [SerializeField] BoxCollider2D boxCollider;
     [SerializeField] Player player;
 
     private void Awake()
@@ -59,6 +73,17 @@ public class PlayerMovement : MonoBehaviour
         rope.enabled = false;
         ropeRender.enabled = false;
         noVelY = false;
+        originalScale = playerScale.localScale;
+        crouchedScale = playerScale.localScale / 2f;
+        ropeDelay = 0.25f;
+        ropeTimer = ropeDelay;
+
+        /*
+        gotHitDelay = 0.1f;
+        gotHitDelayCounter = gotHitDelay;
+        invulnerableDelay = 5f;
+        invulnerableCounter = invulnerableDelay;
+        */
     }
 
     void Update()
@@ -68,6 +93,7 @@ public class PlayerMovement : MonoBehaviour
         Position = transform.position;
         currentVelocity = rb.velocity;
         bool pressCrouch = Input.GetKey("s") || Input.GetKey("down");
+        
 
 
         if (!(PauseMenu.gamePaused))
@@ -97,13 +123,15 @@ public class PlayerMovement : MonoBehaviour
     {
         if (IsCrouched)
         {
-            collider.size = new Vector2(0.29f, 0.30f);
-            collider.offset = new Vector2(-0.02f, 0.15f);
+            transform.localScale = crouchedScale;
+            boxCol.size = new Vector2(0.29f, 0.30f);
+            boxCol.offset = new Vector2(-0.02f, 0.15f);
         }
         else
         {
-            collider.size = new Vector2(0.29f, 0.60f);
-            collider.offset = new Vector2(-0.02f, 0.3f);
+            transform.localScale = originalScale;
+            boxCol.size = new Vector2(0.29f, 0.60f);
+            boxCol.offset = new Vector2(-0.02f, 0.3f);
         }
         
     }
@@ -131,10 +159,6 @@ public class PlayerMovement : MonoBehaviour
             coyoteCounter = coyoteTime;
         else
             coyoteCounter -= Time.deltaTime;
-
-        // One rope per jump
-        if (onGround)
-            ropeUsed = false;
     }
 
     void Jump()
@@ -170,19 +194,26 @@ public class PlayerMovement : MonoBehaviour
         float ropeMaxDistance = 1.2f;
         float ropeY = 0.6f;
         float ropeX = 0.6f;
-        float ropeLastSling = 100f;
-        bool canUseRope = true;
         
         Vector2 ropePosition;
         ropePosition.x = ropeAnchor.position.x;
         ropePosition.y = ropeAnchor.position.y;
 
 
-        notPossibleRope = Physics2D.OverlapCircle(ropePosition, 0.3f, ceilingLayer);
+        //notPossibleRope = Physics2D.OverlapCircle(ropePosition, 0.3f, ceilingLayer);
+        //if (notPossibleRope != null) canUseRope = false;
+        //else canUseRope = true;
+        
+        if (rope.enabled == false)
+            ropeTimer -= Time.deltaTime;
+        if (ropeTimer < 0)
+        {
+            ropeTimer = ropeDelay;
+            ropesLeft = 1;
+        }
 
-        if (notPossibleRope != null) canUseRope = false;
 
-        if (onGround == false && canUseRope)
+        if (onGround == false)
         {
             if (Input.GetButtonDown("Fire3"))
             {
@@ -194,10 +225,9 @@ public class PlayerMovement : MonoBehaviour
                     ropeHit = Physics2D.Raycast(ropePosition, ropePosition + new Vector2(-ropeX, ropeY) - ropePosition, ropeMaxDistance, ceilingLayer);
 
                 //  if it collides with something
-                if (ropeHit.collider != null && ropeHit.point.y > ropePosition.y && ropeUsed == false)
+                if (ropeHit.collider != null && ropeHit.point.y > ropePosition.y && ropesLeft > 0)
                 {
-                    // Only one rope per jump
-                    ropeUsed = true;
+                    ropesLeft -= 1;
                
                     rope.enabled = true;
 
@@ -212,11 +242,7 @@ public class PlayerMovement : MonoBehaviour
 
                     ropeRender.enabled = true;
                     ropeRender.SetPosition(0, ropeAnchor.position);
-                    ropeRender.SetPosition(1, new Vector3(rope.connectedAnchor.x, rope.connectedAnchor.y - 0.15f, 0));
-                    
-
-                    // TESTING ROPE RENDER
-                    //ropeRender.SetPosition(1, ropeAnchor.position);
+                    ropeRender.SetPosition(1, new Vector3(rope.connectedAnchor.x, rope.connectedAnchor.y - 0.15f, 0));         
                 }
             }
 
@@ -230,20 +256,9 @@ public class PlayerMovement : MonoBehaviour
                 if (wallCol != null)
                     rope.enabled = false;
 
-                // ADD ROPE SIZE // RENDER
-                /*
-                Vector3 thisRopePosition = ropeAnchor.position;
-                if (ropeRender.GetPosition(1) != new Vector3(rope.connectedAnchor.x, rope.connectedAnchor.y - 0.15f, 0))
-                {
-                    thisRopePosition += new Vector3(0.1f, 0.1f, 0);
-                    ropeRender.SetPosition(1, thisRopePosition);
-                }
-                */
-
-
             }
 
-            if (Input.GetButtonUp("Fire3"))
+            if (Input.GetButtonUp("Fire3") && ropeHit.collider != null)
             {
                 rope.enabled = false;
                 ropeRender.enabled = false;
@@ -251,7 +266,6 @@ public class PlayerMovement : MonoBehaviour
                 // Gives a final boost
                 if (usingRope)
                 {
-                    rb.AddForce(new Vector2(0f, ropeLastSling));
                     usingRope = false;
                 }
             }
@@ -271,27 +285,53 @@ public class PlayerMovement : MonoBehaviour
         float runSpeed = 2f;
         if (player.usingShield) runSpeed = 0f;
         if (player.usingShield && IsCrouched) runSpeed = 0f;
-        if (IsCrouched && !IsCrouched) runSpeed = 1f;
+        if (IsCrouched && !player.usingShield) runSpeed = 1f;
         // Rope movement
         Vector2 rightBalance = new Vector2(1500f * Time.deltaTime, 0f);
         Vector2 leftBalance = new Vector2(-1500f * Time.deltaTime, 0f);
+
+        
 
         // If the character is using a rope, ignore this speed
         if (!(usingRope))
             currentVelocity = new Vector2(runSpeed * hAxis, currentVelocity.y);
 
-        else
+
+        /*
+        if (gotHit)
+        {
+            gotHitDelayCounter -= Time.deltaTime;
+            currentVelocity = new Vector2(0f, 3f);
+        }
+        if (gotHitDelayCounter < 0)
+        {
+            gotHitDelayCounter = gotHitDelay;
+            gotHit = false;
+        }
+
+        if (invulnerable)
+        {
+            invulnerableCounter -= Time.deltaTime;
+            player.stats.CurrentHP = temporaryHP;
+        }
+        if (invulnerableCounter < 0)
+        {
+            invulnerable = false;
+        }
+        */
+
+
+       
+        if (usingRope)
         {
             if (rb.velocity.x < 3 && rb.velocity.x > -3)
             {
                 if (Input.GetKeyDown("d") || Input.GetKeyDown("right"))
                 {
-                    Debug.Log(rightBalance);
                     rb.AddForce(rightBalance);
                 }
                 if (Input.GetKeyDown("a") || Input.GetKeyDown("left"))
                 {
-                    Debug.Log(leftBalance);
                     rb.AddForce(leftBalance);
                 }
             }
@@ -307,7 +347,7 @@ public class PlayerMovement : MonoBehaviour
             noVelY = false;
     }
 
-
+    /*
     void OnCollisionEnter2D(Collision2D hitInfo)
     {
         Enemy enemy = hitInfo.transform.GetComponent<Enemy>();
@@ -315,10 +355,16 @@ public class PlayerMovement : MonoBehaviour
         if (enemy != null)
         {
             // FALTA METER MOVIMENTO QND LEVA HIT
-            player.stats.TakeDamage(25f);
+            if (!(invulnerable))
+            {
+                player.stats.TakeDamage(10f);
+                temporaryHP = player.stats.CurrentHP;
+                invulnerable = true;
+                gotHit = true;
+            }
         }
     }
-
+    */
 
     void SpriteRotation()
     {
