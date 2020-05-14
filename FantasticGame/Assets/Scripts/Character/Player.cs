@@ -41,6 +41,7 @@ public class Player : MonoBehaviour
     [SerializeField] bool           godMode;
     [SerializeField] bool           fly;
 
+
     private void Awake()
     {
         stats = new Stats();
@@ -85,6 +86,7 @@ public class Player : MonoBehaviour
             stats.RegenMana();
             animator.SetBool("attack", false);
             animator.SetBool("rangedAttack", false);
+            bool pressShield = Input.GetKey("w") || Input.GetKey("up");
             MagicPosition = magicPosition.position;
             // ---------------------------------------------------------------------------------------------
 
@@ -93,13 +95,13 @@ public class Player : MonoBehaviour
             // SHIELD --------------------------------------------------------------------------------------
             ShieldPosition = shieldPosition.position;
             usingShield = false;
-            canUseShield = stats.CurrentMana > 1f ? true : false;
 
-            if (movement.onGround && Input.GetKey("w") || Input.GetKey("up") && canUseShield)
+            canUseShield = CurrentMana > 5f ? true : false;
+
+            if (movement.onGround && pressShield && canUseShield)
             {             
                 Shield();
             }
-
 
             // RANGED ATTACK -------------------------------------------------------------------------------
             // Everytime the player attacks, it starts a timer and sets canAttack to false
@@ -165,7 +167,7 @@ public class Player : MonoBehaviour
         stats.CanRangeAttack = false;
         stats.SpendMana();
         // When Crouched
-        if (movement.IsCrouched) Instantiate(magicPrefab, crouchedMagicPosition.position, magicPosition.rotation);
+        if (movement.crouchGetter) Instantiate(magicPrefab, crouchedMagicPosition.position, magicPosition.rotation);
         else Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
     }
 

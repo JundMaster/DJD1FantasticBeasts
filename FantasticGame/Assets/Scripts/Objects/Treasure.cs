@@ -17,7 +17,7 @@ public class Treasure : MonoBehaviour
 
     private void Start()
     {
-        stats.CurrentHP = 100f;
+        stats.CurrentHP = 25f;
     }
 
     private void Update()

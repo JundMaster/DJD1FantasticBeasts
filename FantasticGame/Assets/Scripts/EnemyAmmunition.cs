@@ -19,7 +19,7 @@ public class EnemyAmmunition : MonoBehaviour
         rb.velocity = transform.right * speed;
 
         // Destroys the object if it doesn't hit anything
-        Destroy(gameObject, 215f * Time.deltaTime);
+        Destroy(gameObject, 400f * Time.deltaTime);
     }
 
 

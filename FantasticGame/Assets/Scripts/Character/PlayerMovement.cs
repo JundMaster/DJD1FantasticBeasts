@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     Vector2                         currentVelocity;
     float                           hAxis;
     float                           jumpTime;
+    float                           runSpeed;
     /*
     bool                            gotHit;
     float                           gotHitDelay;
@@ -20,12 +21,15 @@ public class PlayerMovement : MonoBehaviour
     */
 
     // Crouched
-    [SerializeField] BoxCollider2D  boxCol;
+    [SerializeField] BoxCollider2D      boxCol;
+    [SerializeField] CircleCollider2D   circleCol;
+    public bool                     crouchGetter    { get; private set; }
     public bool                     IsCrouched      { get; private set; }
     [SerializeField] Transform      playerScale;
     Vector3                         originalScale;
     Vector3                         crouchedScale;
-    
+    bool                            usingCrouch;
+    [SerializeField] Transform      ceilingOverHead;
     // Position
     public Vector3                  Position    { get; private set; }
 
@@ -39,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
 
     // Rope
     RaycastHit2D                        ropeHit;
-    Collider2D                          notPossibleRope;
+    bool                                minRange;
     [SerializeField] DistanceJoint2D    rope;
     [SerializeField] Transform          ropeAnchor;
     [SerializeField] LineRenderer       ropeRender;
@@ -75,8 +79,11 @@ public class PlayerMovement : MonoBehaviour
         noVelY = false;
         originalScale = playerScale.localScale;
         crouchedScale = playerScale.localScale / 2f;
-        ropeDelay = 0.25f;
+        ropeDelay = 0.5f;
         ropeTimer = ropeDelay;
+
+        boxCol.enabled = true;
+        circleCol.enabled = false;
 
         /*
         gotHitDelay = 0.1f;
@@ -92,9 +99,7 @@ public class PlayerMovement : MonoBehaviour
         hAxis = Input.GetAxis("Horizontal");
         Position = transform.position;
         currentVelocity = rb.velocity;
-        bool pressCrouch = Input.GetKey("s") || Input.GetKey("down");
-        
-
+        crouchGetter = circleCol.enabled;
 
         if (!(PauseMenu.gamePaused))
         {
@@ -103,7 +108,6 @@ public class PlayerMovement : MonoBehaviour
             Jump();
             Rope();
             NeutralVelY();
-            IsCrouched = pressCrouch && onGround ? true : false;
             Crouched();
             SpriteRotation();
             // Sets rigidbody final velocity
@@ -121,20 +125,35 @@ public class PlayerMovement : MonoBehaviour
     // CORRIGIR <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     void Crouched()
     {
-        if (IsCrouched)
+        Collider2D collisionTop = Physics2D.OverlapCircle(ceilingOverHead.position, 0.02f, onGroundLayers);
+
+        // Checks if the player pressed crouch
+        if (Input.GetKeyDown("s"))
         {
-            transform.localScale = crouchedScale;
-            boxCol.size = new Vector2(0.29f, 0.30f);
-            boxCol.offset = new Vector2(-0.02f, 0.15f);
+            usingCrouch = true;
+            IsCrouched = true;
+            circleCol.enabled = true;
+            boxCol.enabled = false;
         }
+        else if (Input.GetKeyUp("s"))
+        {
+            usingCrouch = false;
+
+        }
+        // If it's not using crouch AND the collision isn't detecting a roof, stand up
+        if (usingCrouch == false && IsCrouched == false)
+        {
+            
+            circleCol.enabled = false;
+            boxCol.enabled = true;
+        }
+
+        if (collisionTop != null)
+            IsCrouched = true;
         else
-        {
-            transform.localScale = originalScale;
-            boxCol.size = new Vector2(0.29f, 0.60f);
-            boxCol.offset = new Vector2(-0.02f, 0.3f);
-        }
-        
+            IsCrouched = false;
     }
+
 
     void Grounded()
     {
@@ -166,9 +185,9 @@ public class PlayerMovement : MonoBehaviour
         // JUMP
         float jumpSpeed = 3f;
         float jumpMaxTime = 0.15f;
-        
+
         // Jump conditions
-        if ((Input.GetButtonDown("Jump") && coyoteCounter > 0 && rb.velocity.y < 0.1))
+        if ((Input.GetButtonDown("Jump") && coyoteCounter > 0 && rb.velocity.y < 0.1) && usingCrouch == false && circleCol.enabled == true)
         {
             // If the player jumps, gravityScale is set to 0
             currentVelocity.y = jumpSpeed;
@@ -194,16 +213,19 @@ public class PlayerMovement : MonoBehaviour
         float ropeMaxDistance = 1.2f;
         float ropeY = 0.6f;
         float ropeX = 0.6f;
-        
         Vector2 ropePosition;
         ropePosition.x = ropeAnchor.position.x;
         ropePosition.y = ropeAnchor.position.y;
 
-
-        //notPossibleRope = Physics2D.OverlapCircle(ropePosition, 0.3f, ceilingLayer);
-        //if (notPossibleRope != null) canUseRope = false;
-        //else canUseRope = true;
+        // Doesn't let the player use the rope too close
+        if (!(usingRope))
+        {
+            Collider2D notPossibleRope = Physics2D.OverlapCircle(ropePosition, 0.35f, ceilingLayer);
+            if (notPossibleRope) minRange = true;
+            else minRange = false;
+        }
         
+        // Rope timer
         if (rope.enabled == false)
             ropeTimer -= Time.deltaTime;
         if (ropeTimer < 0)
@@ -225,7 +247,7 @@ public class PlayerMovement : MonoBehaviour
                     ropeHit = Physics2D.Raycast(ropePosition, ropePosition + new Vector2(-ropeX, ropeY) - ropePosition, ropeMaxDistance, ceilingLayer);
 
                 //  if it collides with something
-                if (ropeHit.collider != null && ropeHit.point.y > ropePosition.y && ropesLeft > 0)
+                if (ropeHit.collider != null && ropeHit.point.y > ropePosition.y && ropesLeft > 0 && minRange == false)
                 {
                     ropesLeft -= 1;
                
@@ -242,15 +264,16 @@ public class PlayerMovement : MonoBehaviour
 
                     ropeRender.enabled = true;
                     ropeRender.SetPosition(0, ropeAnchor.position);
-                    ropeRender.SetPosition(1, new Vector3(rope.connectedAnchor.x, rope.connectedAnchor.y - 0.15f, 0));         
+                    ropeRender.SetPosition(1, new Vector3(rope.connectedAnchor.x, rope.connectedAnchor.y - 0.22f, -0.5f));         
                 }
             }
 
             // Renders rope while pressing Fire3
-            if (Input.GetButton("Fire3") && ropeHit.collider != null)
+            if (Input.GetButton("Fire3") && ropeHit.collider != null && minRange == false)
             {
                 usingRope = true;
                 ropeRender.SetPosition(0, ropeAnchor.position);
+                usingRope = true;
 
                 Collider2D wallCol = Physics2D.OverlapCircle(ropeWallCollider.position, 0.02f, onGroundLayers);
                 if (wallCol != null)
@@ -282,15 +305,13 @@ public class PlayerMovement : MonoBehaviour
     void Movement()
     {
         // Running speed
-        float runSpeed = 2f;
         if (player.usingShield) runSpeed = 0f;
-        if (player.usingShield && IsCrouched) runSpeed = 0f;
-        if (IsCrouched && !player.usingShield) runSpeed = 1f;
+        if (circleCol.enabled == true && player.usingShield == true) runSpeed = 0f;
+        if (circleCol.enabled == true && player.usingShield == false) runSpeed = 1f;
+        if (circleCol.enabled == false && player.usingShield == false) runSpeed = 2f;
         // Rope movement
         Vector2 rightBalance = new Vector2(1500f * Time.deltaTime, 0f);
         Vector2 leftBalance = new Vector2(-1500f * Time.deltaTime, 0f);
-
-        
 
         // If the character is using a rope, ignore this speed
         if (!(usingRope))

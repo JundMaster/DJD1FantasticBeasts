@@ -33,13 +33,14 @@ public class Enemy : MonoBehaviour
     [SerializeField] int    lootChance;    // LOOT CHANCE 1 - 10
     [SerializeField] bool   holdPosition;   // HOLDS ENEMY POS
     [SerializeField] bool   staticEnemy;    // IF ENEMY IS A STATIC ENEMY
-
+    [SerializeField] bool   shooter;
 
     Vector2         startingPos;
     
     bool            limitWalkingRangeReached;
     Vector2         tempPosition;
     float           waitingTimeCounter;
+    bool   shooting;
 
 
     bool            backStabCheckerEnabled;
@@ -72,6 +73,24 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        // Movement -----------------------------------------------------------------------------------
+        if (shooting == true)
+        {
+            if (staticEnemy == false) holdPosition = true;  // ONLY FOR MOVING ENEMIES
+            if (stats.CanRangeAttack) Shoot();
+        }
+        if (shooting == false && staticEnemy == false) Movement();
+
+
+        // DRAW MAX RANGE OF ATTACK
+        aimDraw.enabled = true;
+        aimDraw.SetPosition(0, magicPosition.position);
+        if (transform.right.x > 0) aimDraw.SetPosition(1, magicPosition.position + magicPosition.right * maxAimRange);
+        if (transform.right.x < 0) aimDraw.SetPosition(1, magicPosition.position + new Vector3(-maxAimRange, 0f, 0f));
+
+        //  AIMING CHECK ------------------------------------------------------------------------------
+        AimCheck();
+
         // SHOOT ---------------------------------------------------------------------------------------
         if (stats.CanRangeAttack == false)
             stats.RangedAttackCounter -= Time.deltaTime;
@@ -84,26 +103,7 @@ public class Enemy : MonoBehaviour
         // CHECKS IF PLAYER IS ON THE ENEMY'S BACK ----------------------------------------------------
         BackStabCheck();
 
-
-
-        //  AIMING CHECK ------------------------------------------------------------------------------
-        AimCheck();
-
-
-
-        // DRAW MAX RANGE OF ATTACK
-        aimDraw.enabled = true;
-        aimDraw.SetPosition(0, magicPosition.position);
-        if (transform.right.x > 0) aimDraw.SetPosition(1, magicPosition.position + magicPosition.right * maxAimRange);
-        if (transform.right.x < 0) aimDraw.SetPosition(1, magicPosition.position + new Vector3(-maxAimRange, 0f, 0f));
-
-
-        // Movement -----------------------------------------------------------------------------------
-        
-        if (!(staticEnemy)) //if not a static enemy
-            if (!(holdPosition)) //holding position
-                Movement();
-
+        if (shooter) Shooter();
 
 
         // ALIVE --------------------------------------------------------------------------------------
@@ -145,18 +145,13 @@ public class Enemy : MonoBehaviour
         if (aim)
         {
             if (aim.rigidbody == player.movement.rb)
-            {
-                if (staticEnemy == false) holdPosition = true;  // ONLY FOR MOVING ENEMIES
-                if (stats.CanRangeAttack) Shoot();
-            }
+                shooting = true;
             else
             {
+                shooting = false;
                 holdPosition = false;
             }
         }
-
-
-
     }
 
     // Shoots
@@ -172,7 +167,7 @@ public class Enemy : MonoBehaviour
     void Movement()
     {
         Collider2D isGroundedCheck = Physics2D.OverlapCircle(groundCheck.position, 0.02f, groundLayer);
-        if (isGroundedCheck)
+        if (isGroundedCheck && holdPosition == false)
         {
             transform.position += transform.right * speed * Time.deltaTime;
 
@@ -212,6 +207,23 @@ public class Enemy : MonoBehaviour
                 transform.position += transform.right * speed * Time.deltaTime;
                 limitWalkingRangeReached = false;
             }
+        }
+    }
+
+    void Shooter()
+    {
+        if (stats.CanRangeAttack == false)
+            stats.RangedAttackCounter -= Time.deltaTime;
+        if (stats.RangedAttackCounter < 0)
+        {   // If timeDelay gets < 0, sets timer back to AttackDelay again and the character can attack
+            stats.RangedAttackCounter = stats.RangedAttackDelay;
+            stats.CanRangeAttack = true;
+        }
+
+        if (stats.CanRangeAttack)
+        {
+            Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
+            stats.CanRangeAttack = false;
         }
     }
 }

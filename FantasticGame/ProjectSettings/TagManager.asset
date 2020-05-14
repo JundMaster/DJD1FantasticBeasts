@@ -27,7 +27,7 @@ TagManager:
   - pickUps
   - enemyAmmunition
   - boxes
-  - 
+  - Foreground
   - 
   - 
   - 
@@ -44,4 +44,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: rope
+    uniqueID: 1930518939
+    locked: 0
+  - name: bg buildings
+    uniqueID: 2382064223
     locked: 0

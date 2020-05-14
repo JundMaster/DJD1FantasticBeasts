@@ -26,8 +26,8 @@ public class CameraFollow : MonoBehaviour
         maxLevelRangeYmin = new Vector3(0f, -1f, 0f);
         */
 
-        maxLevelRangeXmax = new Vector3(10000f, 0f, 0f);
-        maxLevelRangeXmin = new Vector3(-1000000f, 0f, 0f);
+        maxLevelRangeXmax = new Vector3(93f, 0f, 0f);
+        maxLevelRangeXmin = new Vector3(-2f, 0f, 0f);
 
         maxLevelRangeYmin = new Vector3(0f, -100000f, 0f);
     }
