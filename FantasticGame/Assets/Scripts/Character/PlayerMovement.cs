@@ -128,14 +128,14 @@ public class PlayerMovement : MonoBehaviour
         Collider2D collisionTop = Physics2D.OverlapCircle(ceilingOverHead.position, 0.02f, onGroundLayers);
 
         // Checks if the player pressed crouch
-        if (Input.GetKeyDown("s"))
+        if (Input.GetKeyDown("s") || Input.GetKeyDown("down"))
         {
             usingCrouch = true;
             IsCrouched = true;
             circleCol.enabled = true;
             boxCol.enabled = false;
         }
-        else if (Input.GetKeyUp("s"))
+        else if (Input.GetKeyUp("s") || Input.GetKeyUp("down"))
         {
             usingCrouch = false;
 
@@ -187,7 +187,7 @@ public class PlayerMovement : MonoBehaviour
         float jumpMaxTime = 0.15f;
 
         // Jump conditions
-        if ((Input.GetButtonDown("Jump") && coyoteCounter > 0 && rb.velocity.y < 0.1) && usingCrouch == false && circleCol.enabled == true)
+        if ((Input.GetButtonDown("Jump") && coyoteCounter > 0 && rb.velocity.y < 0.1) && usingCrouch == false && circleCol.enabled == false)
         {
             // If the player jumps, gravityScale is set to 0
             currentVelocity.y = jumpSpeed;
