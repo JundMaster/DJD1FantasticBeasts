@@ -150,6 +150,7 @@ public class Player : MonoBehaviour
             // ALIVE CONDITION ----------------------------------------------------------------------------
             if (!(stats.IsAlive))
             {
+                Destroy(gameObject);
                 stats.Die(gameObject);
             }
 

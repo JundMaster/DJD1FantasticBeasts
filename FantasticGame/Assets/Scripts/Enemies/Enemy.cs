@@ -19,28 +19,30 @@ public class Enemy : MonoBehaviour
     [SerializeField] Transform          groundRangeCheck, groundCheck, wallCheck, backStab;
 
     [SerializeField] LineRenderer       aimDraw; //Drawing range
-
-
-    [SerializeField] Player             player;
   
-
 
     [SerializeField] float  speed;       // WALKING SPEED
     [SerializeField] float  limitRange;  // RANGE FOR WALKING
     [SerializeField] float  maxAimRange; // RANGE FOR SHOOTING
     [SerializeField] float  attackDelay; // ATTACK DELAY
     [SerializeField] float  HP;          // CURRENT HP
+
+    [SerializeField] float  enemyDamage;     // ENEMY DAMAGE
     [SerializeField] int    lootChance;    // LOOT CHANCE 1 - 10
     [SerializeField] bool   holdPosition;   // HOLDS ENEMY POS
     [SerializeField] bool   staticEnemy;    // IF ENEMY IS A STATIC ENEMY
     [SerializeField] bool   shooter;
 
+    public float Damage { get; private set; }
+
     Vector2         startingPos;
-    
+
+    float           originalSpeed;
+
     bool            limitWalkingRangeReached;
     Vector2         tempPosition;
     float           waitingTimeCounter;
-    bool   shooting;
+    bool            shooting;
 
 
     bool            backStabCheckerEnabled;
@@ -62,12 +64,18 @@ public class Enemy : MonoBehaviour
         startingPos = transform.position;
         stats.CurrentHP = HP;
 
+        stats.RangedDamage = enemyDamage;
+        stats.MeleeDamage = enemyDamage;
+        Damage = enemyDamage;
+
         limitWalkingRangeReached = false;
 
         //waitingTimeCounter = waitingTime;
-        waitingTimeCounter = Random.Range(0f, 4f);
+        waitingTimeCounter = Random.Range(1f, 3f);
 
         backStabCheckerEnabled = false;
+
+        originalSpeed = speed;
 
     }
 
@@ -85,8 +93,8 @@ public class Enemy : MonoBehaviour
         // DRAW MAX RANGE OF ATTACK
         aimDraw.enabled = true;
         aimDraw.SetPosition(0, magicPosition.position);
-        if (transform.right.x > 0) aimDraw.SetPosition(1, magicPosition.position + magicPosition.right * maxAimRange);
-        if (transform.right.x < 0) aimDraw.SetPosition(1, magicPosition.position + new Vector3(-maxAimRange, 0f, 0f));
+        if (transform.right.x > 0) aimDraw.SetPosition(1, magicPosition.position + new Vector3(maxAimRange, 0f, -1f));
+        if (transform.right.x < 0) aimDraw.SetPosition(1, magicPosition.position + new Vector3(-maxAimRange, 0f, -1f));
 
         //  AIMING CHECK ------------------------------------------------------------------------------
         AimCheck();
@@ -117,6 +125,7 @@ public class Enemy : MonoBehaviour
             }
                
             stats.Die(gameObject);
+            Destroy(gameObject);
         }
     }
 
@@ -140,18 +149,26 @@ public class Enemy : MonoBehaviour
     // Checks if the the player is in range and if there's an object between the enemy and player
     void AimCheck()
     {
-
+        Player p1 = FindObjectOfType<Player>();
         RaycastHit2D aim = Physics2D.Raycast(magicPosition.position, magicPosition.right, maxAimRange);
-        if (aim)
+        if (aim.rigidbody == p1.movement.rb)
         {
-            if (aim.rigidbody == player.movement.rb)
-                shooting = true;
-            else
-            {
-                shooting = false;
-                holdPosition = false;
-            }
+            shooting = true;
+            speed = 0;
         }
+        else
+        {
+            shooting = false;
+            holdPosition = false;
+        }
+
+        if (transform.right.x > 0)
+            if (p1.transform.position.x > magicPosition.position.x + maxAimRange)
+                speed = originalSpeed;
+
+        if (transform.right.x < 0)
+            if (p1.transform.position.x < magicPosition.position.x - maxAimRange)
+                speed = originalSpeed;
     }
 
     // Shoots
@@ -159,7 +176,10 @@ public class Enemy : MonoBehaviour
     {
         backStabCheckerEnabled = true; // first time the enemy shoots, it enabled the backstabchecker
         stats.CanRangeAttack = false;
-        Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
+        GameObject projectileObject = Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
+        EnemyAmmunition ammo = projectileObject.GetComponent<EnemyAmmunition>();
+
+        ammo.enemy = this;
     }
 
     // Movement, turns 180 if reaches max position || if collides against a wall || if doesn't detect ground

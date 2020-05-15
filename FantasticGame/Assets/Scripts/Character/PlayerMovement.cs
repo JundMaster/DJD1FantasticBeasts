@@ -26,8 +26,6 @@ public class PlayerMovement : MonoBehaviour
     public bool                     crouchGetter    { get; private set; }
     public bool                     IsCrouched      { get; private set; }
     [SerializeField] Transform      playerScale;
-    Vector3                         originalScale;
-    Vector3                         crouchedScale;
     bool                            usingCrouch;
     [SerializeField] Transform      ceilingOverHead;
     // Position
@@ -77,9 +75,7 @@ public class PlayerMovement : MonoBehaviour
         rope.enabled = false;
         ropeRender.enabled = false;
         noVelY = false;
-        originalScale = playerScale.localScale;
-        crouchedScale = playerScale.localScale / 2f;
-        ropeDelay = 0.5f;
+        ropeDelay = 0.25f;
         ropeTimer = ropeDelay;
 
         boxCol.enabled = true;
@@ -120,6 +116,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("grounded", onGround);
             animator.SetBool("usingRope", usingRope);
             animator.SetBool("noVelY", noVelY);
+            animator.SetBool("crouch", circleCol.enabled);
         }        
     }
     // CORRIGIR <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -147,6 +144,10 @@ public class PlayerMovement : MonoBehaviour
             circleCol.enabled = false;
             boxCol.enabled = true;
         }
+
+        // TEMPORARY << NO ANIMATION
+   
+            
 
         if (collisionTop != null)
             IsCrouched = true;
@@ -369,13 +370,12 @@ public class PlayerMovement : MonoBehaviour
     }
 
     /*
-    void OnCollisionEnter2D(Collision2D hitInfo)
+    void OnTriggerEnter2D(Collider2D hitInfo)
     {
         Enemy enemy = hitInfo.transform.GetComponent<Enemy>();
 
         if (enemy != null)
         {
-            // FALTA METER MOVIMENTO QND LEVA HIT
             if (!(invulnerable))
             {
                 player.stats.TakeDamage(10f);
@@ -386,6 +386,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     */
+    
 
     void SpriteRotation()
     {

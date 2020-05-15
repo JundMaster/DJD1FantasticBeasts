@@ -7,10 +7,9 @@ public class Ammunition : MonoBehaviour
     [SerializeField] GameObject     ammunitionHit;
 
     [SerializeField] Rigidbody2D    rb;
-    [SerializeField] float          rangedDamage; 
     [SerializeField] float          speed;
 
-
+    Player p1;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +19,7 @@ public class Ammunition : MonoBehaviour
 
         // Destroys the object if it doesn't hit anything
         Destroy(gameObject, 400f * Time.deltaTime);
-
+        p1 = FindObjectOfType<Player>();
     }
 
 
@@ -33,12 +32,12 @@ public class Ammunition : MonoBehaviour
         // If there's a collision
         if (treasure != null)
         {
-            treasure.stats.TakeDamage(rangedDamage);
+            treasure.stats.TakeDamage(p1.stats.RangedDamage);
         }
 
         if (enemy != null)
         {
-            enemy.stats.TakeDamage(rangedDamage);
+            enemy.stats.TakeDamage(p1.stats.RangedDamage);
         }
 
 

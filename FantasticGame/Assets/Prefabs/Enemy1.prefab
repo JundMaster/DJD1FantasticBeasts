@@ -193,15 +193,16 @@ MonoBehaviour:
   wallCheck: {fileID: 1427029996}
   backStab: {fileID: 1774078116}
   aimDraw: {fileID: 5849754886814068407}
-  player: {fileID: 0}
   speed: 1
   limitRange: 1
   maxAimRange: 2
   attackDelay: 2
   HP: 50
+  damage: 10
   lootChance: 0
   holdPosition: 0
   staticEnemy: 0
+  shooter: 0
 --- !u!212 &5849754886814068403
 SpriteRenderer:
   m_ObjectHideFlags: 0

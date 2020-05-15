@@ -7,11 +7,9 @@ public class EnemyAmmunition : MonoBehaviour
     [SerializeField] GameObject ammunitionHit;
     [SerializeField] GameObject ammunitionHitShield;
     [SerializeField] Rigidbody2D rb;
-    [SerializeField] float rangedDamage;
     [SerializeField] float speed;
 
-
-
+    public Enemy enemy;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +18,7 @@ public class EnemyAmmunition : MonoBehaviour
 
         // Destroys the object if it doesn't hit anything
         Destroy(gameObject, 400f * Time.deltaTime);
+
     }
 
 
@@ -39,7 +38,7 @@ public class EnemyAmmunition : MonoBehaviour
                     }
                     else if (player.transform.position.x < rb.transform.position.x)
                     {
-                        player.stats.TakeDamage(rangedDamage);
+                        player.stats.TakeDamage(enemy.Damage);
                         Instantiate(ammunitionHit, transform.position, transform.rotation);
                     }
                 }
@@ -48,7 +47,7 @@ public class EnemyAmmunition : MonoBehaviour
                     if (player.transform.position.x > rb.transform.position.x)
                     {
                         Instantiate(ammunitionHit, transform.position, transform.rotation);
-                        player.stats.TakeDamage(rangedDamage);
+                        player.stats.TakeDamage(enemy.Damage);
                     }
                     else if (player.transform.position.x < rb.transform.position.x)
                     {
@@ -58,7 +57,7 @@ public class EnemyAmmunition : MonoBehaviour
             }
             else
             {
-                player.stats.TakeDamage(rangedDamage);
+                player.stats.TakeDamage(enemy.Damage);
                 Instantiate(ammunitionHit, transform.position, transform.rotation);
             }
         }

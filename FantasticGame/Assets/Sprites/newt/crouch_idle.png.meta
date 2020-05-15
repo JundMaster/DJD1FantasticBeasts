@@ -1,0 +1,272 @@
+fileFormatVersion: 2
+guid: a7ac7df9cc4c602418d2f961dcbd63a0
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 9159447272655079304
+    second: crouch_idle_0
+  - first:
+      213: -6061327372344356730
+    second: crouch_idle_1
+  - first:
+      213: -3426405251327565491
+    second: crouch_idle_2
+  - first:
+      213: -1463454895853769734
+    second: crouch_idle_3
+  - first:
+      213: 8183229803568962131
+    second: crouch_idle_4
+  - first:
+      213: 5281382210104421398
+    second: crouch_idle_5
+  - first:
+      213: -2760748863630958540
+    second: crouch_idle_6
+  - first:
+      213: -5876986188622789661
+    second: crouch_idle_7
+  - first:
+      213: -5041653877312111462
+    second: crouch_idle_8
+  - first:
+      213: 4782801994442475862
+    second: crouch_idle_9
+  - first:
+      213: -3982410389532386114
+    second: crouch_idle_10
+  - first:
+      213: -1158762482730434271
+    second: crouch_idle_11
+  - first:
+      213: -7464645955963132556
+    second: crouch_idle_12
+  - first:
+      213: -6699234223368394763
+    second: crouch_idle_13
+  - first:
+      213: -610438027154558274
+    second: crouch_idle_14
+  - first:
+      213: -8628006348177387595
+    second: crouch_idle_15
+  - first:
+      213: -7569372307207630556
+    second: crouch_idle_16
+  - first:
+      213: 1960698527741640336
+    second: crouch_idle_17
+  - first:
+      213: -7915869134228519663
+    second: crouch_idle_18
+  - first:
+      213: -5647776441618648532
+    second: crouch_idle_19
+  - first:
+      213: -6854523050888811664
+    second: crouch_idle_20
+  - first:
+      213: 631092831099143060
+    second: crouch_idle_21
+  - first:
+      213: -2255776182065675909
+    second: crouch_idle_22
+  - first:
+      213: 1218376600315569056
+    second: crouch_idle_23
+  - first:
+      213: -1980621397668313022
+    second: crouch_idle_24
+  - first:
+      213: 4456078294557455438
+    second: crouch_idle_25
+  - first:
+      213: -3021787419332545683
+    second: crouch_idle_26
+  - first:
+      213: 581549887086850985
+    second: crouch_idle_27
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: crouch_idle_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 60
+        height: 60
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 887c68104c4ec1f70800000000000000
+      internalID: 9159447272655079304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: crouch_idle_1
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 0
+        width: 60
+        height: 60
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68010108ed6d1eba0800000000000000
+      internalID: -6061327372344356730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: crouch_idle_2
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 60
+        height: 60
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d41661ae396f270d0800000000000000
+      internalID: -3426405251327565491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: crouch_idle_3
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 0
+        width: 60
+        height: 60
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: afb64d3a683c0bbe0800000000000000
+      internalID: -1463454895853769734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

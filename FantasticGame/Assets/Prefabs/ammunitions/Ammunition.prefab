@@ -4811,3 +4811,4 @@ MonoBehaviour:
   rb: {fileID: 4357377087198178749}
   rangedDamage: 25
   speed: 4
+  p1: {fileID: 0}
