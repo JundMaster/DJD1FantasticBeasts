@@ -22,6 +22,16 @@ public class Player : MonoBehaviour
     [SerializeField] float              shakeTime;
     [SerializeField] float              shakeForce;
 
+    [SerializeField] Transform          swoopingCicle;
+    [SerializeField] GameObject         swoopingPrefab;
+    [SerializeField] GameObject         swoopingSpawnerPrefab;
+    private Vector3                     swoopingSpawnPos;
+    private bool                        usingSwooping;
+    private bool                        usedSwooping;
+    private float                       swoopingCounter;
+    private float                       swoopingDelay;
+    [SerializeField] LayerMask          onGroundLayers;
+
     public Stats                        stats           { get; private set; }
     private Animator                    animator;
     public PlayerMovement               movement        { get; private set; }
@@ -71,7 +81,11 @@ public class Player : MonoBehaviour
         stats.MeleeAttackDelay = 0.45f;
         stats.MeleeAttackCounter = stats.MeleeAttackDelay;
 
+        swoopingDelay = 3f;
+        swoopingCounter = swoopingDelay;
+
         canScreenShake = false;
+        usingSwooping = false;
     }
 
     // Update is called once per frame
@@ -144,6 +158,35 @@ public class Player : MonoBehaviour
                     MeleeAttack();
                 }
 
+
+
+            // SWOOPING EVIL ------------------------------------------------------------------------------
+            Collider2D swoopingCheck = Physics2D.OverlapCircle(swoopingCicle.position, 0.2f, onGroundLayers);
+            if (Input.GetButtonDown("Fire3") && movement.onGround && usingSwooping == false && swoopingCheck == null)
+            {
+                Instantiate(swoopingSpawnerPrefab, swoopingCicle.position, transform.rotation);
+                swoopingSpawnPos = swoopingCicle.position;
+                usingSwooping = true;
+            }
+                
+            if (usingSwooping)
+                swoopingCounter -= Time.deltaTime;
+
+            if (swoopingCounter < 2.5f && usedSwooping == false)
+            {
+                usedSwooping    = true;
+                Instantiate(swoopingPrefab, swoopingSpawnPos, transform.rotation);
+            }
+            if (swoopingCounter < 0)
+            {
+                swoopingCounter = swoopingDelay;
+                usedSwooping    = false;
+                usingSwooping   = false;
+            }
+
+
+
+            Debug.Log(swoopingCounter);
 
 
 

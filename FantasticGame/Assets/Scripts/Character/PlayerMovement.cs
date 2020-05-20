@@ -25,7 +25,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] CircleCollider2D   circleCol;
     public bool                     crouchGetter    { get; private set; }
     public bool                     IsCrouched      { get; private set; }
-    [SerializeField] Transform      playerScale;
     bool                            usingCrouch;
     [SerializeField] Transform      ceilingOverHead;
     // Position
