@@ -144,3 +144,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be3237e725228be4792e4d266ba792d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swoopingSpawnerPrefab: {fileID: 7297083882377176823, guid: d95fd448fefbf6544b26bfe7d58d261c,
+    type: 3}

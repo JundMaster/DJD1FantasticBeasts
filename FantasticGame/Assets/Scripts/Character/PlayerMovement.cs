@@ -40,21 +40,25 @@ public class PlayerMovement : MonoBehaviour
 
     // Rope
     RaycastHit2D                        ropeHit;
+    Vector3                             ropeHitCoords;
     bool                                minRange;
     [SerializeField] DistanceJoint2D    rope;
     [SerializeField] Transform          ropeAnchor;
     [SerializeField] LineRenderer       ropeRender;
     [SerializeField] Transform          ropeWallCollider;
+    GameObject                          ropeSprite;
+    Vector3                             newRopeSprite;
     bool                                usingRope;
     float                               ropeDelay;
     float                               ropeTimer;
     int                                 ropesLeft;
 
 
+
     public Rigidbody2D                  rb      { get; private set; }
     Animator                            animator;
 
-
+    
     // Layers
     [SerializeField] LayerMask  ceilingLayer;
     [SerializeField] LayerMask  onGroundLayers;
@@ -67,8 +71,8 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         rope = GetComponent<DistanceJoint2D>();
-        //player = GetComponent<Player>();
         player = FindObjectOfType<Player>();
+        ropeSprite = GameObject.FindGameObjectWithTag("ropeSprite");
     }
 
     void Start()
@@ -81,6 +85,7 @@ public class PlayerMovement : MonoBehaviour
 
         boxCol.enabled = true;
         circleCol.enabled = false;
+
 
         /*
         gotHitDelay = 0.1f;
@@ -124,6 +129,7 @@ public class PlayerMovement : MonoBehaviour
         Collider2D deathTileCheck = Physics2D.OverlapCircle(groundCheck.position, 2f, deathTileLayer);
         if (deathTileCheck != null)
         {
+            DestroySwooping.swoopingIsAlive = false;
             player.stats.Die(player.gameObject);
             player.manager.Respawn();
         }
@@ -228,14 +234,19 @@ public class PlayerMovement : MonoBehaviour
         ropePosition.x = ropeAnchor.position.x;
         ropePosition.y = ropeAnchor.position.y;
 
-        // Doesn't let the player use the rope too close
+
         if (!(usingRope))
         {
+            // Doesn't let the player use the rope too close
             Collider2D notPossibleRope = Physics2D.OverlapCircle(ropePosition, 0.35f, ceilingLayer);
             if (notPossibleRope) minRange = true;
             else minRange = false;
+            // Sets ropeSprite to rope anchor position   AND keeps refreshing its position
+            if (ropeSprite != null) ropeSprite.SetActive(false);
+            newRopeSprite = ropeAnchor.position;
         }
-        
+        if (ropeSprite != null) ropeSprite.transform.position = newRopeSprite;
+
         // Rope timer
         if (rope.enabled == false)
             ropeTimer -= Time.deltaTime;
@@ -245,10 +256,10 @@ public class PlayerMovement : MonoBehaviour
             ropesLeft = 1;
         }
 
-
-        if (onGround == false)
+        // It's possible to use swooping evil if it isn't being used as a platform
+        if (onGround == false && DestroySwooping.swoopingIsAlive == false)
         {
-            if (Input.GetButtonDown("Fire3"))
+            if (Input.GetButtonDown("Fire3") )
             {
                 // Creates a 2dRaycast to get the collision rigidbody
                 // Uses ropeX and ropeY to aim the rope hit
@@ -259,7 +270,7 @@ public class PlayerMovement : MonoBehaviour
 
                 //  if it collides with something
                 if (ropeHit.collider != null && ropeHit.point.y > ropePosition.y && ropesLeft > 0 && minRange == false)
-                {
+                {         
                     ropesLeft -= 1;
                
                     rope.enabled = true;
@@ -269,13 +280,13 @@ public class PlayerMovement : MonoBehaviour
 
                     // Defines the anchor point to the point where it rope hitted
                     rope.connectedAnchor = new Vector2(ropeHit.point.x, ropeHit.point.y + 0.15f);
+                    ropeHitCoords = new Vector3(ropeHit.point.x, ropeHit.point.y, ropeSprite.transform.position.z);
 
                     // Sets rope distance, starts the rop with the size of this vector
                     rope.distance = ropeHit.distance;
 
-                    ropeRender.enabled = true;
-                    ropeRender.SetPosition(0, ropeAnchor.position);
-                    ropeRender.SetPosition(1, new Vector3(rope.connectedAnchor.x, rope.connectedAnchor.y - 0.22f, -0.5f));         
+                    ropeSprite.SetActive(true);
+                    ropeRender.enabled = true;       
                 }
             }
 
@@ -284,7 +295,11 @@ public class PlayerMovement : MonoBehaviour
             {
                 usingRope = true;
                 ropeRender.SetPosition(0, ropeAnchor.position);
-                usingRope = true;
+
+                // If the rope hasn't reached its point, it keeps drawing its self
+                if (ropeSprite.transform.position != ropeHitCoords) newRopeSprite = Vector3.MoveTowards(ropeSprite.transform.position, ropeHitCoords, 0.05f);
+                ropeRender.SetPosition(1, ropeSprite.transform.position);
+
 
                 Collider2D wallCol = Physics2D.OverlapCircle(ropeWallCollider.position, 0.02f, onGroundLayers);
                 if (wallCol != null)

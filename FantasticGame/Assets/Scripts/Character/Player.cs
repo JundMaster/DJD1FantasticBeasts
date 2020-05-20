@@ -85,7 +85,7 @@ public class Player : MonoBehaviour
         stats.MeleeAttackDelay = 0.45f;
         stats.MeleeAttackCounter = stats.MeleeAttackDelay;
 
-        swoopingDelay = 3f;
+        swoopingDelay = 2.6f;
         swoopingCounter = swoopingDelay;
 
         canScreenShake = false;
@@ -166,33 +166,26 @@ public class Player : MonoBehaviour
 
             // SWOOPING EVIL ------------------------------------------------------------------------------
             Collider2D swoopingCheck = Physics2D.OverlapCircle(swoopingCicle.position, 0.2f, onGroundLayers);
-            if (Input.GetButtonDown("Fire3") && movement.onGround && usingSwooping == false && swoopingCheck == null)
+            if (Input.GetButtonDown("Fire3") && movement.onGround && DestroySwooping.swoopingIsAlive == false && swoopingCheck == null)
             {
                 Instantiate(swoopingSpawnerPrefab, swoopingCicle.position, transform.rotation);
+                Instantiate(swoopingPrefab, swoopingCicle.position, transform.rotation);
                 swoopingSpawnPos = swoopingCicle.position;
                 usingSwooping = true;
+                usedSwooping = true;
             }
-                
-            if (usingSwooping)
-                swoopingCounter -= Time.deltaTime;
+            // Kills swooping evil if it's pressed again
+            if (Input.GetButtonDown("Fire3") && movement.onGround && DestroySwooping.swoopingIsAlive) 
+                DestroySwooping.swoopingIsAlive = false;
 
-            if (swoopingCounter < 2.5f && usedSwooping == false)
-            {
-                usedSwooping    = true;
-                Instantiate(swoopingPrefab, swoopingSpawnPos, transform.rotation);
-            }
-            if (swoopingCounter < 0)
-            {
-                swoopingCounter = swoopingDelay;
-                usedSwooping    = false;
-                usingSwooping   = false;
-            }
+
 
 
 
             // ALIVE CONDITION ----------------------------------------------------------------------------
             if (!(stats.IsAlive))
             {
+                DestroySwooping.swoopingIsAlive = false;
                 stats.Die(gameObject);
                 manager.Respawn();
             }

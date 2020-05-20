@@ -8,6 +8,7 @@ TagManager:
   - treasure
   - pickUp
   - playerAmmunition
+  - ropeSprite
   layers:
   - Default
   - TransparentFX
