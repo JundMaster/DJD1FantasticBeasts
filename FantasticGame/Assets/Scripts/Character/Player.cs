@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     [SerializeField] LayerMask          treasureLayer;
     [SerializeField] LayerMask          enemyLayer, enemyAmmunitionLayer;
 
-    [SerializeField] CameraShake        cameraShake;
+    private CameraShake                 cameraShake;
     [SerializeField] float              shakeTime;
     [SerializeField] float              shakeForce;
 
@@ -52,11 +52,15 @@ public class Player : MonoBehaviour
     [SerializeField] bool           fly;
 
 
+    public LevelManager             manager { get; private set; }
+
     private void Awake()
     {
         stats = new Stats();
         animator = GetComponent<Animator>();
         movement = GetComponent<PlayerMovement>();
+        cameraShake = FindObjectOfType<CameraShake>();
+        manager = FindObjectOfType<LevelManager>();
     }
 
 
@@ -113,7 +117,7 @@ public class Player : MonoBehaviour
             canUseShield = CurrentMana > 5f ? true : false;
 
             if (movement.onGround && pressShield && canUseShield)
-            {             
+            {
                 Shield();
             }
 
@@ -186,15 +190,11 @@ public class Player : MonoBehaviour
 
 
 
-            Debug.Log(swoopingCounter);
-
-
-
             // ALIVE CONDITION ----------------------------------------------------------------------------
             if (!(stats.IsAlive))
             {
-                Destroy(gameObject);
                 stats.Die(gameObject);
+                manager.Respawn();
             }
 
             if (godMode) stats.CurrentHP = 10000000000;

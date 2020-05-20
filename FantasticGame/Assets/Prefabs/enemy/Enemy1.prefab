@@ -28,7 +28,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5849754886814068402}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1058641896
 GameObject:
@@ -58,7 +58,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5849754886814068402}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1427029995
 GameObject:
@@ -88,7 +88,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5849754886814068402}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1774078115
 GameObject:
@@ -118,7 +118,37 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5849754886814068402}
-  m_RootOrder: 4
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5346886211108831040
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 886074153621237573}
+  m_Layer: 13
+  m_Name: magicPositionCrouch
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &886074153621237573
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5346886211108831040}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.284, y: -0.103, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5849754886814068402}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5849754886814068401
 GameObject:
@@ -153,6 +183,7 @@ Transform:
   m_LocalScale: {x: 1, y: 2, z: 1}
   m_Children:
   - {fileID: 5849754887289469781}
+  - {fileID: 886074153621237573}
   - {fileID: 98882452}
   - {fileID: 1058641897}
   - {fileID: 1427029996}
@@ -173,6 +204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   magicPosition: {fileID: 5849754887289469781}
+  magicPositionCrouch: {fileID: 886074153621237573}
   magicPrefab: {fileID: 938036225051192266, guid: b31e39fa92235a94782fa88099db05bc,
     type: 3}
   playerLayer:
@@ -194,15 +226,13 @@ MonoBehaviour:
   backStab: {fileID: 1774078116}
   aimDraw: {fileID: 5849754886814068407}
   speed: 1
-  limitRange: 1
-  maxAimRange: 2
+  limitRange: 1.5
+  maxAimRange: 1.7
   attackDelay: 2
-  HP: 50
-  damage: 10
-  lootChance: 0
-  holdPosition: 0
+  HP: 100
+  enemyDamage: 20
+  lootChance: 3
   staticEnemy: 0
-  shooter: 0
 --- !u!212 &5849754886814068403
 SpriteRenderer:
   m_ObjectHideFlags: 0

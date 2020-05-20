@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
     public Stats stats { get; private set; }
 
     [SerializeField] Transform          magicPosition;
+    [SerializeField] Transform          magicPositionCrouch;
     [SerializeField] GameObject         magicPrefab;
 
 
@@ -29,9 +30,10 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] float  enemyDamage;     // ENEMY DAMAGE
     [SerializeField] int    lootChance;    // LOOT CHANCE 1 - 10
-    [SerializeField] bool   holdPosition;   // HOLDS ENEMY POS
+    private bool            holdPosition;   // HOLDS ENEMY POS
     [SerializeField] bool   staticEnemy;    // IF ENEMY IS A STATIC ENEMY
-    [SerializeField] bool   shooter;
+
+    //[SerializeField] bool   shooter; // ONLY FOR DEMO
 
     public float Damage { get; private set; }
 
@@ -111,7 +113,8 @@ public class Enemy : MonoBehaviour
         // CHECKS IF PLAYER IS ON THE ENEMY'S BACK ----------------------------------------------------
         BackStabCheck();
 
-        if (shooter) Shooter();
+        // ONLY FOR DEMO
+        // if (shooter) Shooter();
 
 
         // ALIVE --------------------------------------------------------------------------------------
@@ -150,8 +153,9 @@ public class Enemy : MonoBehaviour
     void AimCheck()
     {
         Player p1 = FindObjectOfType<Player>();
-        RaycastHit2D aim = Physics2D.Raycast(magicPosition.position, magicPosition.right, maxAimRange);
-        if (aim.rigidbody == p1.movement.rb)
+        RaycastHit2D aimTop = Physics2D.Raycast(magicPosition.position, magicPosition.right, maxAimRange);
+        RaycastHit2D aimBottom = Physics2D.Raycast(magicPositionCrouch.position, magicPositionCrouch.right, maxAimRange);
+        if (aimTop.rigidbody == p1.movement.rb || aimBottom.rigidbody == p1.movement.rb)
         {
             shooting = true;
             speed = 0;
@@ -230,6 +234,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    /*  ONLY FOR DEMO
     void Shooter()
     {
         if (stats.CanRangeAttack == false)
@@ -246,6 +251,7 @@ public class Enemy : MonoBehaviour
             stats.CanRangeAttack = false;
         }
     }
+    */
 }
 
 

@@ -28,6 +28,7 @@ public class EnemyAmmunition : MonoBehaviour
 
         if (player != null)
         {
+            
             if (player.usingShield)
             {
                 if (player.transform.right.x < 0) // Turned left
@@ -59,9 +60,10 @@ public class EnemyAmmunition : MonoBehaviour
             {
                 player.stats.TakeDamage(enemy.Damage);
                 Instantiate(ammunitionHit, transform.position, transform.rotation);
+                Debug.Log("hit");
+
             }
         }
-
         else Instantiate(ammunitionHit, transform.position, transform.rotation);
 
         Destroy(gameObject);

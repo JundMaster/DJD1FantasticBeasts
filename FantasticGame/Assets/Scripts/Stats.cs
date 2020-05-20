@@ -37,6 +37,7 @@ public class Stats : MonoBehaviour
 
     public void Die(GameObject gameObject)
     {
+        IsAlive = false;
         Destroy(gameObject);
     }
 

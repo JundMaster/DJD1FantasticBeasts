@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField] Player player;
+    [SerializeField] Player     player;
+    [SerializeField] Transform  respawnPoint;
 
-    // Start is called before the first frame update
-    void Start()
+
+    void Awake()
     {
-        
+        Instantiate(player, respawnPoint.position, transform.rotation);
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public void Respawn()
     {
-        //Instantiate(player);
+        Instantiate(player, respawnPoint.position, transform.rotation);
     }
+
+
 }

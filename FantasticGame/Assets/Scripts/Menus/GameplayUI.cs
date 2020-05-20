@@ -7,14 +7,17 @@ public class GameplayUI : MonoBehaviour
     [SerializeField] RectTransform healthBar;
     [SerializeField] RectTransform manaBar;
 
-    [SerializeField] Player player;
+    private Player player;
 
     private void Awake()
     {
+        player = FindObjectOfType<Player>();
     }
 
     private void Update()
     {
+        player = FindObjectOfType<Player>();
+
         if (manaBar)
         {
             manaBar.localScale = new Vector3(player.CurrentMana / 100f, 1f, 1f);

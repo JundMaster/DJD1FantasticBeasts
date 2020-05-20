@@ -56,17 +56,19 @@ public class PlayerMovement : MonoBehaviour
 
 
     // Layers
-    [SerializeField] LayerMask ceilingLayer;
-    [SerializeField] LayerMask onGroundLayers;
+    [SerializeField] LayerMask  ceilingLayer;
+    [SerializeField] LayerMask  onGroundLayers;
+    [SerializeField] LayerMask  deathTileLayer;
 
-    [SerializeField] Player player;
+    private Player              player;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         rope = GetComponent<DistanceJoint2D>();
-        player = GetComponent<Player>();
+        //player = GetComponent<Player>();
+        player = FindObjectOfType<Player>();
     }
 
     void Start()
@@ -116,9 +118,18 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("usingRope", usingRope);
             animator.SetBool("noVelY", noVelY);
             animator.SetBool("crouch", circleCol.enabled);
-        }        
+        }
+
+        // COLLISION WITH DEATH TILE ----------------------------------------------------------------
+        Collider2D deathTileCheck = Physics2D.OverlapCircle(groundCheck.position, 2f, deathTileLayer);
+        if (deathTileCheck != null)
+        {
+            player.stats.Die(player.gameObject);
+            player.manager.Respawn();
+        }
     }
-    // CORRIGIR <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
     void Crouched()
     {
         Collider2D collisionTop = Physics2D.OverlapCircle(ceilingOverHead.position, 0.02f, onGroundLayers);
@@ -385,7 +396,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     */
-    
+
 
     void SpriteRotation()
     {
