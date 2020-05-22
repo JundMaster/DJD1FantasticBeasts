@@ -28,39 +28,47 @@ public class EnemyAmmunition : MonoBehaviour
 
         if (player != null)
         {
-            
-            if (player.UsingShield)
+            if (player.Movement.Invulnerable == false)
             {
-                if (player.transform.right.x < 0) // Turned left
+                if (player.UsingShield)
                 {
-                    if (player.transform.position.x > rb.transform.position.x)
+                    if (player.transform.right.x < 0) // Turned left
                     {
-                        Instantiate(ammunitionHitShield, player.ShieldPosition, transform.rotation);
+                        if (player.transform.position.x > rb.transform.position.x)
+                        {
+                            Instantiate(ammunitionHitShield, player.ShieldPosition, transform.rotation);
+                        }
+                        else if (player.transform.position.x < rb.transform.position.x)
+                        {
+                            player.Stats.TakeDamage(enemy.Damage);
+                            Instantiate(ammunitionHit, transform.position, transform.rotation);
+                        }
                     }
-                    else if (player.transform.position.x < rb.transform.position.x)
+                    else if (player.transform.right.x > 0) // Turned Right
                     {
-                        player.Stats.TakeDamage(enemy.Damage);
-                        Instantiate(ammunitionHit, transform.position, transform.rotation);
+                        if (player.transform.position.x > rb.transform.position.x)
+                        {
+                            Instantiate(ammunitionHit, transform.position, transform.rotation);
+                            player.Stats.TakeDamage(enemy.Damage);
+                        }
+                        else if (player.transform.position.x < rb.transform.position.x)
+                        {
+                            Instantiate(ammunitionHitShield, player.ShieldPosition, transform.rotation);
+                        }
                     }
                 }
-                else if (player.transform.right.x > 0) // Turned Right
+                else
                 {
-                    if (player.transform.position.x > rb.transform.position.x)
-                    {
-                        Instantiate(ammunitionHit, transform.position, transform.rotation);
-                        player.Stats.TakeDamage(enemy.Damage);
-                    }
-                    else if (player.transform.position.x < rb.transform.position.x)
-                    {
-                        Instantiate(ammunitionHitShield, player.ShieldPosition, transform.rotation);
-                    }
-                }
-            }
-            else
-            {
-                player.Stats.TakeDamage(enemy.Damage);
-                Instantiate(ammunitionHit, transform.position, transform.rotation);
+                    player.Stats.TakeDamage(enemy.Damage);
+                    Instantiate(ammunitionHit, transform.position, transform.rotation);
 
+                    if (player.transform.position.x > rb.transform.position.x)
+                        player.Movement.Rb.AddForce(new Vector2(100f, 0f));
+                    else if (player.transform.position.x < rb.transform.position.x)
+                        player.Movement.Rb.AddForce(new Vector2(-100f, 0f));
+
+                    StartCoroutine(player.CameraShake.Shake(0.015f, 0.04f));
+                }
             }
         }
         else Instantiate(ammunitionHit, transform.position, transform.rotation);

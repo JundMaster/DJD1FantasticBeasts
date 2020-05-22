@@ -49,6 +49,13 @@ public class PlayerMovement : MonoBehaviour
     float                               ropeTimer;
     int                                 ropesLeft;
 
+    // ENEMY HIT
+    public bool                         Invulnerable    { get; set; }
+    float                               invulnerableTimer;
+    float                               invulnerableDelay;
+    [SerializeField] SpriteRenderer     spriteRender;
+    float                               spriteEnableCounter;
+    float                               spriteEnableDelay;
 
     // Layers
     [SerializeField] LayerMask  ceilingLayer;
@@ -56,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask  groundedNotFloorLayers;
     [SerializeField] LayerMask  deathTileLayer;
     [SerializeField] LayerMask  ropeStopLayer;
+    [SerializeField] LayerMask  enemyLayer;
 
     // ETC
     private Player              player;
@@ -84,6 +92,12 @@ public class PlayerMovement : MonoBehaviour
 
         lastJumpDelay = 0.55f; // Timer to jump again
         lastJumpCounter = lastJumpDelay;
+
+        Invulnerable = false;
+        invulnerableDelay = 1f;
+        invulnerableTimer = invulnerableDelay;
+        spriteEnableDelay = 0.1f;
+        spriteEnableCounter = spriteEnableDelay;
     }
 
     void Update()
@@ -104,6 +118,7 @@ public class PlayerMovement : MonoBehaviour
             NeutralVelY();
             Crouched();
             SpriteRotation();
+            EnemyCollision();
             // Sets rigidbody final velocity
             Rb.velocity = currentVelocity;
 
@@ -117,13 +132,34 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("crouch", circleCol.enabled);
         }
 
+        // INVULNERABLE  -----------------------------------------------------------------------------
+        if (Invulnerable)
+        {
+            invulnerableTimer -= Time.deltaTime;
+            spriteEnableCounter -= Time.deltaTime;
+        }
+        if (spriteEnableCounter < 0)
+        {
+            spriteRender.enabled = !spriteRender.enabled;
+            spriteEnableCounter = spriteEnableDelay;
+        }
+        if (invulnerableTimer < 0)
+        {
+            invulnerableTimer = invulnerableDelay;
+            Invulnerable = false;
+            spriteRender.enabled = true;
+        }
+        // -----------------------------------------------------------------------------------------
+        Debug.Log(spriteEnableCounter);
+
+
         // COLLISION WITH DEATH TILE ----------------------------------------------------------------
         Collider2D deathTileCheck = Physics2D.OverlapCircle(groundCheck.position, 2f, deathTileLayer);
         if (deathTileCheck != null)
             player.Stats.IsAlive = false;
         // -----------------------------------------------------------------------------------------
-        if (Physics2D.OverlapCircle(groundCheck.position, 0.5f, groundedNotFloorLayers)) groundedNotFloor = true;
-        else groundedNotFloor = false;
+        
+
 
         // CHECKS IF THE PLAYER IS GROUNDED // FIXES CEILING DOUBLE JUMP BUG
         if (jumped)
@@ -133,7 +169,30 @@ public class PlayerMovement : MonoBehaviour
             jumped = false;
             lastJumpCounter = lastJumpDelay;
         }
+
+        // Fixes animation bug on other tiles
+        if (Physics2D.OverlapCircle(groundCheck.position, 0.5f, groundedNotFloorLayers)) groundedNotFloor = true;
+        else groundedNotFloor = false;
         // -----------------------------------------------------------------------------------------
+    }
+
+    void EnemyCollision()
+    {
+        Collider2D collider = Physics2D.OverlapBox(boxCol.bounds.center, boxCol.bounds.size, 0, enemyLayer);
+
+        if (collider != null)
+            if (Invulnerable == false)
+            {
+                player.Stats.CurrentHP -= 10;
+                EnemyHit();
+            }
+    }
+
+    void EnemyHit()
+    {
+        currentVelocity.y = 5f;
+        Invulnerable = true;
+        StartCoroutine(player.CameraShake.Shake(0.015f, 0.04f));
     }
 
 
@@ -359,7 +418,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-
 
     void NeutralVelY()
     {

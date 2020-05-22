@@ -40,7 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 504492944632311053}
   m_Layer: 9
-  m_Name: swoopingCircle
+  m_Name: swoopingPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -237,6 +237,7 @@ MonoBehaviour:
   ropeWallCollider: {fileID: 504492946230046973}
   rope: {fileID: 504492945739365246}
   ropeRender: {fileID: 504492946553927960}
+  spriteRender: {fileID: 504492945739365222}
   ceilingLayer:
     serializedVersion: 2
     m_Bits: 2048
@@ -252,6 +253,9 @@ MonoBehaviour:
   ropeStopLayer:
     serializedVersion: 2
     m_Bits: 731392
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 8192
 --- !u!114 &504492945739365232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,7 +281,7 @@ MonoBehaviour:
   crouchedShieldPosition: {fileID: 504492946250715700}
   shieldPrefab: {fileID: 7368821073907448600, guid: 6bebaf02af42ee24980cdf523d0db9cd,
     type: 3}
-  swoopingCicle: {fileID: 504492944632311053}
+  swoopingPosition: {fileID: 504492944632311053}
   swoopingPrefab: {fileID: 8945896090885771177, guid: ed182e469efd5e349a8983f3b99ad43d,
     type: 3}
   swoopingSpawnerPrefab: {fileID: 7297083882377176823, guid: d95fd448fefbf6544b26bfe7d58d261c,
@@ -298,6 +302,7 @@ MonoBehaviour:
   shakeForce: 0.055
   godMode: 0
   fly: 0
+  infiniteMana: 0
 --- !u!50 &504492945739365241
 Rigidbody2D:
   serializedVersion: 4

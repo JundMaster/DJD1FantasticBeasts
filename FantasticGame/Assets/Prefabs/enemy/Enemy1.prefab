@@ -166,7 +166,7 @@ GameObject:
   - component: {fileID: 5849754886814068407}
   m_Layer: 13
   m_Name: Enemy1
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -224,7 +224,6 @@ MonoBehaviour:
   groundCheck: {fileID: 1058641897}
   wallCheck: {fileID: 1427029996}
   backStab: {fileID: 1774078116}
-  aimDraw: {fileID: 5849754886814068407}
   speed: 1
   limitRange: 1.5
   maxAimRange: 1.7

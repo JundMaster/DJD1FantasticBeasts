@@ -21,12 +21,10 @@ public class Player : MonoBehaviour
     private bool                        canUseShield;
 
     // SWOOPING EVIL
-    [SerializeField] Transform swoopingCicle;
+    [SerializeField] Transform  swoopingPosition;
     [SerializeField] GameObject swoopingPrefab;
     [SerializeField] GameObject swoopingSpawnerPrefab;
-    private Vector3 swoopingSpawnPos;
-    private bool usingSwooping;
-    private bool usedSwooping;
+
 
     // LAYERS
     [SerializeField] LayerMask          treasureLayer;
@@ -34,13 +32,13 @@ public class Player : MonoBehaviour
     [SerializeField] LayerMask          onGroundLayers;
 
     // CAMERA
-    private CameraShake                 cameraShake;
+    public CameraShake                  CameraShake         { get; private set; }
     [SerializeField] float              shakeTime;
     [SerializeField] float              shakeForce;
     private bool                        canScreenShake;
 
     // ANIMATOR
-    private Animator animator;
+    private Animator                    animator;
 
     // GET SETTERS
     public Stats                        Stats               { get; private set; }
@@ -56,6 +54,7 @@ public class Player : MonoBehaviour
     // CHEATS
     [SerializeField] bool           godMode;
     [SerializeField] bool           fly;
+    [SerializeField] bool           infiniteMana;
 
 
     private void Awake()
@@ -63,7 +62,7 @@ public class Player : MonoBehaviour
         Stats =     new Stats();
         animator =  GetComponent<Animator>();
         Movement =  GetComponent<PlayerMovement>();
-        cameraShake = FindObjectOfType<CameraShake>();
+        CameraShake = FindObjectOfType<CameraShake>();
         Manager =   FindObjectOfType<LevelManager>();
     }
 
@@ -95,7 +94,6 @@ public class Player : MonoBehaviour
 
         // ETC
         canScreenShake = false;
-        usingSwooping = false;
     }
 
     // Update is called once per frame
@@ -136,7 +134,7 @@ public class Player : MonoBehaviour
                 Stats.RangedAttackCounter -= Time.deltaTime;
                 if (Stats.RangedAttackCounter < 0.45f && canScreenShake) // SCREEN SHAKE WITH DELAY
                 {
-                    StartCoroutine(cameraShake.Shake(shakeTime, shakeForce));
+                    StartCoroutine(CameraShake.Shake(shakeTime, shakeForce));
                     canScreenShake = false;
                 }
             }
@@ -175,14 +173,12 @@ public class Player : MonoBehaviour
 
 
             // SWOOPING EVIL ------------------------------------------------------------------------------
-            Collider2D swoopingCheck = Physics2D.OverlapCircle(swoopingCicle.position, 0.2f, onGroundLayers);
+            Collider2D swoopingCheck = Physics2D.OverlapCircle(swoopingPosition.position, 0.2f, onGroundLayers);
             if (Input.GetButtonDown("Fire3") && Movement.OnGround && SwoopingEvilPlatform.isAlive == false && swoopingCheck == null)
             {
-                Instantiate(swoopingSpawnerPrefab, swoopingCicle.position, transform.rotation);
-                Instantiate(swoopingPrefab, swoopingCicle.position, transform.rotation);
-                swoopingSpawnPos = swoopingCicle.position;
-                usingSwooping = true;
-                usedSwooping = true;
+                Instantiate(swoopingSpawnerPrefab, swoopingPosition.position, transform.rotation);
+                Instantiate(swoopingPrefab, swoopingPosition.position, transform.rotation);
+
             }
             // Kills swooping evil if it's pressed again
             if (Input.GetButtonDown("Fire3") && Movement.OnGround && SwoopingEvilPlatform.isAlive) 
@@ -191,8 +187,9 @@ public class Player : MonoBehaviour
 
 
             // CHEATS
-            if (godMode) Stats.CurrentHP = 10000000000;
+            if (godMode) Movement.Invulnerable = true;
             if (fly) if (Input.GetButton("Jump")) Movement.Rb.gravityScale = 0f;
+            if (infiniteMana) Stats.CurrentMana = Stats.MaxMana;
         }
     }
 
@@ -232,12 +229,11 @@ public class Player : MonoBehaviour
 
     void Shield()
     {
-        if (Physics2D.OverlapCircle(shieldPosition.position, 0.1f, enemyAmmunitionLayer)) StartCoroutine(cameraShake.Shake(0.015f, 0.04f));
+        if (Physics2D.OverlapCircle(shieldPosition.position, 0.1f, enemyAmmunitionLayer)) StartCoroutine(CameraShake.Shake(0.015f, 0.04f));
         if (Movement.IsCrouched) Instantiate(shieldPrefab, crouchedShieldPosition.position, transform.rotation);
         else Instantiate(shieldPrefab, shieldPosition.position, transform.rotation);
         UsingShield = true;
         Stats.CurrentMana -= 10f * Time.deltaTime;
-
     }
 
 
