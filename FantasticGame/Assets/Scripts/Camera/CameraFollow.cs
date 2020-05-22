@@ -20,15 +20,12 @@ public class CameraFollow : MonoBehaviour
 
     private void Start()
     {
-        /* test lvl
-        maxLevelRangeXmax = new Vector3 (8f, 0f, 0f);
-        maxLevelRangeXmin = new Vector3(-6f, 0f, 0f);
-
+        /*
         maxLevelRangeYmin = new Vector3(0f, -1f, 0f);
         */
 
-        maxLevelRangeXmax = new Vector3(10000f, 0f, 0f);
-        maxLevelRangeXmin = new Vector3(-2f, 0f, 0f);
+        maxLevelRangeXmax = new Vector3(4f, 0f, 0f);
+        maxLevelRangeXmin = new Vector3(-2.5f, 0f, 0f);
 
         //maxLevelRangeYmin = new Vector3(0f, -100000f, 0f);
     }
