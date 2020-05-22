@@ -243,12 +243,15 @@ MonoBehaviour:
   onGroundLayers:
     serializedVersion: 2
     m_Bits: 133376
+  groundedNotFloorLayers:
+    serializedVersion: 2
+    m_Bits: 133120
   deathTileLayer:
     serializedVersion: 2
     m_Bits: 524288
   ropeStopLayer:
     serializedVersion: 2
-    m_Bits: 721152
+    m_Bits: 731392
 --- !u!114 &504492945739365232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,7 +293,7 @@ MonoBehaviour:
     m_Bits: 65536
   onGroundLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 133376
   shakeTime: 0.0175
   shakeForce: 0.055
   godMode: 0

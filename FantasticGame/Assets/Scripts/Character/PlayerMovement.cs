@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     // GROUNDCHECK ++ JUMP
     bool                                noVelY;
     float                               coyoteCounter;
+    bool                                groundedNotFloor;
     [SerializeField] Transform          groundCheck;
     // GROUNDCHECK GET SET
     public bool                         OnGround        { get; private set; }
@@ -52,6 +53,7 @@ public class PlayerMovement : MonoBehaviour
     // Layers
     [SerializeField] LayerMask  ceilingLayer;
     [SerializeField] LayerMask  onGroundLayers;
+    [SerializeField] LayerMask  groundedNotFloorLayers;
     [SerializeField] LayerMask  deathTileLayer;
     [SerializeField] LayerMask  ropeStopLayer;
 
@@ -105,9 +107,10 @@ public class PlayerMovement : MonoBehaviour
             // Sets rigidbody final velocity
             Rb.velocity = currentVelocity;
 
-            // Animator
+
             animator.SetFloat("absVelX", Mathf.Abs(currentVelocity.x));
             animator.SetFloat("jumpVel", (currentVelocity.y));
+            animator.SetBool("groundedNotFloor", groundedNotFloor);
             animator.SetBool("grounded", OnGround);
             animator.SetBool("usingRope", usingRope);
             animator.SetBool("noVelY", noVelY);
@@ -119,6 +122,8 @@ public class PlayerMovement : MonoBehaviour
         if (deathTileCheck != null)
             player.Stats.IsAlive = false;
         // -----------------------------------------------------------------------------------------
+        if (Physics2D.OverlapCircle(groundCheck.position, 0.5f, groundedNotFloorLayers)) groundedNotFloor = true;
+        else groundedNotFloor = false;
 
         // CHECKS IF THE PLAYER IS GROUNDED // FIXES CEILING DOUBLE JUMP BUG
         if (jumped)
