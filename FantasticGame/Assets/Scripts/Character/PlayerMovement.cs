@@ -297,7 +297,7 @@ public class PlayerMovement : MonoBehaviour
                 ropeRender.SetPosition(0, ropeAnchor.position);
 
                 // If the rope hasn't reached its point, it keeps drawing its self
-                if (ropeSprite.transform.position != ropeHitCoords) newRopeSprite = Vector3.MoveTowards(ropeSprite.transform.position, ropeHitCoords, 0.05f);
+                if (ropeSprite.transform.position != ropeHitCoords) newRopeSprite = Vector3.MoveTowards(ropeSprite.transform.position, ropeHitCoords, 10f * Time.deltaTime);
                 ropeRender.SetPosition(1, ropeSprite.transform.position);
 
 

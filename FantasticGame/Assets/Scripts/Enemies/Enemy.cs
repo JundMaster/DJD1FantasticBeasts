@@ -93,10 +93,10 @@ public class Enemy : MonoBehaviour
 
 
         // DRAW MAX RANGE OF ATTACK
-        aimDraw.enabled = true;
-        aimDraw.SetPosition(0, magicPosition.position);
-        if (transform.right.x > 0) aimDraw.SetPosition(1, magicPosition.position + new Vector3(maxAimRange, 0f, -1f));
-        if (transform.right.x < 0) aimDraw.SetPosition(1, magicPosition.position + new Vector3(-maxAimRange, 0f, -1f));
+        //aimDraw.enabled = true;
+        //aimDraw.SetPosition(0, magicPosition.position);
+        //if (transform.right.x > 0) aimDraw.SetPosition(1, magicPosition.position + new Vector3(maxAimRange, 0f, -1f));
+        //if (transform.right.x < 0) aimDraw.SetPosition(1, magicPosition.position + new Vector3(-maxAimRange, 0f, -1f));
 
         //  AIMING CHECK ------------------------------------------------------------------------------
         AimCheck();
@@ -233,6 +233,13 @@ public class Enemy : MonoBehaviour
             }
         }
     }
+
+    private void OnDrawGizmos()
+    {
+        if (transform.right.x >= 0) Gizmos.DrawWireSphere(magicPosition.position + new Vector3(maxAimRange, 0f, -1f), 0.05f);
+        if (transform.right.x < 0) Gizmos.DrawWireSphere(magicPosition.position + new Vector3(-maxAimRange, 0f, -1f), 0.05f);
+    }
+
 
     /*  ONLY FOR DEMO
     void Shooter()

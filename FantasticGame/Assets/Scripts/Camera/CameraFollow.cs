@@ -27,7 +27,7 @@ public class CameraFollow : MonoBehaviour
         maxLevelRangeYmin = new Vector3(0f, -1f, 0f);
         */
 
-        maxLevelRangeXmax = new Vector3(93f, 0f, 0f);
+        maxLevelRangeXmax = new Vector3(10000f, 0f, 0f);
         maxLevelRangeXmin = new Vector3(-2f, 0f, 0f);
 
         //maxLevelRangeYmin = new Vector3(0f, -100000f, 0f);
@@ -109,52 +109,3 @@ public class CameraFollow : MonoBehaviour
     }
     
 }
-
-
-
-
-
-/*
-        // Targetpos = PLAYER POS
-        Vector3 targetPos = player.Position + offset;
-                targetPos.z = transform.position.z;
-
-        // Creates rectangle
-        Rect rect = CreateRect();
-
-        // New Targetpos depending on player pos on rectangle
-        if (targetPos.x < rect.xMin) rect.xMin = targetPos.x;
-        if (targetPos.x > rect.xMax) rect.xMax = targetPos.x;
-        if (player.onGround)
-        {
-            camSpeed = 0.25f;
-            rect.yMin = targetPos.y;
-        }
-
-        // Variable to know the center of the recrangle
-        Vector3 movePos = rect.center;
-                movePos.z = transform.position.z;
-
-
-        Vector3 newPos = movePos - transform.position;
-        transform.position += newPos * camSpeed;
-
-
-        /*
-        if (transform.position.x < 5.25f)
-            tempPosition = transform.position;
-
-        if (transform.position.x > 5.25f)
-            transform.position = new Vector3(tempPosition.x, transform.position.y, transform.position.z);
-        */
-
-/*
-if (transform.position.y > 0.05f)
-    tempPosition = transform.position;
-if (transform.position.y < 0.05f)
-    transform.position = new Vector3(transform.position.x, tempPosition.y, transform.position.z);
-    */
-
-//Debug.Log(transform.position.y);
-//Debug.Log(tempPosition.y);
-    
