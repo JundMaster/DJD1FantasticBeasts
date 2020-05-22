@@ -4,71 +4,65 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // VARIABLES DECLARATION
-    // Movement Variables
-    Vector2                         currentVelocity;
-    float                           hAxis;
-    float                           jumpTime;
-    float                           runSpeed;
-    /*
-    bool                            gotHit;
-    float                           gotHitDelay;
-    float                           gotHitDelayCounter;
-    bool                            invulnerable;
-    float                           invulnerableDelay;
-    float                           invulnerableCounter;
-    float                           temporaryHP;
-    */
+    Vector2                             currentVelocity;
+    float                               hAxis;
+    float                               runSpeed;
 
-    // Crouched
+    // CROUCHED
     [SerializeField] BoxCollider2D      boxCol;
     [SerializeField] CircleCollider2D   circleCol;
-    public bool                     crouchGetter    { get; private set; }
-    public bool                     IsCrouched      { get; private set; }
-    bool                            usingCrouch;
-    [SerializeField] Transform      ceilingOverHead;
-    // Position
-    public Vector3                  Position    { get; private set; }
+    [SerializeField] Transform          ceilingOverHead;
+    bool                                usingCrouch;
+    // CROUCHED GET SET
+    public bool                         CrouchGetter    { get; private set; }
+    public bool                         IsCrouched      { get; private set; }
+    
+    // POSITION GET SET
+    public Vector3                      Position        { get; private set; }
 
 
-    // groundChecking variables
-    bool                            noVelY;
-    float                           coyoteCounter;
-    public bool                     onGround    { get; private set; }
-    [SerializeField] Transform      groundCheck;
+    // GROUNDCHECK ++ JUMP
+    bool                                noVelY;
+    float                               coyoteCounter;
+    [SerializeField] Transform          groundCheck;
+    // GROUNDCHECK GET SET
+    public bool                         OnGround        { get; private set; }
+    float                               jumpTime;
+    bool                                jumped;
+    float                               lastJumpCounter;
+    float                               lastJumpDelay;
 
 
-    // Rope
+    // ROPE
+    [SerializeField] Transform          ropeAnchor;
+    [SerializeField] Transform          ropeWallCollider;
+    [SerializeField] DistanceJoint2D    rope;
+    [SerializeField] LineRenderer       ropeRender;
     RaycastHit2D                        ropeHit;
     Vector3                             ropeHitCoords;
-    bool                                minRange;
-    [SerializeField] DistanceJoint2D    rope;
-    [SerializeField] Transform          ropeAnchor;
-    [SerializeField] LineRenderer       ropeRender;
-    [SerializeField] Transform          ropeWallCollider;
-    GameObject                          ropeSprite;
     Vector3                             newRopeSprite;
+    GameObject                          ropeSprite;
+    bool                                minRange;
     bool                                usingRope;
     float                               ropeDelay;
     float                               ropeTimer;
     int                                 ropesLeft;
 
 
-
-    public Rigidbody2D                  rb      { get; private set; }
-    Animator                            animator;
-
-    
     // Layers
     [SerializeField] LayerMask  ceilingLayer;
     [SerializeField] LayerMask  onGroundLayers;
     [SerializeField] LayerMask  deathTileLayer;
+    [SerializeField] LayerMask  ropeStopLayer;
 
+    // ETC
     private Player              player;
+    public Rigidbody2D          Rb { get; private set; }
+    Animator                    animator;
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
+        Rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         rope = GetComponent<DistanceJoint2D>();
         player = FindObjectOfType<Player>();
@@ -77,31 +71,27 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        rope.enabled = false;
-        ropeRender.enabled = false;
-        noVelY = false;
-        ropeDelay = 0.25f;
-        ropeTimer = ropeDelay;
+        rope.enabled        = false;
+        ropeRender.enabled  = false;
+        noVelY              = false;
+        ropeDelay           = 0.25f; // Usable ropes delay
+        ropeTimer           = ropeDelay;
 
-        boxCol.enabled = true;
-        circleCol.enabled = false;
+        boxCol.enabled      = true; // Crouch colliders
+        circleCol.enabled   = false;
 
-
-        /*
-        gotHitDelay = 0.1f;
-        gotHitDelayCounter = gotHitDelay;
-        invulnerableDelay = 5f;
-        invulnerableCounter = invulnerableDelay;
-        */
+        lastJumpDelay = 0.55f; // Timer to jump again
+        lastJumpCounter = lastJumpDelay;
     }
 
     void Update()
     {
         // Gets hAxis and sets velocity // Update Variables
-        hAxis = Input.GetAxis("Horizontal");
-        Position = transform.position;
-        currentVelocity = rb.velocity;
-        crouchGetter = circleCol.enabled;
+        hAxis           = Input.GetAxis("Horizontal");
+        Position        = transform.position;
+        currentVelocity = Rb.velocity;
+        CrouchGetter    = circleCol.enabled;
+        // -----------------------------------------------------------------------------------------
 
         if (!(PauseMenu.gamePaused))
         {
@@ -113,13 +103,12 @@ public class PlayerMovement : MonoBehaviour
             Crouched();
             SpriteRotation();
             // Sets rigidbody final velocity
-            rb.velocity = currentVelocity;
+            Rb.velocity = currentVelocity;
 
-            // Reference for animatorator movement
-
+            // Animator
             animator.SetFloat("absVelX", Mathf.Abs(currentVelocity.x));
             animator.SetFloat("jumpVel", (currentVelocity.y));
-            animator.SetBool("grounded", onGround);
+            animator.SetBool("grounded", OnGround);
             animator.SetBool("usingRope", usingRope);
             animator.SetBool("noVelY", noVelY);
             animator.SetBool("crouch", circleCol.enabled);
@@ -128,11 +117,18 @@ public class PlayerMovement : MonoBehaviour
         // COLLISION WITH DEATH TILE ----------------------------------------------------------------
         Collider2D deathTileCheck = Physics2D.OverlapCircle(groundCheck.position, 2f, deathTileLayer);
         if (deathTileCheck != null)
+            player.Stats.IsAlive = false;
+        // -----------------------------------------------------------------------------------------
+
+        // CHECKS IF THE PLAYER IS GROUNDED // FIXES CEILING DOUBLE JUMP BUG
+        if (jumped)
+            lastJumpCounter -= Time.deltaTime;
+        if (lastJumpCounter < 0)
         {
-            DestroySwooping.swoopingIsAlive = false;
-            player.stats.Die(player.gameObject);
-            player.manager.Respawn();
+            jumped = false;
+            lastJumpCounter = lastJumpDelay;
         }
+        // -----------------------------------------------------------------------------------------
     }
 
 
@@ -171,7 +167,6 @@ public class PlayerMovement : MonoBehaviour
             IsCrouched = false;
     }
 
-
     void Grounded()
     {
         // GROUND COLLISION
@@ -180,18 +175,18 @@ public class PlayerMovement : MonoBehaviour
         // Ground collision
         Collider2D groundCollision = Physics2D.OverlapCircle(groundCheck.position, 0.05f, onGroundLayers);
 
-
-        if (groundCollision != null)
+        // If there's ground collision and didn't jump for X seconds
+        if (groundCollision != null && jumped == false)
         {
-            onGround = true;
+            OnGround = true;
         }
         else
-            onGround = false;
+            OnGround = false;
 
         
 
         // If the character leaves the ground, it has some time (coyoteTime float) to jump
-        if (onGround)
+        if (OnGround)
             coyoteCounter = coyoteTime;
         else
             coyoteCounter -= Time.deltaTime;
@@ -204,35 +199,36 @@ public class PlayerMovement : MonoBehaviour
         float jumpMaxTime = 0.15f;
 
         // Jump conditions
-        if ((Input.GetButtonDown("Jump") && coyoteCounter > 0 && rb.velocity.y < 0.1) && usingCrouch == false && circleCol.enabled == false)
+        if (Input.GetButtonDown("Jump") && coyoteCounter > 0 && Rb.velocity.y < 0.1 && usingCrouch == false && circleCol.enabled == false)
         {
             // If the player jumps, gravityScale is set to 0
             currentVelocity.y = jumpSpeed;
-            rb.gravityScale = 0.0f;
+            Rb.gravityScale = 0.0f;
             jumpTime = Time.time;
-            onGround = false;
+            OnGround = false;
+            jumped = true;
         }
         else if ((Input.GetButton("Jump") && ((Time.time - jumpTime) < jumpMaxTime)))
         {
             // While pressing jump, how much time has passed since jump was pressed
             // Jumps until jumpTime reaches jumpMaxTime
-            onGround = false;
+            OnGround = false;
         }
         else
         {
-            rb.gravityScale = 5.0f;
+            Rb.gravityScale = 5.0f;
    
         }
     }
 
     void Rope()
     {
-        float ropeMaxDistance = 1.2f;
-        float ropeY = 0.6f;
-        float ropeX = 0.6f;
+        float ropeMaxDistance   = 1.2f;
+        float ropeY             = 0.6f;
+        float ropeX             = 0.6f;
         Vector2 ropePosition;
-        ropePosition.x = ropeAnchor.position.x;
-        ropePosition.y = ropeAnchor.position.y;
+        ropePosition.x          = ropeAnchor.position.x;
+        ropePosition.y          = ropeAnchor.position.y;
 
 
         if (!(usingRope))
@@ -257,7 +253,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // It's possible to use swooping evil if it isn't being used as a platform
-        if (onGround == false && DestroySwooping.swoopingIsAlive == false)
+        if (OnGround == false && SwoopingEvilPlatform.isAlive == false)
         {
             if (Input.GetButtonDown("Fire3") )
             {
@@ -301,7 +297,7 @@ public class PlayerMovement : MonoBehaviour
                 ropeRender.SetPosition(1, ropeSprite.transform.position);
 
 
-                Collider2D wallCol = Physics2D.OverlapCircle(ropeWallCollider.position, 0.02f, onGroundLayers);
+                Collider2D wallCol = Physics2D.OverlapCircle(ropeWallCollider.position, 0.02f, ropeStopLayer);
                 if (wallCol != null)
                     rope.enabled = false;
 
@@ -331,10 +327,10 @@ public class PlayerMovement : MonoBehaviour
     void Movement()
     {
         // Running speed
-        if (player.usingShield) runSpeed = 0f;
-        if (circleCol.enabled == true && player.usingShield == true) runSpeed = 0f;
-        if (circleCol.enabled == true && player.usingShield == false) runSpeed = 1f;
-        if (circleCol.enabled == false && player.usingShield == false) runSpeed = 2f;
+        if (player.UsingShield) runSpeed = 0f;
+        if (circleCol.enabled == true && player.UsingShield == true) runSpeed = 0f;
+        if (circleCol.enabled == true && player.UsingShield == false) runSpeed = 1f;
+        if (circleCol.enabled == false && player.UsingShield == false) runSpeed = 2f;
         // Rope movement
         Vector2 rightBalance = new Vector2(1500f * Time.deltaTime, 0f);
         Vector2 leftBalance = new Vector2(-1500f * Time.deltaTime, 0f);
@@ -343,43 +339,17 @@ public class PlayerMovement : MonoBehaviour
         if (!(usingRope))
             currentVelocity = new Vector2(runSpeed * hAxis, currentVelocity.y);
 
-
-        /*
-        if (gotHit)
-        {
-            gotHitDelayCounter -= Time.deltaTime;
-            currentVelocity = new Vector2(0f, 3f);
-        }
-        if (gotHitDelayCounter < 0)
-        {
-            gotHitDelayCounter = gotHitDelay;
-            gotHit = false;
-        }
-
-        if (invulnerable)
-        {
-            invulnerableCounter -= Time.deltaTime;
-            player.stats.CurrentHP = temporaryHP;
-        }
-        if (invulnerableCounter < 0)
-        {
-            invulnerable = false;
-        }
-        */
-
-
-       
         if (usingRope)
         {
-            if (rb.velocity.x < 3 && rb.velocity.x > -3)
+            if (Rb.velocity.x < 3 && Rb.velocity.x > -3)
             {
                 if (Input.GetKeyDown("d") || Input.GetKeyDown("right"))
                 {
-                    rb.AddForce(rightBalance);
+                    Rb.AddForce(rightBalance);
                 }
                 if (Input.GetKeyDown("a") || Input.GetKeyDown("left"))
                 {
-                    rb.AddForce(leftBalance);
+                    Rb.AddForce(leftBalance);
                 }
             }
         }
@@ -388,30 +358,11 @@ public class PlayerMovement : MonoBehaviour
 
     void NeutralVelY()
     {
-        if (rb.velocity.y == 0)
+        if (Rb.velocity.y == 0)
             noVelY = true;
         else
             noVelY = false;
     }
-
-    /*
-    void OnTriggerEnter2D(Collider2D hitInfo)
-    {
-        Enemy enemy = hitInfo.transform.GetComponent<Enemy>();
-
-        if (enemy != null)
-        {
-            if (!(invulnerable))
-            {
-                player.stats.TakeDamage(10f);
-                temporaryHP = player.stats.CurrentHP;
-                invulnerable = true;
-                gotHit = true;
-            }
-        }
-    }
-    */
-
 
     void SpriteRotation()
     {

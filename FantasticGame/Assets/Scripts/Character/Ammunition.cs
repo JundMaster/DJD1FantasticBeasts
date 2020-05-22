@@ -10,6 +10,7 @@ public class Ammunition : MonoBehaviour
     [SerializeField] float          speed;
 
     Player p1;
+    Camera camera;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,11 +18,19 @@ public class Ammunition : MonoBehaviour
         speed = 4f;
         rb.velocity = transform.right * speed;
 
+        camera = Camera.main;
+
         // Destroys the object if it doesn't hit anything
-        Destroy(gameObject, 400f * Time.deltaTime);
+        //Destroy(gameObject, 150 * Time.deltaTime);
         p1 = FindObjectOfType<Player>();
     }
 
+    private void Update()
+    {
+        if ((gameObject.transform.position.x > (camera.transform.position.x) + (camera.aspect * 2f * camera.orthographicSize)) ||
+            (gameObject.transform.position.x < (camera.transform.position.x) - (camera.aspect * 2f * camera.orthographicSize)))
+                Destroy(gameObject);
+    }
 
     void OnTriggerEnter2D(Collider2D hitInfo)
     {
@@ -32,12 +41,12 @@ public class Ammunition : MonoBehaviour
         // If there's a collision
         if (treasure != null)
         {
-            treasure.stats.TakeDamage(p1.stats.RangedDamage);
+            treasure.Stats.TakeDamage(p1.Stats.RangedDamage);
         }
 
         if (enemy != null)
         {
-            enemy.stats.TakeDamage(p1.stats.RangedDamage);
+            enemy.Stats.TakeDamage(p1.Stats.RangedDamage);
         }
 
 

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4298525448237873673}
   - component: {fileID: 3413234078879570805}
   - component: {fileID: 9211557716392543709}
-  m_Layer: 17
+  m_Layer: 10
   m_Name: swoopingCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

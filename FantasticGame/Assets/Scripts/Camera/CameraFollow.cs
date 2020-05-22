@@ -24,7 +24,7 @@ public class CameraFollow : MonoBehaviour
         maxLevelRangeYmin = new Vector3(0f, -1f, 0f);
         */
 
-        maxLevelRangeXmax = new Vector3(4f, 0f, 0f);
+        maxLevelRangeXmax = new Vector3(111111f, 0f, 0f);
         maxLevelRangeXmin = new Vector3(-2.5f, 0f, 0f);
 
         //maxLevelRangeYmin = new Vector3(0f, -100000f, 0f);
@@ -57,7 +57,7 @@ public class CameraFollow : MonoBehaviour
             if (targetPos.y < rect.yMin) rect.yMin = targetPos.y;
             else if (targetPos.y > rect.yMax) rect.yMax = targetPos.y;
 
-            if (playerMove.onGround)
+            if (playerMove.OnGround)
                 rect.yMin = targetPos.y - 0.1f;
 
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public Stats stats { get; private set; }
+    public Stats Stats { get; private set; }
 
     [SerializeField] Transform          magicPosition;
     [SerializeField] Transform          magicPositionCrouch;
@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] GameObject         healthPickUp, manaPickUp;
     [SerializeField] Transform          groundRangeCheck, groundCheck, wallCheck, backStab;
 
-    [SerializeField] LineRenderer       aimDraw; //Drawing range
+    //[SerializeField] LineRenderer       aimDraw; //Drawing range
   
 
     [SerializeField] float  speed;       // WALKING SPEED
@@ -55,19 +55,21 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
-        stats = new Stats();
+        Stats = new Stats();
     }
 
     private void Start()
     {
-        stats.CanRangeAttack = false;
-        stats.RangedAttackDelay = attackDelay;
+        Stats.IsAlive = true;
+
+        Stats.CanRangeAttack = false;
+        Stats.RangedAttackDelay = attackDelay;
 
         startingPos = transform.position;
-        stats.CurrentHP = HP;
+        Stats.CurrentHP = HP;
 
-        stats.RangedDamage = enemyDamage;
-        stats.MeleeDamage = enemyDamage;
+        Stats.RangedDamage = enemyDamage;
+        Stats.MeleeDamage = enemyDamage;
         Damage = enemyDamage;
 
         limitWalkingRangeReached = false;
@@ -87,7 +89,7 @@ public class Enemy : MonoBehaviour
         if (shooting == true)
         {
             if (staticEnemy == false) holdPosition = true;  // ONLY FOR MOVING ENEMIES
-            if (stats.CanRangeAttack) Shoot();
+            if (Stats.CanRangeAttack) Shoot();
         }
         if (shooting == false && staticEnemy == false) Movement();
 
@@ -102,12 +104,12 @@ public class Enemy : MonoBehaviour
         AimCheck();
 
         // SHOOT ---------------------------------------------------------------------------------------
-        if (stats.CanRangeAttack == false)
-            stats.RangedAttackCounter -= Time.deltaTime;
-        if (stats.RangedAttackCounter < 0)
+        if (Stats.CanRangeAttack == false)
+            Stats.RangedAttackCounter -= Time.deltaTime;
+        if (Stats.RangedAttackCounter < 0)
         {   // If timeDelay gets < 0, sets timer back to AttackDelay again and the character can attack
-            stats.RangedAttackCounter = stats.RangedAttackDelay;
-            stats.CanRangeAttack = true;
+            Stats.RangedAttackCounter = Stats.RangedAttackDelay;
+            Stats.CanRangeAttack = true;
         }
 
         // CHECKS IF PLAYER IS ON THE ENEMY'S BACK ----------------------------------------------------
@@ -118,7 +120,7 @@ public class Enemy : MonoBehaviour
 
 
         // ALIVE --------------------------------------------------------------------------------------
-        if (!(stats.IsAlive))
+        if (!(Stats.IsAlive))
         {
             int chance = Random.Range(0, 10);
             if (chance > lootChance)
@@ -127,8 +129,7 @@ public class Enemy : MonoBehaviour
                 else if (manaPickUp != null) Instantiate(manaPickUp, transform.position, transform.rotation);
             }
                
-            stats.Die(gameObject);
-            Destroy(gameObject);
+            Stats.Die(gameObject);
         }
     }
 
@@ -155,7 +156,7 @@ public class Enemy : MonoBehaviour
         Player p1 = FindObjectOfType<Player>();
         RaycastHit2D aimTop = Physics2D.Raycast(magicPosition.position, magicPosition.right, maxAimRange);
         RaycastHit2D aimBottom = Physics2D.Raycast(magicPositionCrouch.position, magicPositionCrouch.right, maxAimRange);
-        if (aimTop.rigidbody == p1.movement.rb || aimBottom.rigidbody == p1.movement.rb)
+        if (aimTop.rigidbody == p1.Movement.Rb || aimBottom.rigidbody == p1.Movement.Rb)
         {
             shooting = true;
             speed = 0;
@@ -179,7 +180,7 @@ public class Enemy : MonoBehaviour
     void Shoot()
     {
         backStabCheckerEnabled = true; // first time the enemy shoots, it enabled the backstabchecker
-        stats.CanRangeAttack = false;
+        Stats.CanRangeAttack = false;
         GameObject projectileObject = Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
         EnemyAmmunition ammo = projectileObject.GetComponent<EnemyAmmunition>();
 
@@ -244,18 +245,18 @@ public class Enemy : MonoBehaviour
     /*  ONLY FOR DEMO
     void Shooter()
     {
-        if (stats.CanRangeAttack == false)
-            stats.RangedAttackCounter -= Time.deltaTime;
-        if (stats.RangedAttackCounter < 0)
+        if (Stats.CanRangeAttack == false)
+            Stats.RangedAttackCounter -= Time.deltaTime;
+        if (Stats.RangedAttackCounter < 0)
         {   // If timeDelay gets < 0, sets timer back to AttackDelay again and the character can attack
-            stats.RangedAttackCounter = stats.RangedAttackDelay;
-            stats.CanRangeAttack = true;
+            Stats.RangedAttackCounter = Stats.RangedAttackDelay;
+            Stats.CanRangeAttack = true;
         }
 
-        if (stats.CanRangeAttack)
+        if (Stats.CanRangeAttack)
         {
             Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
-            stats.CanRangeAttack = false;
+            Stats.CanRangeAttack = false;
         }
     }
     */

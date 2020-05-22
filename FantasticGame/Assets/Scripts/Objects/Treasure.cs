@@ -8,28 +8,28 @@ public class Treasure : MonoBehaviour
     [SerializeField] GameObject     healthPickUp, manaPickUp;
 
 
-    public Stats stats { get; private set; }
+    public Stats Stats { get; private set; }
 
     private void Awake()
     {
-        stats = new Stats();
+        Stats = new Stats();
     }
 
     private void Start()
     {
-        stats.CurrentHP = 25f;
+        Stats.CurrentHP = 25f;
     }
 
     private void Update()
     {
-        if (!(stats.IsAlive))
+        if (!(Stats.IsAlive))
         {
             int chance = Random.Range(0, 10);
             if (healthPickUp != null && chance >= 5) Instantiate(healthPickUp, transform.position, transform.rotation);
             else if (manaPickUp != null) Instantiate(manaPickUp, transform.position, transform.rotation);
 
 
-            stats.Die(gameObject);
+            Stats.Die(gameObject);
         }
     }
 

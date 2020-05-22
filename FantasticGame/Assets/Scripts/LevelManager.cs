@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField] Player     player;
+    [SerializeField] GameObject player;
     [SerializeField] Transform  respawnPoint;
 
 

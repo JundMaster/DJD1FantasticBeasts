@@ -29,7 +29,7 @@ public class EnemyAmmunition : MonoBehaviour
         if (player != null)
         {
             
-            if (player.usingShield)
+            if (player.UsingShield)
             {
                 if (player.transform.right.x < 0) // Turned left
                 {
@@ -39,7 +39,7 @@ public class EnemyAmmunition : MonoBehaviour
                     }
                     else if (player.transform.position.x < rb.transform.position.x)
                     {
-                        player.stats.TakeDamage(enemy.Damage);
+                        player.Stats.TakeDamage(enemy.Damage);
                         Instantiate(ammunitionHit, transform.position, transform.rotation);
                     }
                 }
@@ -48,7 +48,7 @@ public class EnemyAmmunition : MonoBehaviour
                     if (player.transform.position.x > rb.transform.position.x)
                     {
                         Instantiate(ammunitionHit, transform.position, transform.rotation);
-                        player.stats.TakeDamage(enemy.Damage);
+                        player.Stats.TakeDamage(enemy.Damage);
                     }
                     else if (player.transform.position.x < rb.transform.position.x)
                     {
@@ -58,9 +58,8 @@ public class EnemyAmmunition : MonoBehaviour
             }
             else
             {
-                player.stats.TakeDamage(enemy.Damage);
+                player.Stats.TakeDamage(enemy.Damage);
                 Instantiate(ammunitionHit, transform.position, transform.rotation);
-                Debug.Log("hit");
 
             }
         }

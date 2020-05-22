@@ -5,16 +5,6 @@ using UnityEngine;
 public class HealthPickUp : MonoBehaviour
 {
     [SerializeField] GameObject     pickedUp;
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
 
     void OnTriggerEnter2D(Collider2D hitInfo)
     {
@@ -22,9 +12,9 @@ public class HealthPickUp : MonoBehaviour
 
         if (player != null)
         {
-            if (!(player.stats.IsMaxHP()))
+            if (!(player.Stats.IsMaxHP()))
             {
-                player.stats.HealHP(30f);
+                player.Stats.HealHP(30f);
                 Instantiate(pickedUp, transform.position, transform.rotation);
                 Destroy(gameObject);
             }

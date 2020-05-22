@@ -4,90 +4,96 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    // RANGED
     [SerializeField] Transform          magicPosition;
     [SerializeField] Transform          crouchedMagicPosition;
     [SerializeField] GameObject         magicPrefab;
 
+    // MELEE
     [SerializeField] Transform          meleePosition;
     [SerializeField] GameObject         meleePrefab;
+    [SerializeField] GameObject         meleeAttackTemporary;
 
+    // SHIELD
     [SerializeField] Transform          shieldPosition;
     [SerializeField] Transform          crouchedShieldPosition;
     [SerializeField] GameObject         shieldPrefab;
+    private bool                        canUseShield;
 
+    // SWOOPING EVIL
+    [SerializeField] Transform swoopingCicle;
+    [SerializeField] GameObject swoopingPrefab;
+    [SerializeField] GameObject swoopingSpawnerPrefab;
+    private Vector3 swoopingSpawnPos;
+    private bool usingSwooping;
+    private bool usedSwooping;
+
+    // LAYERS
     [SerializeField] LayerMask          treasureLayer;
     [SerializeField] LayerMask          enemyLayer, enemyAmmunitionLayer;
+    [SerializeField] LayerMask          onGroundLayers;
 
+    // CAMERA
     private CameraShake                 cameraShake;
     [SerializeField] float              shakeTime;
     [SerializeField] float              shakeForce;
+    private bool                        canScreenShake;
 
-    [SerializeField] Transform          swoopingCicle;
-    [SerializeField] GameObject         swoopingPrefab;
-    [SerializeField] GameObject         swoopingSpawnerPrefab;
-    private Vector3                     swoopingSpawnPos;
-    private bool                        usingSwooping;
-    private bool                        usedSwooping;
-    private float                       swoopingCounter;
-    private float                       swoopingDelay;
-    [SerializeField] LayerMask          onGroundLayers;
+    // ANIMATOR
+    private Animator animator;
 
-    public Stats                        stats           { get; private set; }
-    private Animator                    animator;
-    public PlayerMovement               movement        { get; private set; }
+    // GET SETTERS
+    public Stats                        Stats               { get; private set; }
+    public PlayerMovement               Movement            { get; private set; }
+    public float                        CurrentMana         { get; set; }
+    public float                        CurrentHP           { get; set; }
+    public bool                         RangedAttacked      { get; private set; }
+    public bool                         UsingShield         { get; private set; }
+    public Vector2                      ShieldPosition      { get; private set; }
+    public Vector2                      MagicPosition       { get; private set; }
+    public LevelManager                 Manager             { get; private set; }
 
-    
-    public float                    CurrentMana             { get; set; }
-    public float                    CurrentHP               { get; set; }
-    public bool                     RangedAttacked          { get; private set; }
-    public bool                     usingShield             { get; private set; }
-    public Vector2                  ShieldPosition          { get; private set; }
-    public Vector2                  MagicPosition           { get; private set; }
-
-
-    private bool                    canUseShield;
-    private bool                    canScreenShake;
-
+    // CHEATS
     [SerializeField] bool           godMode;
     [SerializeField] bool           fly;
 
 
-    public LevelManager             manager { get; private set; }
-
     private void Awake()
     {
-        stats = new Stats();
-        animator = GetComponent<Animator>();
-        movement = GetComponent<PlayerMovement>();
+        Stats =     new Stats();
+        animator =  GetComponent<Animator>();
+        Movement =  GetComponent<PlayerMovement>();
         cameraShake = FindObjectOfType<CameraShake>();
-        manager = FindObjectOfType<LevelManager>();
+        Manager =   FindObjectOfType<LevelManager>();
     }
 
 
     // Start is called before the first frame update
     void Start()
     {
-        stats.MaxMana = 100;
-        stats.CurrentMana = stats.MaxMana;
-        stats.AttackManaCost = 5f;
-        stats.ManaRegen = 0.5f;
-        stats.MaxHP = 100;
-        stats.CurrentHP = stats.MaxHP;
+        // STATS
+        Stats.IsAlive       = true;
+        Stats.MaxMana       = 100;
+        Stats.CurrentMana   = Stats.MaxMana;
+        Stats.AttackManaCost = 5f;
+        Stats.ManaRegen     = 0.5f;
+        Stats.MaxHP         = 100;
+        Stats.CurrentHP     = Stats.MaxHP;
 
-        stats.RangedDamage = 50f;
-        stats.CanRangeAttack = true;
-        stats.RangedAttackDelay = 0.5f;
-        stats.RangedAttackCounter = stats.RangedAttackDelay;
+        // RANGED
+        Stats.RangedDamage      = 50f;
+        Stats.CanRangeAttack    = true;
+        Stats.RangedAttackDelay = 0.5f;
+        Stats.RangedAttackCounter = Stats.RangedAttackDelay;
 
-        stats.MeleeDamage = 30f;
-        stats.CanMeleeAttack = true;
-        stats.MeleeAttackRange = 0.15f;
-        stats.MeleeAttackDelay = 0.45f;
-        stats.MeleeAttackCounter = stats.MeleeAttackDelay;
+        // MELEE
+        Stats.MeleeDamage       = 30f;
+        Stats.CanMeleeAttack    = true;
+        Stats.MeleeAttackRange  = 0.15f;
+        Stats.MeleeAttackDelay  = 0.45f;
+        Stats.MeleeAttackCounter = Stats.MeleeAttackDelay;
 
-        swoopingDelay = 2.6f;
-        swoopingCounter = swoopingDelay;
-
+        // ETC
         canScreenShake = false;
         usingSwooping = false;
     }
@@ -98,10 +104,10 @@ public class Player : MonoBehaviour
         if (PauseMenu.gamePaused == false)
         {
             // UPDATE VARIABLES ----------------------------------------------------------------------------
-            CurrentMana = stats.CurrentMana;
-            CurrentHP = stats.CurrentHP;
+            CurrentMana = Stats.CurrentMana;
+            CurrentHP = Stats.CurrentHP;
             RangedAttacked = false;
-            stats.RegenMana();
+            Stats.RegenMana();
             animator.SetBool("attack", false);
             animator.SetBool("rangedAttack", false);
             bool pressShield = Input.GetKey("w") || Input.GetKey("up");
@@ -112,61 +118,65 @@ public class Player : MonoBehaviour
 
             // SHIELD --------------------------------------------------------------------------------------
             ShieldPosition = shieldPosition.position;
-            usingShield = false;
+            UsingShield = false;
 
             canUseShield = CurrentMana > 5f ? true : false;
 
-            if (movement.onGround && pressShield && canUseShield)
+            if (Movement.OnGround && pressShield && canUseShield)
             {
                 Shield();
             }
+            // ---------------------------------------------------------------------------------------------
+
 
             // RANGED ATTACK -------------------------------------------------------------------------------
             // Everytime the player attacks, it starts a timer and sets canAttack to false
-            if (stats.CanRangeAttack == false)
+            if (Stats.CanRangeAttack == false)
             {
-                stats.RangedAttackCounter -= Time.deltaTime;
-                if (stats.RangedAttackCounter < 0.45f && canScreenShake) // SCREEN SHAKE WITH DELAY
+                Stats.RangedAttackCounter -= Time.deltaTime;
+                if (Stats.RangedAttackCounter < 0.45f && canScreenShake) // SCREEN SHAKE WITH DELAY
                 {
                     StartCoroutine(cameraShake.Shake(shakeTime, shakeForce));
                     canScreenShake = false;
                 }
             }
-            if (stats.RangedAttackCounter < 0)
+            if (Stats.RangedAttackCounter < 0)
             {   // If timeDelay gets < 0, sets timer back to AttackDelay again and the character can attack
-                stats.RangedAttackCounter = stats.RangedAttackDelay;
-                stats.CanRangeAttack = true;
+                Stats.RangedAttackCounter = Stats.RangedAttackDelay;
+                Stats.CanRangeAttack = true;
                 canScreenShake = true;
             }
 
             if (Input.GetButtonDown("Fire2"))
-                if (stats.CanUseSpell() && stats.CanRangeAttack && !usingShield)
+                if (Stats.CanUseSpell() && Stats.CanRangeAttack && !UsingShield)
                     Shoot();
 
+            // ---------------------------------------------------------------------------------------------
 
 
 
             // MELEE ATTACK -------------------------------------------------------------------------------
             // Everytime the player attacks, it starts a timer and sets canAttack to false
-            if (stats.CanMeleeAttack == false)
-                stats.MeleeAttackCounter -= Time.deltaTime;
-            if (stats.MeleeAttackCounter < 0)
+            if (Stats.CanMeleeAttack == false)
+                Stats.MeleeAttackCounter -= Time.deltaTime;
+            if (Stats.MeleeAttackCounter < 0)
             {   // If timeDelay gets < 0, sets timer back to AttackDelay again and the character can attack
-                stats.MeleeAttackCounter = stats.MeleeAttackDelay;
-                stats.CanMeleeAttack = true;
+                Stats.MeleeAttackCounter = Stats.MeleeAttackDelay;
+                Stats.CanMeleeAttack = true;
             }
 
             if (Input.GetButtonDown("Fire1"))
-                if (stats.CanMeleeAttack)
+                if (Stats.CanMeleeAttack)
                 {
                     MeleeAttack();
                 }
+            // ---------------------------------------------------------------------------------------------
 
 
 
             // SWOOPING EVIL ------------------------------------------------------------------------------
             Collider2D swoopingCheck = Physics2D.OverlapCircle(swoopingCicle.position, 0.2f, onGroundLayers);
-            if (Input.GetButtonDown("Fire3") && movement.onGround && DestroySwooping.swoopingIsAlive == false && swoopingCheck == null)
+            if (Input.GetButtonDown("Fire3") && Movement.OnGround && SwoopingEvilPlatform.isAlive == false && swoopingCheck == null)
             {
                 Instantiate(swoopingSpawnerPrefab, swoopingCicle.position, transform.rotation);
                 Instantiate(swoopingPrefab, swoopingCicle.position, transform.rotation);
@@ -175,23 +185,14 @@ public class Player : MonoBehaviour
                 usedSwooping = true;
             }
             // Kills swooping evil if it's pressed again
-            if (Input.GetButtonDown("Fire3") && movement.onGround && DestroySwooping.swoopingIsAlive) 
-                DestroySwooping.swoopingIsAlive = false;
+            if (Input.GetButtonDown("Fire3") && Movement.OnGround && SwoopingEvilPlatform.isAlive) 
+                SwoopingEvilPlatform.isAlive = false;
+            // ---------------------------------------------------------------------------------------------
 
 
-
-
-
-            // ALIVE CONDITION ----------------------------------------------------------------------------
-            if (!(stats.IsAlive))
-            {
-                DestroySwooping.swoopingIsAlive = false;
-                stats.Die(gameObject);
-                manager.Respawn();
-            }
-
-            if (godMode) stats.CurrentHP = 10000000000;
-            if (fly) if (Input.GetButton("Jump")) movement.rb.gravityScale = 0f;
+            // CHEATS
+            if (godMode) Stats.CurrentHP = 10000000000;
+            if (fly) if (Input.GetButton("Jump")) Movement.Rb.gravityScale = 0f;
         }
     }
 
@@ -201,40 +202,41 @@ public class Player : MonoBehaviour
     {
         RangedAttacked = true;
         animator.SetBool("rangedAttack", true);
-        stats.CanRangeAttack = false;
-        stats.SpendMana();
+        Stats.CanRangeAttack = false;
+        Stats.SpendMana();
         // When Crouched
-        if (movement.crouchGetter) Instantiate(magicPrefab, crouchedMagicPosition.position, magicPosition.rotation);
+        if (Movement.CrouchGetter) Instantiate(magicPrefab, crouchedMagicPosition.position, magicPosition.rotation);
         else Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
     }
 
     void MeleeAttack()
     {
         animator.SetBool("attack", true);
-        stats.CanMeleeAttack = false;
+        Stats.CanMeleeAttack = false;
+        Instantiate(meleeAttackTemporary, meleePosition.position, transform.rotation);
 
-        Collider2D[] treasureHit = Physics2D.OverlapCircleAll(meleePosition.position, stats.MeleeAttackRange, treasureLayer);
-        Collider2D[] enemyHit = Physics2D.OverlapCircleAll(meleePosition.position, stats.MeleeAttackRange, enemyLayer);
+        Collider2D[] treasureHit = Physics2D.OverlapCircleAll(meleePosition.position, Stats.MeleeAttackRange, treasureLayer);
+        Collider2D[] enemyHit = Physics2D.OverlapCircleAll(meleePosition.position, Stats.MeleeAttackRange, enemyLayer);
 
         foreach (Collider2D treasure in treasureHit)
         {
             Instantiate(meleePrefab, treasure.GetComponent<Rigidbody2D>().position, transform.rotation);
-            treasure.GetComponent<Treasure>().stats.TakeDamage(stats.MeleeDamage);
+            treasure.GetComponent<Treasure>().Stats.TakeDamage(Stats.MeleeDamage);
         }
         foreach (Collider2D enemy in enemyHit)
         {
             Instantiate(meleePrefab, enemy.GetComponent<Rigidbody2D>().position, transform.rotation);
-            enemy.GetComponent<Enemy>().stats.TakeDamage(stats.MeleeDamage);
+            enemy.GetComponent<Enemy>().Stats.TakeDamage(Stats.MeleeDamage);
         }
     }
 
     void Shield()
     {
         if (Physics2D.OverlapCircle(shieldPosition.position, 0.1f, enemyAmmunitionLayer)) StartCoroutine(cameraShake.Shake(0.015f, 0.04f));
-        if (movement.IsCrouched) Instantiate(shieldPrefab, crouchedShieldPosition.position, transform.rotation);
+        if (Movement.IsCrouched) Instantiate(shieldPrefab, crouchedShieldPosition.position, transform.rotation);
         else Instantiate(shieldPrefab, shieldPosition.position, transform.rotation);
-        usingShield = true;
-        stats.CurrentMana -= 10f * Time.deltaTime;
+        UsingShield = true;
+        Stats.CurrentMana -= 10f * Time.deltaTime;
 
     }
 

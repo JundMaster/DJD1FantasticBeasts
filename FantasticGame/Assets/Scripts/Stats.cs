@@ -12,7 +12,7 @@ public class Stats : MonoBehaviour
     public float    MaxHP                { get; set; }
     public float    CurrentHP            { get; set; }
 
-    public bool     IsAlive              { get; private set; } = true;
+    public bool     IsAlive              { get; set; }
 
     public float    RangedDamage         { get; set; }
     public bool     CanRangeAttack       { get; set; }
@@ -30,14 +30,12 @@ public class Stats : MonoBehaviour
     public void TakeDamage(float damage)
     {
         CurrentHP -= damage;
-        if (CurrentHP <= 0)
+        if (CurrentHP < 1)
             IsAlive = false;
     }
 
-
     public void Die(GameObject gameObject)
     {
-        IsAlive = false;
         Destroy(gameObject);
     }
 
