@@ -30,7 +30,6 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] float  enemyDamage;     // ENEMY DAMAGE
     [SerializeField] int    lootChance;    // LOOT CHANCE 1 - 10
-    private bool            holdPosition;   // HOLDS ENEMY POS
     [SerializeField] bool   staticEnemy;    // IF ENEMY IS A STATIC ENEMY
 
     //[SerializeField] bool   shooter; // ONLY FOR DEMO
@@ -44,6 +43,8 @@ public class Enemy : MonoBehaviour
     Vector2         tempPosition;
     float           waitingTimeCounter;
     bool            backStabCheckerEnabled;
+
+    float           canMoveTimer;
     
 
     private void Awake()
@@ -74,6 +75,7 @@ public class Enemy : MonoBehaviour
 
         originalSpeed = speed;
 
+        canMoveTimer = attackDelay;
     }
 
     private void Update()
@@ -81,7 +83,6 @@ public class Enemy : MonoBehaviour
         // Movement -----------------------------------------------------------------------------------
         if (shooting == true)
         {
-            if (staticEnemy == false) holdPosition = true;  // ONLY FOR MOVING ENEMIES
             if (Stats.CanRangeAttack) Shoot();
         }
         if (shooting == false && staticEnemy == false) Movement();
@@ -132,7 +133,7 @@ public class Enemy : MonoBehaviour
     {
         if (backStabCheckerEnabled)
         {
-            Collider2D checkSurround = Physics2D.OverlapCircle(backStab.position, 0.3f, playerLayer);
+            Collider2D checkSurround = Physics2D.OverlapCircle(backStab.position, 0.5f, playerLayer);
 
             if (checkSurround)
             {
@@ -153,11 +154,13 @@ public class Enemy : MonoBehaviour
         {
             shooting = true;
             speed = 0;
+            canMoveTimer = attackDelay;
         }
         else
         {
             shooting = false;
-            holdPosition = false;
+            canMoveTimer -= Time.deltaTime;
+            if (canMoveTimer < -1) speed = originalSpeed;
         }
 
         if (transform.right.x > 0)
@@ -185,7 +188,7 @@ public class Enemy : MonoBehaviour
     void Movement()
     {
         Collider2D isGroundedCheck = Physics2D.OverlapCircle(groundCheck.position, 0.02f, groundLayer);
-        if (isGroundedCheck && holdPosition == false)
+        if (isGroundedCheck)
         {
             transform.position += transform.right * speed * Time.deltaTime;
 

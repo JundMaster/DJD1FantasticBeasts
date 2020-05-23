@@ -5,7 +5,7 @@ public class CameraFollow : MonoBehaviour
     private PlayerMovement          playerMove;
 
     [SerializeField] Rect           cameraTrap;
-    [SerializeField] Vector3        offset;
+    [SerializeField] Vector3        offset = new Vector3(0f, 7f, 0f);
     [SerializeField] float          feedBackLoop = 1f;
 
     [SerializeField] Vector3        maxLevelRangeXmax;
@@ -14,7 +14,7 @@ public class CameraFollow : MonoBehaviour
 
     private void Awake()
     {
-        playerMove = FindObjectOfType<PlayerMovement>();
+        //playerMove = FindObjectOfType<PlayerMovement>();
 
     }
 
@@ -25,7 +25,7 @@ public class CameraFollow : MonoBehaviour
         */
 
         maxLevelRangeXmax = new Vector3(111111f, 0f, 0f);
-        maxLevelRangeXmin = new Vector3(-2.5f, 0f, 0f);
+        maxLevelRangeXmin = new Vector3(-2.0f, 0f, 0f);
 
         //maxLevelRangeYmin = new Vector3(0f, -100000f, 0f);
     }
@@ -42,7 +42,7 @@ public class CameraFollow : MonoBehaviour
 
         //if (transform.position.y <= maxLevelRangeYmin.x)
         //    transform.position = new Vector3(transform.position.x, maxLevelRangeYmin.y + 1f , transform.position.z);
-
+        
         if (playerMove.Position.x < maxLevelRangeXmax.x)
         {
             // playerMove Pos
@@ -74,7 +74,7 @@ public class CameraFollow : MonoBehaviour
             transform.position += camDirection * feedBackLoop;
 
         }
-
+        
 
     }
 
