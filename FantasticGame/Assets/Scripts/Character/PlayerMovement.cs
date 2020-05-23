@@ -122,7 +122,7 @@ public class PlayerMovement : MonoBehaviour
             // Sets rigidbody final velocity
             Rb.velocity = currentVelocity;
 
-
+            // Animator
             animator.SetFloat("absVelX", Mathf.Abs(currentVelocity.x));
             animator.SetFloat("jumpVel", (currentVelocity.y));
             animator.SetBool("groundedNotFloor", groundedNotFloor);
@@ -287,8 +287,8 @@ public class PlayerMovement : MonoBehaviour
     void Rope()
     {
         float ropeMaxDistance   = 1.3f;
-        float ropeY             = 0.6f;
-        float ropeX             = 0.6f;
+        float ropeY             = 0.7f;
+        float ropeX             = 0.5f;
         Vector2 ropePosition;
         ropePosition.x          = ropeAnchor.position.x;
         ropePosition.y          = ropeAnchor.position.y;
@@ -297,7 +297,7 @@ public class PlayerMovement : MonoBehaviour
         if (!(usingRope))
         {
             // Doesn't let the player use the rope too close
-            Collider2D notPossibleRope = Physics2D.OverlapCircle(ropePosition, 0.40f, ceilingLayer);
+            Collider2D notPossibleRope = Physics2D.OverlapCircle(ropePosition, 0.50f, ceilingLayer);
             if (notPossibleRope) minRange = true;
             else minRange = false;
             // Sets ropeSprite to rope anchor position   AND keeps refreshing its position
@@ -337,9 +337,9 @@ public class PlayerMovement : MonoBehaviour
                     // Connects the joint final position to the rigidbody it hits
                     rope.connectedBody = ropeHit.collider.gameObject.GetComponent<Rigidbody2D>();
 
-                    // Defines the anchor point to the point where it rope hitted
+                    // Defines the anchor point to the point where the rope hitted
                     rope.connectedAnchor = new Vector2(ropeHit.point.x, ropeHit.point.y + 0.15f);
-                    ropeHitCoords = new Vector3(ropeHit.point.x, ropeHit.point.y - 0.15f, ropeSprite.transform.position.z);
+                    ropeHitCoords = new Vector3(ropeHit.point.x, ropeHit.point.y, ropeSprite.transform.position.z);
 
                     // Sets rope distance, starts the rop with the size of this vector
                     rope.distance = ropeHit.distance;
@@ -356,8 +356,9 @@ public class PlayerMovement : MonoBehaviour
                 ropeRender.SetPosition(0, ropeAnchor.position);
 
                 // If the rope hasn't reached its point, it keeps drawing its self
-                if (ropeSprite.transform.position != ropeHitCoords) newRopeSprite = Vector3.MoveTowards(ropeSprite.transform.position, ropeHitCoords, 10f * Time.deltaTime);
-                ropeRender.SetPosition(1, ropeSprite.transform.position);
+                if (ropeSprite.transform.position != ropeHitCoords) 
+                    newRopeSprite = Vector3.MoveTowards(ropeSprite.transform.position, new Vector3(ropeHitCoords.x -0.05f, ropeHitCoords.y - 0.15f, ropeHitCoords.z), 10f * Time.deltaTime);
+                ropeRender.SetPosition(1, new Vector3 (ropeSprite.transform.position.x, ropeSprite.transform.position.y - 0.138f, ropeSprite.transform.position.z));
 
 
                 Collider2D wallCol = Physics2D.OverlapCircle(ropeWallCollider.position, 0.02f, ropeStopLayer);
@@ -404,6 +405,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (usingRope)
         {
+            Rb.drag = 0.02f;
             if (Rb.velocity.x < 3 && Rb.velocity.x > -3)
             {
                 if (Input.GetKeyDown("d") || Input.GetKeyDown("right"))
@@ -416,6 +418,7 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+        else Rb.drag = 0f;
     }
 
     void NeutralVelY()
