@@ -5,7 +5,6 @@ using UnityEngine;
 public class Ammunition : MonoBehaviour
 {
     [SerializeField] GameObject     ammunitionHit;
-
     [SerializeField] Rigidbody2D    rb;
     [SerializeField] float          speed;
 
@@ -14,7 +13,6 @@ public class Ammunition : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         speed = 4f;
         rb.velocity = transform.right * speed;
 
@@ -34,8 +32,8 @@ public class Ammunition : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D hitInfo)
     {
-        Treasure treasure = hitInfo.transform.GetComponent<Treasure>();
-        Enemy enemy = hitInfo.transform.GetComponent<Enemy>();
+        Treasure treasure = hitInfo.GetComponent<Treasure>();
+        Enemy enemy = hitInfo.GetComponent<Enemy>();
 
 
         // If there's a collision

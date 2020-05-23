@@ -35,23 +35,16 @@ public class Enemy : MonoBehaviour
 
     //[SerializeField] bool   shooter; // ONLY FOR DEMO
 
-    public float Damage { get; private set; }
-
-    Vector2         startingPos;
+    public float    Damage { get; private set; }
+    bool            shooting;
 
     float           originalSpeed;
-
+    Vector2         startingPos;
     bool            limitWalkingRangeReached;
     Vector2         tempPosition;
     float           waitingTimeCounter;
-    bool            shooting;
-
-
     bool            backStabCheckerEnabled;
-
-
     
-
 
     private void Awake()
     {

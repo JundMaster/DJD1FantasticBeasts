@@ -90,7 +90,7 @@ public class PlayerMovement : MonoBehaviour
         boxCol.enabled      = true; // Crouch colliders
         circleCol.enabled   = false;
 
-        lastJumpDelay = 0.55f; // Timer to jump again
+        lastJumpDelay = 0.45f; // Timer to jump again
         lastJumpCounter = lastJumpDelay;
 
         Invulnerable = false;
@@ -150,7 +150,6 @@ public class PlayerMovement : MonoBehaviour
             spriteRender.enabled = true;
         }
         // -----------------------------------------------------------------------------------------
-        Debug.Log(spriteEnableCounter);
 
 
         // COLLISION WITH DEATH TILE ----------------------------------------------------------------
@@ -161,7 +160,7 @@ public class PlayerMovement : MonoBehaviour
         
 
 
-        // CHECKS IF THE PLAYER IS GROUNDED // FIXES CEILING DOUBLE JUMP BUG
+        // CHECKS IF THE PLAYER IS GROUNDED // FIXES CEILING DOUBLE JUMP BUG // can delete ??
         if (jumped)
             lastJumpCounter -= Time.deltaTime;
         if (lastJumpCounter < 0)
@@ -287,7 +286,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Rope()
     {
-        float ropeMaxDistance   = 1.2f;
+        float ropeMaxDistance   = 1.3f;
         float ropeY             = 0.6f;
         float ropeX             = 0.6f;
         Vector2 ropePosition;
@@ -298,7 +297,7 @@ public class PlayerMovement : MonoBehaviour
         if (!(usingRope))
         {
             // Doesn't let the player use the rope too close
-            Collider2D notPossibleRope = Physics2D.OverlapCircle(ropePosition, 0.35f, ceilingLayer);
+            Collider2D notPossibleRope = Physics2D.OverlapCircle(ropePosition, 0.40f, ceilingLayer);
             if (notPossibleRope) minRange = true;
             else minRange = false;
             // Sets ropeSprite to rope anchor position   AND keeps refreshing its position
@@ -340,7 +339,7 @@ public class PlayerMovement : MonoBehaviour
 
                     // Defines the anchor point to the point where it rope hitted
                     rope.connectedAnchor = new Vector2(ropeHit.point.x, ropeHit.point.y + 0.15f);
-                    ropeHitCoords = new Vector3(ropeHit.point.x, ropeHit.point.y, ropeSprite.transform.position.z);
+                    ropeHitCoords = new Vector3(ropeHit.point.x, ropeHit.point.y - 0.15f, ropeSprite.transform.position.z);
 
                     // Sets rope distance, starts the rop with the size of this vector
                     rope.distance = ropeHit.distance;
