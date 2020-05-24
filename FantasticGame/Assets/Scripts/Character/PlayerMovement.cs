@@ -401,7 +401,7 @@ public class PlayerMovement : MonoBehaviour
         // Running speed
         if (player.UsingShield) runSpeed = 0f;
         if (circleCol.enabled == true && player.UsingShield == true) runSpeed = 0f;
-        if (circleCol.enabled == true && player.UsingShield == false) runSpeed = 1f;
+        if (circleCol.enabled == true && player.UsingShield == false) runSpeed = 0f;
         if (circleCol.enabled == false && player.UsingShield == false) runSpeed = 2f;
         // Rope movement
         Vector2 rightBalance = new Vector2(1500f * Time.deltaTime, 0f);
