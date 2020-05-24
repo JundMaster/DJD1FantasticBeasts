@@ -153,7 +153,7 @@ public class PlayerMovement : MonoBehaviour
 
 
         // COLLISION WITH DEATH TILE ----------------------------------------------------------------
-        Collider2D deathTileCheck = Physics2D.OverlapCircle(groundCheck.position, 2f, deathTileLayer);
+        Collider2D deathTileCheck = Physics2D.OverlapCircle(groundCheck.position, 0.1f, deathTileLayer);
         if (deathTileCheck != null)
             player.Stats.IsAlive = false;
         // -----------------------------------------------------------------------------------------
