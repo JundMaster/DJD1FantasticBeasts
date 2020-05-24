@@ -200,14 +200,14 @@ public class PlayerMovement : MonoBehaviour
         Collider2D collisionTop = Physics2D.OverlapCircle(ceilingOverHead.position, 0.02f, onGroundLayers);
 
         // Checks if the player pressed crouch
-        if (Input.GetKeyDown("s") || Input.GetKeyDown("down"))
+        if (Input.GetKeyDown("down") && OnGround)
         {
             usingCrouch = true;
             IsCrouched = true;
             circleCol.enabled = true;
             boxCol.enabled = false;
         }
-        else if (Input.GetKeyUp("s") || Input.GetKeyUp("down"))
+        else if (Input.GetKeyUp("down") && OnGround)
         {
             usingCrouch = false;
 
@@ -297,7 +297,7 @@ public class PlayerMovement : MonoBehaviour
         if (!(usingRope))
         {
             // Doesn't let the player use the rope too close
-            Collider2D notPossibleRope = Physics2D.OverlapCircle(ropePosition, 0.50f, ceilingLayer);
+            Collider2D notPossibleRope = Physics2D.OverlapCircle(ropePosition, 0.40f, ceilingLayer);
             if (notPossibleRope) minRange = true;
             else minRange = false;
             // Sets ropeSprite to rope anchor position   AND keeps refreshing its position
@@ -345,7 +345,7 @@ public class PlayerMovement : MonoBehaviour
                     rope.distance = ropeHit.distance;
 
                     ropeSprite.SetActive(true);
-                    ropeRender.enabled = true;       
+                    ropeRender.enabled = true;     
                 }
             }
 
@@ -361,9 +361,17 @@ public class PlayerMovement : MonoBehaviour
                 ropeRender.SetPosition(1, new Vector3 (ropeSprite.transform.position.x, ropeSprite.transform.position.y - 0.138f, ropeSprite.transform.position.z));
 
 
+                // If the player collides against something
                 Collider2D wallCol = Physics2D.OverlapCircle(ropeWallCollider.position, 0.02f, ropeStopLayer);
                 if (wallCol != null)
                     rope.enabled = false;
+
+                // If the player passes the ceining position
+                if (player.transform.position.y > ropeHitCoords.y - 0.8f)
+                {
+                    currentVelocity = -currentVelocity / 2f;
+                }
+      
 
             }
 
@@ -393,7 +401,7 @@ public class PlayerMovement : MonoBehaviour
         // Running speed
         if (player.UsingShield) runSpeed = 0f;
         if (circleCol.enabled == true && player.UsingShield == true) runSpeed = 0f;
-        if (circleCol.enabled == true && player.UsingShield == false) runSpeed = 1f;
+        if (circleCol.enabled == true && player.UsingShield == false) runSpeed = 0f;
         if (circleCol.enabled == false && player.UsingShield == false) runSpeed = 2f;
         // Rope movement
         Vector2 rightBalance = new Vector2(1500f * Time.deltaTime, 0f);
@@ -403,16 +411,16 @@ public class PlayerMovement : MonoBehaviour
         if (!(usingRope))
             currentVelocity = new Vector2(runSpeed * hAxis, currentVelocity.y);
 
-        if (usingRope)
+        if (usingRope && rope.distance > 0.8f)
         {
             Rb.drag = 0.02f;
             if (Rb.velocity.x < 3 && Rb.velocity.x > -3)
             {
-                if (Input.GetKeyDown("d") || Input.GetKeyDown("right"))
+                if (Input.GetKeyDown("right"))
                 {
                     Rb.AddForce(rightBalance);
                 }
-                if (Input.GetKeyDown("a") || Input.GetKeyDown("left"))
+                if (Input.GetKeyDown("left"))
                 {
                     Rb.AddForce(leftBalance);
                 }
