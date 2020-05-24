@@ -17,12 +17,13 @@ public class Treasure : MonoBehaviour
 
     private void Start()
     {
+        Stats.IsAlive = true;
         Stats.CurrentHP = 25f;
     }
 
     private void Update()
     {
-        if (!(Stats.IsAlive))
+        if (!Stats.IsAlive)
         {
             int chance = Random.Range(0, 10);
             if (healthPickUp != null && chance >= 5) Instantiate(healthPickUp, transform.position, transform.rotation);

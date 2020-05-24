@@ -108,7 +108,7 @@ public class Player : MonoBehaviour
             Stats.RegenMana();
             animator.SetBool("attack", false);
             animator.SetBool("rangedAttack", false);
-            bool pressShield = Input.GetKey("w") || Input.GetKey("up");
+            bool pressShield = Input.GetKey("s");
             MagicPosition = magicPosition.position;
             // ---------------------------------------------------------------------------------------------
 
