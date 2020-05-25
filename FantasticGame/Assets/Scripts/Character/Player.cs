@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
 
     // LAYERS
     [SerializeField] LayerMask          treasureLayer;
-    [SerializeField] LayerMask          enemyLayer, enemyAmmunitionLayer;
+    [SerializeField] LayerMask          enemyLayer, enemyAmmunitionLayer, meleeEnemyLayer;
     [SerializeField] LayerMask          onGroundLayers;
 
     // CAMERA
@@ -104,6 +104,7 @@ public class Player : MonoBehaviour
             // UPDATE VARIABLES ----------------------------------------------------------------------------
             CurrentMana = Stats.CurrentMana;
             CurrentHP = Stats.CurrentHP;
+            if (Stats.CurrentHP < 0) Stats.IsAlive = false;
             RangedAttacked = false;
             Stats.RegenMana();
             animator.SetBool("attack", false);
@@ -214,6 +215,7 @@ public class Player : MonoBehaviour
 
         Collider2D[] treasureHit = Physics2D.OverlapCircleAll(meleePosition.position, Stats.MeleeAttackRange, treasureLayer);
         Collider2D[] enemyHit = Physics2D.OverlapCircleAll(meleePosition.position, Stats.MeleeAttackRange, enemyLayer);
+        Collider2D[] meleeEnemyHit = Physics2D.OverlapCircleAll(meleePosition.position, Stats.MeleeAttackRange, meleeEnemyLayer);
 
         foreach (Collider2D treasure in treasureHit)
         {
@@ -224,6 +226,11 @@ public class Player : MonoBehaviour
         {
             Instantiate(meleePrefab, enemy.GetComponent<Rigidbody2D>().position, transform.rotation);
             enemy.GetComponent<Enemy>().Stats.TakeDamage(Stats.MeleeDamage);
+        }
+        foreach (Collider2D enemy in meleeEnemyHit)
+        {
+            Instantiate(meleePrefab, enemy.GetComponent<Rigidbody2D>().position + new Vector2( 0f, 0.4f), transform.rotation);
+            enemy.GetComponent<EnemyMelee>().Stats.TakeDamage(Stats.MeleeDamage);
         }
     }
 

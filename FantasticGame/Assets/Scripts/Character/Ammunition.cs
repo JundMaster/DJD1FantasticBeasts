@@ -34,6 +34,7 @@ public class Ammunition : MonoBehaviour
     {
         Treasure treasure = hitInfo.GetComponent<Treasure>();
         Enemy enemy = hitInfo.GetComponent<Enemy>();
+        EnemyMelee enemyMelee = hitInfo.GetComponent<EnemyMelee>();
 
 
         // If there's a collision
@@ -47,6 +48,10 @@ public class Ammunition : MonoBehaviour
             enemy.Stats.TakeDamage(p1.Stats.RangedDamage);
         }
 
+        if (enemyMelee != null)
+        {
+            enemyMelee.Stats.TakeDamage(p1.Stats.RangedDamage);
+        }
 
         Instantiate(ammunitionHit, transform.position, transform.rotation);
 

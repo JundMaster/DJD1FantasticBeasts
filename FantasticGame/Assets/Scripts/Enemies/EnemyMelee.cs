@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class EnemyMelee : MonoBehaviour
 {
     public Stats Stats { get; private set; }
 
-    [SerializeField] Transform          magicPosition;
-    [SerializeField] Transform          magicPositionCrouch;
-    [SerializeField] GameObject         magicPrefab;
+    [SerializeField] Transform          meleePosition;
 
 
     [SerializeField] LayerMask          playerLayer;
@@ -24,22 +22,20 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] float  speed;       // WALKING SPEED
     [SerializeField] float  limitRange;  // RANGE FOR WALKING
-    [SerializeField] float  maxAimRange; // RANGE FOR SHOOTING
     [SerializeField] float  backStabSize; // BACK STAB COLLIDER SIZE
-    [SerializeField] float  attackDelay; // ATTACK DELAY
     [SerializeField] float  HP;          // CURRENT HP
 
     [SerializeField] float  enemyDamage;     // ENEMY DAMAGE
     [SerializeField] float  attackPushForce;  // HOW MUCH WILL ENEMY PUSH THE PLAYER
     [SerializeField] int    lootChance;    // LOOT CHANCE 1 - 10
-    [SerializeField] bool   staticEnemy;    // IF ENEMY IS A STATIC ENEMY
 
     //[SerializeField] bool   shooter; // ONLY FOR DEMO
 
     public float    Damage { get; private set; }
     public float    PushForce { get; private set; }
-    bool            shooting;
 
+    bool            meleeAttack;
+    float           attackDelay;
 
     float           originalSpeed;
     Vector2         startingPos;
@@ -50,72 +46,77 @@ public class Enemy : MonoBehaviour
 
     float           canMoveTimer;
 
-
-
+    Player p1;
+    Animator animator;
     private void Awake()
     {
         Stats = new Stats();
+        animator = GetComponent<Animator>();
     }
 
     private void Start()
     {
-        Stats.IsAlive = true;
-        startingPos = transform.position;
-        Stats.CurrentHP = HP;
+        Stats.IsAlive       = true;
+        startingPos         = transform.position;
+        Stats.CurrentHP     = HP;
+
+        attackDelay = 0.75f;
+        Stats.CanMeleeAttack    = false;
+        Stats.MeleeAttackDelay  = attackDelay;
+        meleeAttack             = false;
 
 
-        Stats.CanRangeAttack = false;
-        Stats.RangedAttackDelay = attackDelay;
+        Stats.MeleeDamage   = enemyDamage;
+        Damage              = enemyDamage;
+        PushForce           = attackPushForce;
 
 
-        Stats.RangedDamage = enemyDamage;
-        Damage = enemyDamage;
-        PushForce = attackPushForce;
+        limitWalkingRangeReached    = false;
+        //waitingTimeCounter        = waitingTime;
+        waitingTimeCounter          = Random.Range(1f, 3f);
 
 
-        limitWalkingRangeReached = false;
-        //waitingTimeCounter = waitingTime;
-        waitingTimeCounter = Random.Range(1f, 3f);
-
-
-        backStabCheckerEnabled = false;
-        originalSpeed = speed;
-        canMoveTimer = attackDelay;
+        backStabCheckerEnabled  = false;
+        originalSpeed           = speed;
     }
 
     private void Update()
     {
-        
+        p1 = FindObjectOfType<Player>();
+
+
+        // OTHER ATTACKS ANIMATION DELAY
+        if (meleeAttack == true )
+        {
+            Stats.MeleeAttackDelay -= Time.deltaTime;
+        }
+        if (Stats.MeleeAttackDelay < 0)
+        {   // If timeDelay gets < 0, sets timer back to initial delay again and the character can attack
+            Stats.CanMeleeAttack = true;
+            Stats.MeleeAttackDelay = attackDelay;
+        }
 
 
         // Movement -----------------------------------------------------------------------------------
-        // Attack delays for ranged attacks
-        if (shooting == true) // RANGED
+        // Attack delays for ranged and melee attacks
+        if (Stats.CanMeleeAttack)     // Attack animation delay
         {
-            if (Stats.CanRangeAttack) Shoot();
+            Melee();
         }
-        if (shooting == false && staticEnemy == false) Movement();
+        if (meleeAttack == false)
+        {
+            Movement();
+        }
+
 
 
         //  AIMING CHECK ------------------------------------------------------------------------------
         AimCheck();
 
 
-        // ATTACK DELAY -------------------------------------------------------------------------------
-        if (Stats.CanRangeAttack == false)
-            Stats.RangedAttackCounter -= Time.deltaTime;
-        if (Stats.RangedAttackCounter < 0)
-        {   // If timeDelay gets < 0, sets timer back to AttackDelay again and the character can attack
-            Stats.RangedAttackCounter = Stats.RangedAttackDelay;
-            Stats.CanRangeAttack = true;
-        }
-
 
         // CHECKS IF PLAYER IS ON THE ENEMY'S BACK ----------------------------------------------------
         BackStabCheck();
-
-        // ONLY FOR DEMO
-        // if (shooter) Shooter();
 
 
         // ALIVE --------------------------------------------------------------------------------------
@@ -127,9 +128,12 @@ public class Enemy : MonoBehaviour
                 if (healthPickUp != null && chance >= 5) Instantiate(healthPickUp, transform.position, transform.rotation);
                 else if (manaPickUp != null) Instantiate(manaPickUp, transform.position, transform.rotation);
             }
-               
             Stats.Die(gameObject);
         }
+
+        // ANIMATIONS --------------------------------------------------------------------------------
+        animator.SetBool("attack", meleeAttack);
+        animator.SetFloat("speed", speed);
     }
 
     
@@ -140,7 +144,7 @@ public class Enemy : MonoBehaviour
         {
             Collider2D checkSurround = Physics2D.OverlapCircle(backStab.position, 0.5f, playerLayer);
 
-            if (checkSurround)
+            if (checkSurround && meleeAttack == false)
             {
                 transform.Rotate(0f, 180f, 0f);
                 if (limitWalkingRangeReached == true) limitWalkingRangeReached = false;
@@ -152,43 +156,52 @@ public class Enemy : MonoBehaviour
     // Checks if the the player is in range and if there's an object between the enemy and player
     void AimCheck()
     {
-        Player p1 = FindObjectOfType<Player>();
-        RaycastHit2D aimTop = Physics2D.Raycast(magicPosition.position, magicPosition.right, maxAimRange);
-        RaycastHit2D aimBottom = Physics2D.Raycast(magicPositionCrouch.position, magicPositionCrouch.right, maxAimRange);
-        if (aimTop.rigidbody == p1.Movement.Rb || aimBottom.rigidbody == p1.Movement.Rb)
+        Collider2D aimTop;
+        if (transform.rotation.y > 0) aimTop = Physics2D.OverlapBox(meleePosition.position, new Vector3(0.2f, 0.7f, 0.2f) , 0f, playerLayer);
+        else aimTop = Physics2D.OverlapBox(meleePosition.position, new Vector3(0.15f, 0.7f, 0.2f), 0f, playerLayer);
+
+        if (aimTop != null)
         {
-            shooting = true;
+            meleeAttack = true;
             speed = 0;
+            // Sets canMoveTimer to attackDelay, to start counting in the beggining of the attack
             canMoveTimer = attackDelay;
         }
         else
         {
-            shooting = false;
+            // Only cancells attack and starts moving AFTER atacking
             canMoveTimer -= Time.deltaTime;
-            if (canMoveTimer < -1) 
-                speed = originalSpeed;
-
+            if (canMoveTimer < 0)
+            {
+                if (limitWalkingRangeReached == false)
+                {
+                    meleeAttack = false;
+                    speed = originalSpeed;
+                }
+            }
+            
+            // If player moves out of range, resets animation counter to initial value
+            Stats.MeleeAttackDelay = attackDelay;
         }
-
-        if (transform.right.x > 0)
-            if (p1.transform.position.x > magicPosition.position.x + maxAimRange)
-                speed = originalSpeed;
-
-        if (transform.right.x < 0)
-            if (p1.transform.position.x < magicPosition.position.x - maxAimRange)
-                speed = originalSpeed;
     }
 
-    // Shoots
-    void Shoot()
+    // Melee Attack
+    void Melee()
     {
-        backStabCheckerEnabled = true; // first time the enemy shoots, it enabled the backstabchecker
-        Stats.CanRangeAttack = false;
-        GameObject projectileObject = Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
-        EnemyAmmunition ammo = projectileObject.GetComponent<EnemyAmmunition>();
+        backStabCheckerEnabled = true;
+        Stats.CanMeleeAttack = false;
+        p1.Stats.TakeDamage(Damage);
+        if (p1.Movement.CrouchGetter) Instantiate(ammunitionHit, p1.transform.position + new Vector3(0f, 0.3f, 0f), p1.transform.rotation);
+        else Instantiate(ammunitionHit, p1.transform.position + new Vector3(0f, 0.5f, 0f), p1.transform.rotation);
 
-        ammo.enemy = this;
+        // Pushes the player
+        if (p1.transform.position.x > transform.position.x)
+            p1.Movement.Rb.AddForce(new Vector2(PushForce, 0f));
+        else if (p1.transform.position.x < transform.position.x)
+            p1.Movement.Rb.AddForce(new Vector2(-PushForce, 0f));
+        StartCoroutine(p1.CameraShake.Shake(0.025f, 0.08f));
     }
+
 
     // Movement, turns 180 if reaches max position || if collides against a wall || if doesn't detect ground
     // Uses a random timer to turn the enemy
@@ -227,43 +240,23 @@ public class Enemy : MonoBehaviour
             {
                 waitingTimeCounter -= Time.deltaTime;
                 transform.position = tempPosition;
+                speed = 0;
             }
             if (waitingTimeCounter < 0)
             {
                 transform.Rotate(0f, 180f, 0f);
                 waitingTimeCounter = Random.Range(0f, 4f); // WAITING TIME <<<<<<<<<<< TA RANDOM NESTE ;
-                transform.position += transform.right * speed * Time.deltaTime;
                 limitWalkingRangeReached = false;
+                speed = originalSpeed;
             }
         }
     }
 
     private void OnDrawGizmos()
     {
-        if (transform.right.x >= 0) Gizmos.DrawWireSphere(magicPosition.position + new Vector3(maxAimRange, 0f, -1f), 0.05f);
-        if (transform.right.x < 0) Gizmos.DrawWireSphere(magicPosition.position + new Vector3(-maxAimRange, 0f, -1f), 0.05f);
+        Gizmos.DrawWireCube(meleePosition.position, new Vector3 ( 0.2f, 0.7f, 0.2f));
         Gizmos.DrawWireSphere(backStab.position, backStabSize);
     }
-
-
-    /*  ONLY FOR DEMO
-    void Shooter()
-    {
-        if (Stats.CanRangeAttack == false)
-            Stats.RangedAttackCounter -= Time.deltaTime;
-        if (Stats.RangedAttackCounter < 0)
-        {   // If timeDelay gets < 0, sets timer back to AttackDelay again and the character can attack
-            Stats.RangedAttackCounter = Stats.RangedAttackDelay;
-            Stats.CanRangeAttack = true;
-        }
-
-        if (Stats.CanRangeAttack)
-        {
-            Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
-            Stats.CanRangeAttack = false;
-        }
-    }
-    */
 }
 
 

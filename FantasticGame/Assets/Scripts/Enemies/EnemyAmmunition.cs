@@ -18,7 +18,6 @@ public class EnemyAmmunition : MonoBehaviour
 
         // Destroys the object if it doesn't hit anything
         Destroy(gameObject, 400f * Time.deltaTime);
-
     }
 
 
@@ -63,9 +62,9 @@ public class EnemyAmmunition : MonoBehaviour
                     Instantiate(ammunitionHit, transform.position, transform.rotation);
 
                     if (player.transform.position.x > rb.transform.position.x)
-                        player.Movement.Rb.AddForce(new Vector2(100f, 0f));
+                        player.Movement.Rb.AddForce(new Vector2(enemy.PushForce, 0f));
                     else if (player.transform.position.x < rb.transform.position.x)
-                        player.Movement.Rb.AddForce(new Vector2(-100f, 0f));
+                        player.Movement.Rb.AddForce(new Vector2(-enemy.PushForce, 0f));
 
                     StartCoroutine(player.CameraShake.Shake(0.015f, 0.04f));
                 }
