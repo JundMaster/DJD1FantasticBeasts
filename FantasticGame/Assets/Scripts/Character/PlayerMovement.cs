@@ -51,6 +51,8 @@ public class PlayerMovement : MonoBehaviour
 
     // ENEMY HIT
     public bool                         Invulnerable    { get; set; }
+    private float                       invulnerableHP;
+    private float                       normalHP;
     float                               invulnerableTimer;
     float                               invulnerableDelay;
     [SerializeField] SpriteRenderer     spriteRender;
@@ -77,6 +79,7 @@ public class PlayerMovement : MonoBehaviour
         rope = GetComponent<DistanceJoint2D>();
         player = FindObjectOfType<Player>();
         ropeSprite = GameObject.FindGameObjectWithTag("ropeSprite");
+        if (ropeSprite != null) ropeSprite.SetActive(false);
     }
 
     void Start()
@@ -133,10 +136,14 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // INVULNERABLE  -----------------------------------------------------------------------------
+        normalHP = player.Stats.CurrentHP - 10f;
+        if (Invulnerable == false) invulnerableHP = player.Stats.CurrentHP;
         if (Invulnerable)
         {
             invulnerableTimer -= Time.deltaTime;
             spriteEnableCounter -= Time.deltaTime;
+            if (player.Stats.CurrentHP < 0) player.Stats.IsAlive = false;
+            player.Stats.CurrentHP = invulnerableHP - 10f;
         }
         if (spriteEnableCounter < 0)
         {
@@ -148,6 +155,8 @@ public class PlayerMovement : MonoBehaviour
             invulnerableTimer = invulnerableDelay;
             Invulnerable = false;
             spriteRender.enabled = true;
+            invulnerableHP = player.Stats.CurrentHP;
+            player.Stats.CurrentHP = normalHP;
         }
         // -----------------------------------------------------------------------------------------
 
@@ -182,7 +191,6 @@ public class PlayerMovement : MonoBehaviour
         if (collider != null)
             if (Invulnerable == false)
             {
-                player.Stats.CurrentHP -= 10;
                 EnemyHit();
             }
     }
@@ -219,11 +227,7 @@ public class PlayerMovement : MonoBehaviour
             circleCol.enabled = false;
             boxCol.enabled = true;
         }
-
-        // TEMPORARY << NO ANIMATION
-   
             
-
         if (collisionTop != null)
             IsCrouched = true;
         else
