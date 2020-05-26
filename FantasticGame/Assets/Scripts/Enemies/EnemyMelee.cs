@@ -86,7 +86,7 @@ public class EnemyMelee : MonoBehaviour
 
 
         // OTHER ATTACKS ANIMATION DELAY
-        if (meleeAttack == true )
+        if (meleeAttack == true)
         {
             Stats.MeleeAttackDelay -= Time.deltaTime;
         }
@@ -156,30 +156,36 @@ public class EnemyMelee : MonoBehaviour
     // Checks if the the player is in range and if there's an object between the enemy and player
     void AimCheck()
     {
-        Collider2D aimTop;
-        if (transform.rotation.y > 0) aimTop = Physics2D.OverlapBox(meleePosition.position, new Vector3(0.2f, 0.7f, 0.2f) , 0f, playerLayer);
-        else aimTop = Physics2D.OverlapBox(meleePosition.position, new Vector3(0.15f, 0.7f, 0.2f), 0f, playerLayer);
+        Collider2D collider;
+        if (transform.rotation.y > 0) collider = Physics2D.OverlapBox(meleePosition.position, new Vector3(0.2f, 0.7f, 0.2f) , 0f, playerLayer);
+        else collider = Physics2D.OverlapBox(meleePosition.position, new Vector3(0.15f, 0.7f, 0.2f), 0f, playerLayer);
 
-        if (aimTop != null)
+        if (collider != null)
         {
             meleeAttack = true;
             speed = 0;
             // Sets canMoveTimer to attackDelay, to start counting in the beggining of the attack
             canMoveTimer = attackDelay;
         }
+        
         else
         {
             // Only cancells attack and starts moving AFTER atacking
             canMoveTimer -= Time.deltaTime;
             if (canMoveTimer < 0)
             {
-                if (limitWalkingRangeReached == false)
+                if (limitWalkingRangeReached == false)          // If it's maximum range
+                {
+                    meleeAttack = false;
+                    speed = originalSpeed;
+                }
+                if (limitWalkingRangeReached && meleeAttack)    // If it's maximum range and has not collider to attack
                 {
                     meleeAttack = false;
                     speed = originalSpeed;
                 }
             }
-            
+
             // If player moves out of range, resets animation counter to initial value
             Stats.MeleeAttackDelay = attackDelay;
         }
