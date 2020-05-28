@@ -108,8 +108,8 @@ public class EnemyMelee : MonoBehaviour
             int chance = Random.Range(0, 10);
             if (chance > lootChance)
             {
-                if (healthPickUp != null && chance >= 5) Instantiate(healthPickUp, transform.position, transform.rotation);
-                else if (manaPickUp != null) Instantiate(manaPickUp, transform.position, transform.rotation);
+                if (healthPickUp != null && chance >= 5) Instantiate(healthPickUp, transform.position + new Vector3(0f, 0.2f, 0f), transform.rotation);
+                else if (manaPickUp != null) Instantiate(manaPickUp, transform.position + new Vector3(0f, 0.2f, 0f), transform.rotation);
             }
             Stats.Die(gameObject);
         }
