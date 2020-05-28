@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
     RaycastHit2D                        ropeHit;
     Vector3                             ropeHitCoords;
     Vector3                             newRopeSprite;
-    GameObject                          ropeSprite;
+    public GameObject                   ropeSprite      { get; set; }
     bool                                minRange;
     bool                                usingRope;
     float                               ropeDelay;
@@ -51,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
 
     // ENEMY HIT
     public bool                         Invulnerable    { get; set; }
-    private float                       invulnerableHP;
+    public float                        invulnerableHP  { get; set; }
     private float                       normalHP;
     float                               invulnerableTimer;
     float                               invulnerableDelay;
@@ -136,7 +136,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // INVULNERABLE  -----------------------------------------------------------------------------
-        normalHP = player.Stats.CurrentHP - 10f;
+        normalHP = player.Stats.CurrentHP;
         if (Invulnerable == false) invulnerableHP = player.Stats.CurrentHP;
         if (Invulnerable)
         {
@@ -164,7 +164,10 @@ public class PlayerMovement : MonoBehaviour
         // COLLISION WITH DEATH TILE ----------------------------------------------------------------
         Collider2D deathTileCheck = Physics2D.OverlapCircle(groundCheck.position, 0.1f, deathTileLayer);
         if (deathTileCheck != null)
+        {
+            if (ropeSprite != null) ropeSprite.SetActive(false);
             player.Stats.IsAlive = false;
+        }
         // -----------------------------------------------------------------------------------------
         
 
@@ -354,7 +357,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
             // Renders rope while pressing Fire3
-            if (Input.GetButton("Fire3") && ropeHit.collider != null && minRange == false)
+            if (Input.GetButton("Fire3") && ropeHit.collider != null && rope.enabled)
             {
                 usingRope = true;
                 ropeRender.SetPosition(0, ropeAnchor.position);
@@ -366,9 +369,13 @@ public class PlayerMovement : MonoBehaviour
 
 
                 // If the player collides against something
-                Collider2D wallCol = Physics2D.OverlapCircle(ropeWallCollider.position, 0.02f, ropeStopLayer);
+                Collider2D wallCol = Physics2D.OverlapCircle(ropeWallCollider.position, 0.03f, ropeStopLayer);
                 if (wallCol != null)
+                {
+                    if (ropeSprite != null) ropeSprite.SetActive(false);
+                    ropeRender.enabled = false;
                     rope.enabled = false;
+                }
 
                 // If the player passes the ceining position
                 if (player.transform.position.y > ropeHitCoords.y - 0.8f)

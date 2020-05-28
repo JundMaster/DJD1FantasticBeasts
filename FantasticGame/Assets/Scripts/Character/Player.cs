@@ -104,7 +104,11 @@ public class Player : MonoBehaviour
             // UPDATE VARIABLES ----------------------------------------------------------------------------
             CurrentMana = Stats.CurrentMana;
             CurrentHP = Stats.CurrentHP;
-            if (Stats.CurrentHP < 0) Stats.IsAlive = false;
+            if (Stats.CurrentHP < 0)
+            {
+                if (Movement.ropeSprite != null) Movement.ropeSprite.SetActive(false);
+                Stats.IsAlive = false;
+            }
             RangedAttacked = false;
             Stats.RegenMana();
             animator.SetBool("attack", false);
@@ -188,7 +192,11 @@ public class Player : MonoBehaviour
 
 
             // CHEATS
-            if (godMode) Movement.Invulnerable = true;
+            if (godMode)
+            {
+                Movement.Invulnerable = true;
+                Movement.invulnerableHP = 100f;
+            }
             if (fly) if (Input.GetButton("Jump")) Movement.Rb.gravityScale = 0f;
             if (infiniteMana) Stats.CurrentMana = Stats.MaxMana;
         }
