@@ -11,14 +11,14 @@ A game based on the movie *Fantastic Beasts and Where to Find them*
 
 ## Controls
 
-Arrow Keys        - Movement
-Up / Down (HOLD)  - Look top/bottom
-Space             - Jump
-A                 - Melee Attack
-D                 - Magic Spell
-S                 - Shield
-W (Air)           - Swooping Evil Rope
-W (Ground)        - Create/Destroy Swooping Evil Platform
+- Arrow Keys        - Movement
+- Up / Down (HOLD)  - Look top/bottom
+- Space             - Jump
+- A                 - Melee Attack
+- D                 - Magic Spell
+- S                 - Shield
+- W (Air)           - Swooping Evil Rope
+- W (Ground)        - Create/Destroy Swooping Evil Platform
 
 ## References
 - [Unity User Manual](https://docs.unity3d.com/Manual/index.html)
