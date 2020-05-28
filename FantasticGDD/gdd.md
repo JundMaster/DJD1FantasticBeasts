@@ -206,13 +206,15 @@ game.
 
 ### Scale/Tiles
 
-Character scale:
+Character scale
+
 ![player size](playerSize.png)
 
 ### Camera Trap
 
 Considering that the player will have to do plenty of jumping, we use a camera
 trap to avoid too much camera movement, while keeping a fluid movement.
+
 ![camera trap](cameraTrap.png)
 
 # Target Audience
