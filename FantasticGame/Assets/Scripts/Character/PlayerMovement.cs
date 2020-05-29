@@ -44,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
     Vector3                             newRopeSprite;
     public GameObject                   ropeSprite      { get; set; }
     bool                                minRange;
-    bool                                usingRope;
+    public bool                         usingRope       { get; private set; }
     float                               ropeDelay;
     float                               ropeTimer;
     int                                 ropesLeft;
