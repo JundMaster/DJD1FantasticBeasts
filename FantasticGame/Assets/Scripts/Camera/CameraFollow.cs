@@ -167,6 +167,10 @@ public class CameraFollow : MonoBehaviour
         Gizmos.DrawLine(p2, p3);
         Gizmos.DrawLine(p3, p4);
         Gizmos.DrawLine(p4, p1);
+
+        Gizmos.color = new Color(255, 0, 0);
+        Gizmos.DrawLine(new Vector3(maxLevelRangeXmin, -30f, 0f), new Vector3(maxLevelRangeXmin, 30f, 0f));
+        Gizmos.DrawLine(new Vector3(maxLevelRangeXmax, -30f, 0f), new Vector3(maxLevelRangeXmax, 30f, 0f));
     }
     
 }

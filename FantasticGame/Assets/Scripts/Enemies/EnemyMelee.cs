@@ -100,7 +100,6 @@ public class EnemyMelee : MonoBehaviour
         //  AIMING CHECK ------------------------------------------------------------------------------
         AimCheck();
 
-        Debug.Log(limitWalkingRangeReached);
 
         // ALIVE --------------------------------------------------------------------------------------
         if (!(Stats.IsAlive))
