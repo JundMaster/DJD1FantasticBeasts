@@ -4793,7 +4793,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 9.094947e-13, y: 0}
   serializedVersion: 2
-  m_Radius: 4.01
+  m_Radius: 8
 --- !u!114 &3001098325413506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4809,6 +4809,4 @@ MonoBehaviour:
   ammunitionHit: {fileID: 7904367576784607624, guid: 1e8bbacd71d72e04d99fa72b96d41376,
     type: 3}
   rb: {fileID: 4357377087198178749}
-  rangedDamage: 25
   speed: 4
-  p1: {fileID: 0}

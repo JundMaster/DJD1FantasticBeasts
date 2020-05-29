@@ -100,7 +100,7 @@ public class EnemyMelee : MonoBehaviour
         //  AIMING CHECK ------------------------------------------------------------------------------
         AimCheck();
 
-
+        Debug.Log(limitWalkingRangeReached);
 
         // ALIVE --------------------------------------------------------------------------------------
         if (!(Stats.IsAlive))
@@ -162,10 +162,24 @@ public class EnemyMelee : MonoBehaviour
                     speed = originalSpeed;
                     meleeAttack = false;
                 }
+              
                 if (limitWalkingRangeReached && meleeAttack)    // If it's maximum range and has not collider to attack
                 {
                     speed = originalSpeed;
                     meleeAttack = false;
+                }
+
+                if (limitWalkingRangeReached)   // If the player leaves its reach while his ranged reached is true
+                {
+                    waitingTimeCounter -= Time.deltaTime;
+                    transform.position = tempPosition;
+                }
+
+                if (p1 == null) // If it killed the player
+                {
+                    speed = originalSpeed;
+                    meleeAttack = false;
+                    limitWalkingRangeReached = false;
                 }
             }         
         }
