@@ -125,7 +125,7 @@ public class Player : MonoBehaviour
 
             canUseShield = CurrentMana > 5f ? true : false;
 
-            if (Movement.OnGround && pressShield && canUseShield)
+            if (Movement.OnGround && pressShield && canUseShield && !Movement.CrouchGetter)
             {
                 Shield();
             }
@@ -151,7 +151,7 @@ public class Player : MonoBehaviour
             }
 
             if (Input.GetButtonDown("Fire2"))
-                if (Stats.CanUseSpell() && Stats.CanRangeAttack && !UsingShield)
+                if (Stats.CanUseSpell() && Stats.CanRangeAttack && !UsingShield && !Movement.CrouchGetter && !Movement.usingRope)
                     Shoot();
 
             // ---------------------------------------------------------------------------------------------
@@ -169,7 +169,7 @@ public class Player : MonoBehaviour
             }
 
             if (Input.GetButtonDown("Fire1"))
-                if (Stats.CanMeleeAttack)
+                if (Stats.CanMeleeAttack && !UsingShield && !Movement.CrouchGetter && !Movement.usingRope)
                 {
                     MeleeAttack();
                 }

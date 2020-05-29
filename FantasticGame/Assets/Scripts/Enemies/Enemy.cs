@@ -17,8 +17,6 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] Transform          groundRangeCheck, groundCheck, wallCheck, backStab;
 
-
-    [SerializeField] GameObject         ammunitionHit;
     // Drops
     [SerializeField] GameObject         healthPickUp, manaPickUp;
 
