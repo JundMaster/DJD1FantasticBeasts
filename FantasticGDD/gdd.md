@@ -132,7 +132,7 @@ will be inspired on NY visual.
 Even though, as the game progresses, the player will get in touch with
 different scenarios, such as, forests, lakes, etc.
 
-![nelson_mb](cenarios.png)
+![nelson_mb](Images/cenarios.png)
 
 ## Characters
 
@@ -189,10 +189,10 @@ Keyboard.
   - Shield - high mana cost;
 - Actions with beasts:
   - Using the Swooping Evil as a rope to pass through some obstacles:
-![swooping evil rope](swoopingRope.png)
+![swooping evil rope](Images/swoopingRope.png)
   
   - Using the Swooping Evil as a platform to pass through some obstacles:
-![swooping evil platform](swoopingPlatform.png)
+![swooping evil platform](Images/swoopingPlatform.png)
 
 ### Indicators
 
@@ -207,13 +207,13 @@ game.
 ### Scale/Tiles
 
 Character scale:
-![player size](playerSize.png)
+![player size](Images/playerSize.png)
 
 ### Camera Trap
 
 Considering that the player will have to do plenty of jumping, we use a camera
 trap to avoid too much camera movement, while keeping a fluid movement.
-![camera trap](cameraTrap.png)
+![camera trap](Images/cameraTrap.png)
 
 # Target Audience
 
