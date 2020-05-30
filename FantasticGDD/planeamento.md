@@ -1,6 +1,6 @@
 | Week: | Gabriel                         | Nelson               | Pedro                           |
 |-------|---------------------------------|----------------------|---------------------------------|
-| 1     | Main Character Sprite           | Levels Layout        | Moodboards - logo/Main Menu Art |
+| 1     | Main Character Sprite           | Levels Layout        | Moodboards - logo/Main Menu     |
 | 2     | Main Character Animation        | Levels Design        | Main Menu - Interface           |
 | 3     | Main Character Animation        | Levels Design        | Movement System                 |
 | 4     | Enemies Sprites                 | Levels Design        | Movement System                 |
