@@ -17,10 +17,12 @@ public class PauseMenu : MonoBehaviour
             if(gamePaused)
             {
                 Resume();
+                Cursor.visible = false;
             }
             else
             {
                 Pause();
+                Cursor.visible = true;
             }
         }
     }
@@ -31,6 +33,7 @@ public class PauseMenu : MonoBehaviour
         // Transition time
         Time.timeScale = 1f;
         gamePaused = false;
+        Cursor.visible = false;
     }
 
     void Pause()
@@ -45,6 +48,7 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         gamePaused = false;
         SceneManager.LoadScene("MainMenu");
+        Cursor.visible = true;
     }
 
     public void QuitGame()

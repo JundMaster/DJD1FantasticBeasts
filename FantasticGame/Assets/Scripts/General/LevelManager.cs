@@ -32,10 +32,12 @@ public class LevelManager : MonoBehaviour
         reachedRespawn2 = false;
         reachedRespawn3 = false;
         reachedRespawn4 = false;
+        Cursor.visible = false;
     }
 
     private void Update()
     {
+
         p1 = FindObjectOfType<Player>();
 
         if (p1.transform.position.x > maxPositionReached)
