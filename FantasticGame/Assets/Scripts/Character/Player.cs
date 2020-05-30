@@ -93,7 +93,7 @@ public class Player : MonoBehaviour
         Stats.MeleeAttackCounter = Stats.MeleeAttackDelay;
 
         // ETC
-        canScreenShake = false;
+        canScreenShake = true;
     }
 
     // Update is called once per frame
@@ -211,8 +211,7 @@ public class Player : MonoBehaviour
         Stats.CanRangeAttack = false;
         Stats.SpendMana();
         // When Crouched
-        if (Movement.CrouchGetter) Instantiate(magicPrefab, crouchedMagicPosition.position, magicPosition.rotation);
-        else Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
+        Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
     }
 
     void MeleeAttack()
@@ -245,8 +244,7 @@ public class Player : MonoBehaviour
     void Shield()
     {
         if (Physics2D.OverlapCircle(shieldPosition.position, 0.1f, enemyAmmunitionLayer)) StartCoroutine(CameraShake.Shake(0.015f, 0.04f));
-        if (Movement.IsCrouched) Instantiate(shieldPrefab, crouchedShieldPosition.position, transform.rotation);
-        else Instantiate(shieldPrefab, shieldPosition.position, transform.rotation);
+        Instantiate(shieldPrefab, shieldPosition.position, transform.rotation);
         UsingShield = true;
         Stats.CurrentMana -= 10f * Time.deltaTime;
     }
