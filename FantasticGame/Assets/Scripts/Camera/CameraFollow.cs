@@ -51,7 +51,7 @@ public class CameraFollow : MonoBehaviour
                 if (offset.y < 1.5f)
                     offset.y += 3 * Time.deltaTime;
             if (p1.Rb.velocity.x != 0)
-                if (p1.Rb.velocity.y > -5)
+                if (p1.Rb.velocity.y > -12)
                 {
                     offset.y = originalOffset.y;
                     lookingCounter = lookingDelay;
@@ -64,14 +64,14 @@ public class CameraFollow : MonoBehaviour
                 if (offset.y > 0f)
                     offset.y -= 3 * Time.deltaTime;
             if (p1.Rb.velocity.x != 0)
-                if (p1.Rb.velocity.y > -5)
+                if (p1.Rb.velocity.y > -12)
                 {
                     offset.y = originalOffset.y;
                     lookingCounter = lookingDelay;
                 }
         }
-        else // WHENEVER SPEED IS > -5, SETS CAMERA TO ITS NORMAL STATE
-            if (p1.Rb.velocity.y > -5)
+        else // WHENEVER SPEED IS > -12, SETS CAMERA TO ITS NORMAL STATE
+            if (p1.Rb.velocity.y > -12)
             {
                 offset.y = originalOffset.y;
                 lookingCounter = lookingDelay;
@@ -83,7 +83,7 @@ public class CameraFollow : MonoBehaviour
         // CAMERA WHEN PLAYER VELOCITY IS TOO HIGH ------------------------------------------------------------------
         if (minRange == false && maxRange == false)
         {
-            if (p1.Rb.velocity.y < -5)
+            if (p1.Rb.velocity.y < -12)
             {
                 if (offset.y > -2f)
                     offset.y -= 3 * Time.deltaTime;
