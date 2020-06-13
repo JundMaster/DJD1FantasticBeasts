@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour
     public float    Damage { get; private set; }
     public float    PushForce { get; private set; }
     bool            shooting;
-
+    bool            shootAnimation;
 
     float           originalSpeed;
     Vector2         startingPos;
@@ -49,10 +49,11 @@ public class Enemy : MonoBehaviour
     float           canMoveTimer;
 
 
-
+    Animator animator;
     private void Awake()
     {
         Stats = new Stats();
+        animator = GetComponent<Animator>();
     }
 
     private void Start()
@@ -85,35 +86,30 @@ public class Enemy : MonoBehaviour
     {
         
 
-
-        // Movement -----------------------------------------------------------------------------------
-        // Attack delays for ranged attacks
-        if (shooting == true) // RANGED
+        // ATTACK DELAY -------------------------------------------------------------------------------
+        if (Stats.CanRangeAttack)
         {
-            if (Stats.CanRangeAttack) Shoot();
+            Stats.RangedAttackCounter -= Time.deltaTime;
+            shooting = true;
         }
-        if (shooting == false && staticEnemy == false) Movement();
+        if (Stats.RangedAttackCounter < 0.3f)   // Sets animation false after 0.3f
+            shootAnimation = true;              // Sets animation to true
+
+        if (Stats.RangedAttackCounter < 0)
+        {   // If timeDelay gets < 0, sets timer back to AttackDelay again and the character can attack
+            shootAnimation = false;
+            Shoot();
+            Stats.RangedAttackCounter = Stats.RangedAttackDelay;
+        }
+        if (Stats.CanRangeAttack == false && staticEnemy == false) Movement();
 
 
         //  AIMING CHECK ------------------------------------------------------------------------------
         AimCheck();
 
 
-        // ATTACK DELAY -------------------------------------------------------------------------------
-        if (Stats.CanRangeAttack == false)
-            Stats.RangedAttackCounter -= Time.deltaTime;
-        if (Stats.RangedAttackCounter < 0)
-        {   // If timeDelay gets < 0, sets timer back to AttackDelay again and the character can attack
-            Stats.RangedAttackCounter = Stats.RangedAttackDelay;
-            Stats.CanRangeAttack = true;
-        }
-
-
         // CHECKS IF PLAYER IS ON THE ENEMY'S BACK ----------------------------------------------------
         BackStabCheck();
-
-        // ONLY FOR DEMO
-        // if (shooter) Shooter();
 
 
         // ALIVE --------------------------------------------------------------------------------------
@@ -128,6 +124,11 @@ public class Enemy : MonoBehaviour
                
             Stats.Die(gameObject);
         }
+
+        //animator.SetFloat("speed", speed);
+        //animator.SetBool("limitReached", limitWalkingRangeReached);
+        //animator.SetBool("shooting", shooting);
+        //animator.SetBool("shootAnimation", shootAnimation);
     }
 
     
@@ -141,11 +142,11 @@ public class Enemy : MonoBehaviour
             if (checkSurround)
             {
                 transform.Rotate(0f, 180f, 0f);
-                if (limitWalkingRangeReached == true) limitWalkingRangeReached = false;
+                limitWalkingRangeReached = false;
             }
         }
     }
-    
+
 
     // Checks if the the player is in range and if there's an object between the enemy and player
     void AimCheck()
@@ -155,32 +156,48 @@ public class Enemy : MonoBehaviour
         RaycastHit2D aimBottom = Physics2D.Raycast(magicPositionCrouch.position, magicPositionCrouch.right, maxAimRange);
         if (aimTop.rigidbody == p1.Movement.Rb || aimBottom.rigidbody == p1.Movement.Rb)
         {
-            shooting = true;
+            Stats.CanRangeAttack = true;
             speed = 0;
             canMoveTimer = attackDelay;
         }
         else
         {
-            shooting = false;
             canMoveTimer -= Time.deltaTime;
-            if (canMoveTimer < -1) 
-                speed = originalSpeed;
+            if (canMoveTimer < 0)
+            {
+                // If player moves out of range, resets animation counter to initial value
+                Stats.MeleeAttackDelay = attackDelay;
+                shooting = false;
 
+                if (limitWalkingRangeReached == false)          // If it's maximum range
+                {
+                    speed = originalSpeed;
+                    Stats.CanRangeAttack = false;
+                }
+
+                if (limitWalkingRangeReached && Stats.CanRangeAttack)    // If it's maximum range and has not collider to attack
+                {
+                    speed = originalSpeed;
+                    Stats.CanRangeAttack = false;
+                }
+
+
+
+                if (p1 == null) // If it killed the player
+                {
+                    speed = originalSpeed;
+                    Stats.CanRangeAttack = false;
+                    limitWalkingRangeReached = false;
+                }
+            }
         }
-
-        if (transform.right.x > 0)
-            if (p1.transform.position.x > magicPosition.position.x + maxAimRange)
-                speed = originalSpeed;
-
-        if (transform.right.x < 0)
-            if (p1.transform.position.x < magicPosition.position.x - maxAimRange)
-                speed = originalSpeed;
     }
+    
 
     // Shoots
     void Shoot()
     {
-        backStabCheckerEnabled = true; // first time the enemy shoots, it enabled the backstabchecker
+        //backStabCheckerEnabled = true; // first time the enemy shoots, it enabled the backstabchecker
         Stats.CanRangeAttack = false;
         GameObject projectileObject = Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
         EnemyAmmunition ammo = projectileObject.GetComponent<EnemyAmmunition>();
@@ -225,13 +242,14 @@ public class Enemy : MonoBehaviour
             {
                 waitingTimeCounter -= Time.deltaTime;
                 transform.position = tempPosition;
+                speed = 0;
             }
             if (waitingTimeCounter < 0)
             {
                 transform.Rotate(0f, 180f, 0f);
                 waitingTimeCounter = Random.Range(0f, 4f); // WAITING TIME <<<<<<<<<<< TA RANDOM NESTE ;
-                transform.position += transform.right * speed * Time.deltaTime;
                 limitWalkingRangeReached = false;
+                speed = originalSpeed;
             }
         }
     }

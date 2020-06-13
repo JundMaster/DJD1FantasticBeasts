@@ -10,6 +10,7 @@ public class EnemyAmmunition : MonoBehaviour
     [SerializeField] float speed;
 
     public Enemy enemy;
+    public Goblin goblinDamage;
     // Start is called before the first frame update
     void Start()
     {

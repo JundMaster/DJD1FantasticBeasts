@@ -9,6 +9,7 @@ TagManager:
   - pickUp
   - playerAmmunition
   - ropeSprite
+  - walls
   layers:
   - Default
   - TransparentFX
@@ -31,7 +32,7 @@ TagManager:
   - Foreground
   - DEATHTILE
   - meleeEnemy
-  - 
+  - goblinLayer
   - 
   - 
   - 

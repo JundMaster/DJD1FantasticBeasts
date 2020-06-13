@@ -35,6 +35,7 @@ public class Ammunition : MonoBehaviour
         Treasure treasure = hitInfo.GetComponent<Treasure>();
         Enemy enemy = hitInfo.GetComponent<Enemy>();
         EnemyMelee enemyMelee = hitInfo.GetComponent<EnemyMelee>();
+        Goblin goblin = hitInfo.GetComponent<Goblin>();
 
 
         // If there's a collision
@@ -52,6 +53,12 @@ public class Ammunition : MonoBehaviour
         {
             enemyMelee.Stats.TakeDamage(p1.Stats.RangedDamage);
         }
+
+        if (goblin != null)
+        {
+            goblin.Stats.TakeDamage(p1.Stats.RangedDamage);
+        }
+
 
         Instantiate(ammunitionHit, transform.position, transform.rotation);
 

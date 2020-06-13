@@ -142,8 +142,6 @@ public class EnemyMelee : MonoBehaviour
         {
             meleeAttack = true;
             speed = 0;
-
-
             // Sets canMoveTimer to attackDelay, to start counting in the beggining of the attack -- Check else condition --
             canMoveTimer = attackDelay;
         }
