@@ -40,11 +40,14 @@ public class CameraFollow : MonoBehaviour
 
     private void FixedUpdate()
     {
-        p1 = FindObjectOfType<PlayerMovement>();
+        if (p1 == null)
+        {
+            p1 = FindObjectOfType<PlayerMovement>();
+        }
 
         
         // IF PLAYER LOOKS UP OR DOWN -------------------------------------------------------------------------------
-        if (Input.GetKey("up") && offset.y > 0.6f)
+        if (p1.player.LookingUp && offset.y > 0.6f)
         {
             lookingCounter -= Time.deltaTime;
             if (lookingCounter < 0)
@@ -57,7 +60,7 @@ public class CameraFollow : MonoBehaviour
                     lookingCounter = lookingDelay;
                 }
         }
-        else if (Input.GetKey("down"))
+        else if (p1.player.LookingDown)
         {
             lookingCounter -= Time.deltaTime;
             if (lookingCounter < 0)

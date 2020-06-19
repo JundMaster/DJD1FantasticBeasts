@@ -2,22 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthPickUp : MonoBehaviour
+sealed public class HealthPickUp : PowerUpBase
 {
-    [SerializeField] GameObject     pickedUp;
-
-    void OnTriggerEnter2D(Collider2D hitInfo)
+    protected override void PickUpAbility(Player player)
     {
-        Player player = hitInfo.transform.GetComponent<Player>();
-
-        if (player != null)
+        if (!(player.Stats.IsMaxHP()))
         {
-            if (!(player.Stats.IsMaxHP()))
-            {
-                player.Stats.HealHP(30f);
-                Instantiate(pickedUp, transform.position, transform.rotation);
-                Destroy(gameObject);
-            }
+            player.Stats.HealHP(30f);
+            PickAndDestroy();
         }
+    }
+
+    public HealthPickUp()
+    {
+        base.Type = PowerUpType.health;
     }
 }

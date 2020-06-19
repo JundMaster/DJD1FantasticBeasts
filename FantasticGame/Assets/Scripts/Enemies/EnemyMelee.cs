@@ -107,8 +107,14 @@ public class EnemyMelee : MonoBehaviour
             int chance = Random.Range(0, 10);
             if (chance > lootChance)
             {
-                if (healthPickUp != null && chance >= 5) Instantiate(healthPickUp, transform.position + new Vector3(0f, 0.2f, 0f), transform.rotation);
-                else if (manaPickUp != null) Instantiate(manaPickUp, transform.position + new Vector3(0f, 0.2f, 0f), transform.rotation);
+                if (healthPickUp != null && chance >= 5)
+                {
+                    Instantiate(healthPickUp, transform.position + new Vector3(0f, 0.2f, 0f), transform.rotation);
+                }
+                else if (manaPickUp != null)
+                {
+                    Instantiate(manaPickUp, transform.position + new Vector3(0f, 0.2f, 0f), transform.rotation);
+                }
             }
             Stats.Die(gameObject);
         }
@@ -189,8 +195,14 @@ public class EnemyMelee : MonoBehaviour
         if (atackingCollider != null)
         {
             p1.Stats.TakeDamage(Damage);
-            if (p1.Movement.CrouchGetter) Instantiate(ammunitionHit, p1.transform.position + new Vector3(0f, 0.3f, 0f), p1.transform.rotation);
-            else Instantiate(ammunitionHit, p1.transform.position + new Vector3(0f, 0.5f, 0f), p1.transform.rotation);
+            if (p1.Movement.CrouchGetter)
+            {
+                Instantiate(ammunitionHit, p1.transform.position + new Vector3(0f, 0.3f, 0f), p1.transform.rotation);
+            }
+            else
+            {
+                Instantiate(ammunitionHit, p1.transform.position + new Vector3(0f, 0.5f, 0f), p1.transform.rotation);
+            }
 
             // Pushes the player
             if (p1.transform.position.x > transform.position.x)

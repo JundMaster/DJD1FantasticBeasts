@@ -19,7 +19,6 @@ public class Ammunition : MonoBehaviour
         camera = Camera.main;
 
         // Destroys the object if it doesn't hit anything
-        //Destroy(gameObject, 150 * Time.deltaTime);
         p1 = FindObjectOfType<Player>();
     }
 

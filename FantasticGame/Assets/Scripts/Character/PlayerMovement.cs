@@ -68,9 +68,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask  enemyLayer;
 
     // ETC
-    private Player              player;
-    public Rigidbody2D          Rb { get; private set; }
-    Animator                    animator;
+    public Player               player  { get; private set; }
+    public Rigidbody2D          Rb      { get; private set; }
+    private Animator            animator;
 
     private void Awake()
     {

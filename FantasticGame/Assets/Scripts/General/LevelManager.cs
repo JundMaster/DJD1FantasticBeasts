@@ -37,8 +37,10 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
-
-        p1 = FindObjectOfType<Player>();
+        if (p1 == null)
+        {
+            p1 = FindObjectOfType<Player>();
+        }
 
         if (p1.transform.position.x > maxPositionReached)
             maxPositionReached = p1.transform.position.x;
@@ -62,11 +64,6 @@ public class LevelManager : MonoBehaviour
             Instantiate(respawnPrefab, respawn4.transform.position, respawnPrefab.transform.rotation);
             reachedRespawn4 = true;
         }
-
-
-
-        //if (Input.GetKeyDown("r"))
-        //    SceneManager.LoadScene(1);
     }
 
 

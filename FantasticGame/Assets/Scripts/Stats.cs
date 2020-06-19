@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stats : MonoBehaviour
+public class Stats
 {
     public float    MaxMana              { get; set; }
     public float    CurrentMana          { get; set; }
@@ -36,7 +36,7 @@ public class Stats : MonoBehaviour
 
     public void Die(GameObject gameObject)
     {
-        Destroy(gameObject);
+        GameObject.Destroy(gameObject);
     }
 
     public bool IsMaxHP()
@@ -71,8 +71,6 @@ public class Stats : MonoBehaviour
             CurrentMana += heal;
     }
 
-
-
     public bool CanUseSpell()
     {
         bool useSpell = false;
@@ -80,13 +78,11 @@ public class Stats : MonoBehaviour
         return useSpell;
     }
 
-
     public void RegenMana()
     {
         if (CurrentMana < MaxMana)
             CurrentMana += Time.deltaTime * ManaRegen;
     }
-
 
     public void SpendMana()
     {

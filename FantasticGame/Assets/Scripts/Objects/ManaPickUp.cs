@@ -2,22 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ManaPickUp : MonoBehaviour
+sealed public class ManaPickUp : PowerUpBase
 {
-    [SerializeField] GameObject pickedUp;
-
-    void OnTriggerEnter2D(Collider2D hitInfo)
+    protected override void PickUpAbility(Player player)
     {
-        Player player = hitInfo.transform.GetComponent<Player>();
-
-        if (player != null)
+        if (!(player.Stats.IsMaxMana()))
         {
-            if (!(player.Stats.IsMaxMana()))
-            {
-                player.Stats.HealMana(30f);
-                Instantiate(pickedUp, transform.position, transform.rotation);
-                Destroy(gameObject);
-            }
+            player.Stats.HealMana(30f);
+            PickAndDestroy();
         }
+    }
+
+    public ManaPickUp()
+    {
+        base.Type = PowerUpType.mana;
     }
 }

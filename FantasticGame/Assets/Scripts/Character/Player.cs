@@ -6,7 +6,6 @@ public class Player : MonoBehaviour
 {
     // RANGED
     [SerializeField] Transform          magicPosition;
-    [SerializeField] Transform          crouchedMagicPosition;
     [SerializeField] GameObject         magicPrefab;
 
     // MELEE
@@ -16,14 +15,17 @@ public class Player : MonoBehaviour
 
     // SHIELD
     [SerializeField] Transform          shieldPosition;
-    [SerializeField] Transform          crouchedShieldPosition;
     [SerializeField] GameObject         shieldPrefab;
     private bool                        canUseShield;
 
     // SWOOPING EVIL
-    [SerializeField] Transform  swoopingPosition;
-    [SerializeField] GameObject swoopingPrefab;
-    [SerializeField] GameObject swoopingSpawnerPrefab;
+    [SerializeField] Transform          swoopingPosition;
+    [SerializeField] GameObject         swoopingPrefab;
+    [SerializeField] GameObject         swoopingSpawnerPrefab;
+
+    // LOOKING
+    public bool LookingUp               { get; private set; }
+    public bool LookingDown             { get; private set; }
 
 
     // LAYERS
@@ -48,7 +50,6 @@ public class Player : MonoBehaviour
     public bool                         RangedAttacked      { get; private set; }
     public bool                         UsingShield         { get; private set; }
     public Vector2                      ShieldPosition      { get; private set; }
-    public Vector2                      MagicPosition       { get; private set; }
     public LevelManager                 Manager             { get; private set; }
 
     // CHEATS
@@ -93,6 +94,8 @@ public class Player : MonoBehaviour
         Stats.MeleeAttackCounter = Stats.MeleeAttackDelay;
 
         // ETC
+        LookingDown = false;
+        LookingUp   = false;
         canScreenShake = true;
     }
 
@@ -114,7 +117,14 @@ public class Player : MonoBehaviour
             animator.SetBool("attack", false);
             animator.SetBool("rangedAttack", false);
             bool pressShield = Input.GetKey("s");
-            MagicPosition = magicPosition.position;
+            if (Input.GetKey("up"))
+                LookingUp = true;
+            else 
+                LookingUp = false;
+            if (Input.GetKey("down"))
+                LookingDown = true;
+            else
+                LookingDown = false;
             // ---------------------------------------------------------------------------------------------
 
 
