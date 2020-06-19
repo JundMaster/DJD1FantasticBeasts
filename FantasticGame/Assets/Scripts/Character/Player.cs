@@ -5,38 +5,38 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     // RANGED
-    [SerializeField] Transform          magicPosition;
-    [SerializeField] GameObject         magicPrefab;
+    [SerializeField] private Transform      magicPosition;
+    [SerializeField] private GameObject     magicPrefab;
 
     // MELEE
-    [SerializeField] Transform          meleePosition;
-    [SerializeField] GameObject         meleePrefab;
-    [SerializeField] GameObject         meleeAttackTemporary;
+    [SerializeField] private Transform      meleePosition;
+    [SerializeField] private GameObject     meleePrefab;
+    [SerializeField] private GameObject     meleeAttackTemporary;
 
     // SHIELD
-    [SerializeField] Transform          shieldPosition;
-    [SerializeField] GameObject         shieldPrefab;
-    private bool                        canUseShield;
+    [SerializeField] private Transform      shieldPosition;
+    [SerializeField] private GameObject     shieldPrefab;
+    private bool                            canUseShield;
 
     // SWOOPING EVIL
-    [SerializeField] Transform          swoopingPosition;
-    [SerializeField] GameObject         swoopingPrefab;
-    [SerializeField] GameObject         swoopingSpawnerPrefab;
+    [SerializeField] private Transform      swoopingPosition;
+    [SerializeField] private GameObject     swoopingPrefab;
+    [SerializeField] private GameObject     swoopingSpawnerPrefab;
 
     // LOOKING
-    public bool LookingUp               { get; private set; }
-    public bool LookingDown             { get; private set; }
+    public bool LookingUp       { get; private set; }
+    public bool LookingDown     { get; private set; }
 
 
     // LAYERS
-    [SerializeField] LayerMask          treasureLayer;
-    [SerializeField] LayerMask          enemyLayer, enemyAmmunitionLayer, meleeEnemyLayer, goblinLayer;
-    [SerializeField] LayerMask          onGroundLayers;
+    [SerializeField] private LayerMask  treasureLayer;
+    [SerializeField] private LayerMask  enemyLayer, enemyAmmunitionLayer, meleeEnemyLayer, goblinLayer;
+    [SerializeField] private LayerMask  onGroundLayers;
 
     // CAMERA
     public CameraShake                  CameraShake         { get; private set; }
-    [SerializeField] float              shakeTime;
-    [SerializeField] float              shakeForce;
+    [SerializeField] private float      shakeTime;
+    [SerializeField] private float      shakeForce;
     private bool                        canScreenShake;
 
     // ANIMATOR
@@ -53,24 +53,21 @@ public class Player : MonoBehaviour
     public LevelManager                 Manager             { get; private set; }
 
     // CHEATS
-    [SerializeField] bool           godMode;
-    [SerializeField] bool           fly;
-    [SerializeField] bool           infiniteMana;
-
-
-    private void Awake()
-    {
-        Stats =     new Stats();
-        animator =  GetComponent<Animator>();
-        Movement =  GetComponent<PlayerMovement>();
-        CameraShake = FindObjectOfType<CameraShake>();
-        Manager =   FindObjectOfType<LevelManager>();
-    }
+    [SerializeField] private bool godMode;
+    [SerializeField] private bool fly;
+    [SerializeField] private bool infiniteMana;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<Animator>();
+        Movement = GetComponent<PlayerMovement>();
+        CameraShake = FindObjectOfType<CameraShake>();
+        Manager = FindObjectOfType<LevelManager>();
+
+        Stats = new Stats();
+
         // STATS
         Stats.IsAlive       = true;
         Stats.MaxMana       = 100;
@@ -128,7 +125,6 @@ public class Player : MonoBehaviour
             // ---------------------------------------------------------------------------------------------
 
 
-
             // SHIELD --------------------------------------------------------------------------------------
             ShieldPosition = shieldPosition.position;
             UsingShield = false;
@@ -167,7 +163,6 @@ public class Player : MonoBehaviour
             // ---------------------------------------------------------------------------------------------
 
 
-
             // MELEE ATTACK -------------------------------------------------------------------------------
             // Everytime the player attacks, it starts a timer and sets canAttack to false
             if (Stats.CanMeleeAttack == false)
@@ -186,7 +181,6 @@ public class Player : MonoBehaviour
             // ---------------------------------------------------------------------------------------------
 
 
-
             // SWOOPING EVIL ------------------------------------------------------------------------------
             Collider2D swoopingCheck = Physics2D.OverlapCircle(swoopingPosition.position, 0.2f, onGroundLayers);
             if (Input.GetButtonDown("Fire3") && Movement.OnGround && SwoopingEvilPlatform.isAlive == false && swoopingCheck == null)
@@ -201,7 +195,17 @@ public class Player : MonoBehaviour
             // ---------------------------------------------------------------------------------------------
 
 
-            // CHEATS
+            // PLAYER DEATH --------------------------------------------------------------------------------
+            if (Stats.IsAlive == false)
+            {
+                SwoopingEvilPlatform.isAlive = false; // Destroys swooping evil  
+                Destroy(gameObject);
+                Manager.Respawn();
+            }
+            // ---------------------------------------------------------------------------------------------
+
+
+            // CHEATS --------------------------------------------------------------------------------------
             if (godMode)
             {
                 Movement.Invulnerable = true;
@@ -209,21 +213,21 @@ public class Player : MonoBehaviour
             }
             if (fly) if (Input.GetButton("Jump")) Movement.Rb.gravityScale = 0f;
             if (infiniteMana) Stats.CurrentMana = Stats.MaxMana;
+            // ---------------------------------------------------------------------------------------------
         }
     }
 
-
-
+    // Attacks, sets animation, starts a timer on update, spends mana, instantiates the shoot prefab
     void Shoot()
     {
         RangedAttacked = true;
         animator.SetBool("rangedAttack", true);
         Stats.CanRangeAttack = false;
         Stats.SpendMana();
-        // When Crouched
         Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
     }
 
+    // Attacks, sets animation, starts a timer on update, instantiates the attack prefab
     void MeleeAttack()
     {
         animator.SetBool("attack", true);
@@ -258,9 +262,13 @@ public class Player : MonoBehaviour
         }
     }
 
+    // Uses shield, spends mana, instantiates the shield prefab
     void Shield()
     {
-        if (Physics2D.OverlapCircle(shieldPosition.position, 0.1f, enemyAmmunitionLayer)) StartCoroutine(CameraShake.Shake(0.015f, 0.04f));
+        if (Physics2D.OverlapCircle(shieldPosition.position, 0.1f, enemyAmmunitionLayer))
+        {
+            StartCoroutine(CameraShake.Shake(0.015f, 0.04f));
+        }
         Instantiate(shieldPrefab, shieldPosition.position, transform.rotation);
         UsingShield = true;
         Stats.CurrentMana -= 10f * Time.deltaTime;

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class mouseTrack : MonoBehaviour
+sealed public class mouseTrack : MonoBehaviour
 {
-    Camera mainCamera;
+    private Camera mainCamera;
 
-    [SerializeField] GameObject     particleMousePrefab;
+    [SerializeField] private GameObject particleMousePrefab;
 
     private void Start()
     {

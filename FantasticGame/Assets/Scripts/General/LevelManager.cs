@@ -3,36 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 //using UnityEngine.SceneManagement;
 
-public class LevelManager : MonoBehaviour
+sealed public class LevelManager : MonoBehaviour
 {
-    [SerializeField] GameObject player;
-    [SerializeField] Transform  respawn1;
-    [SerializeField] Transform  respawn2;
-    [SerializeField] Transform  respawn3;
-    [SerializeField] Transform  respawn4;
-    [SerializeField] GameObject respawnPrefab;
+    [SerializeField] private GameObject player;
+    [SerializeField] private Transform  respawn1;
+    [SerializeField] private Transform  respawn2;
+    [SerializeField] private Transform  respawn3;
+    [SerializeField] private Transform  respawn4;
+    [SerializeField] private GameObject respawnPrefab;
 
 
+    private Player  p1;
 
+    // Checkpoints
+    private float   maxPositionReached;
+    private bool    reachedRespawn2, reachedRespawn3, reachedRespawn4;
 
-    Player p1;
-    float   maxPositionReached;
-    bool    reachedRespawn2, reachedRespawn3, reachedRespawn4;
-
-
-    void Awake()
-    {
-        Instantiate(player, respawn1.position, transform.rotation);
-        p1 = FindObjectOfType<Player>();
-    }
 
     private void Start()
     {
+        Instantiate(player, respawn1.position, respawn1.transform.rotation);
+
+        p1 = FindObjectOfType<Player>();
+
+        // Checkpoint
         maxPositionReached = p1.transform.position.x;
         reachedRespawn2 = false;
         reachedRespawn3 = false;
         reachedRespawn4 = false;
-        Cursor.visible = false;
+        // mouse not visible
+        Cursor.visible = false;   
     }
 
     private void Update()
@@ -65,7 +65,6 @@ public class LevelManager : MonoBehaviour
             reachedRespawn4 = true;
         }
     }
-
 
     public void Respawn()
     {

@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    Vector2                             currentVelocity;
-    float                               hAxis;
-    float                               runSpeed;
+    private Vector2     currentVelocity;
+    private float       hAxis;
+    private float       runSpeed;
 
     // CROUCHED
-    [SerializeField] BoxCollider2D      boxCol;
-    [SerializeField] CircleCollider2D   circleCol;
-    [SerializeField] Transform          ceilingOverHead;
-    bool                                usingCrouch;
+    [SerializeField] private BoxCollider2D      boxCol;
+    [SerializeField] private CircleCollider2D   circleCol;
+    [SerializeField] private Transform          ceilingOverHead;
+    private bool usingCrouch;
+
     // CROUCHED GET SET
     public bool                         CrouchGetter    { get; private set; }
     public bool                         IsCrouched      { get; private set; }
@@ -20,57 +21,54 @@ public class PlayerMovement : MonoBehaviour
     // POSITION GET SET
     public Vector3                      Position        { get; private set; }
 
-
     // GROUNDCHECK ++ JUMP
-    bool                                noVelY;
-    float                               coyoteCounter;
-    bool                                groundedNotFloor;
+    private bool                        noVelY;
+    private float                       coyoteCounter;
+    private bool                        groundedNotFloor;
     [SerializeField] Transform          groundCheck;
-    // GROUNDCHECK GET SET
     public bool                         OnGround        { get; private set; }
-    float                               jumpTime;
-    bool                                jumped;
-    float                               lastJumpCounter;
-    float                               lastJumpDelay;
-
+    private float                       jumpTime;
+    private bool                        jumped;
+    private float                       lastJumpCounter;
+    private float                       lastJumpDelay;
 
     // ROPE
-    [SerializeField] Transform          ropeAnchor;
-    [SerializeField] Transform          ropeWallCollider;
-    [SerializeField] DistanceJoint2D    rope;
-    [SerializeField] LineRenderer       ropeRender;
-    RaycastHit2D                        ropeHit;
-    Vector3                             ropeHitCoords;
-    Vector3                             newRopeSprite;
-    public GameObject                   ropeSprite      { get; set; }
-    bool                                minRange;
-    public bool                         usingRope       { get; private set; }
-    float                               ropeDelay;
-    float                               ropeTimer;
-    int                                 ropesLeft;
+    [SerializeField] private Transform          ropeAnchor;
+    [SerializeField] private Transform          ropeWallCollider;
+    [SerializeField] private DistanceJoint2D    rope;
+    [SerializeField] private LineRenderer       ropeRender;
+    private RaycastHit2D                        ropeHit;
+    private Vector3                             ropeHitCoords;
+    private Vector3                             newRopeSprite;
+    public GameObject                           ropeSprite      { get; set; }
+    private bool                                minRange;
+    public bool                                 usingRope       { get; private set; }
+    private float                               ropeDelay;
+    private float                               ropeTimer;
+    private int                                 ropesLeft;
 
     // ENEMY HIT
     public bool                         Invulnerable    { get; set; }
     public float                        invulnerableHP  { get; set; }
     private float                       normalHP;
-    float                               invulnerableTimer;
-    float                               invulnerableDelay;
-    [SerializeField] SpriteRenderer     spriteRender;
-    float                               spriteEnableCounter;
-    float                               spriteEnableDelay;
+    private float                       invulnerableTimer;
+    private float                       invulnerableDelay;
+    [SerializeField] private SpriteRenderer spriteRender;
+    private float                       spriteEnableCounter;
+    private float                       spriteEnableDelay;
 
     // Layers
-    [SerializeField] LayerMask  ceilingLayer;
-    [SerializeField] LayerMask  onGroundLayers;
-    [SerializeField] LayerMask  groundedNotFloorLayers;
-    [SerializeField] LayerMask  deathTileLayer;
-    [SerializeField] LayerMask  ropeStopLayer;
-    [SerializeField] LayerMask  enemyLayer;
+    [SerializeField] private LayerMask  ceilingLayer;
+    [SerializeField] private LayerMask  onGroundLayers;
+    [SerializeField] private LayerMask  groundedNotFloorLayers;
+    [SerializeField] private LayerMask  deathTileLayer;
+    [SerializeField] private LayerMask  ropeStopLayer;
+    [SerializeField] private LayerMask  enemyLayer;
 
     // ETC
-    public Player               player  { get; private set; }
-    public Rigidbody2D          Rb      { get; private set; }
-    private Animator            animator;
+    public Player       player  { get; private set; }
+    public Rigidbody2D  Rb      { get; private set; }
+    private Animator    animator;
 
     private void Awake()
     {
@@ -119,6 +117,7 @@ public class PlayerMovement : MonoBehaviour
             Jump();
             Rope();
             NeutralVelY();
+            CollisionDeathTiles();
             Crouched();
             SpriteRotation();
             EnemyCollision();
@@ -161,18 +160,7 @@ public class PlayerMovement : MonoBehaviour
         // -----------------------------------------------------------------------------------------
 
 
-        // COLLISION WITH DEATH TILE ----------------------------------------------------------------
-        Collider2D deathTileCheck = Physics2D.OverlapCircle(groundCheck.position, 0.1f, deathTileLayer);
-        if (deathTileCheck != null)
-        {
-            if (ropeSprite != null) ropeSprite.SetActive(false);
-            player.Stats.IsAlive = false;
-        }
-        // -----------------------------------------------------------------------------------------
-        
-
-
-        // CHECKS IF THE PLAYER IS GROUNDED // FIXES CEILING DOUBLE JUMP BUG // can delete ??
+        // CHECKS IF THE PLAYER IS GROUNDED // FIXES CEILING DOUBLE JUMP BUG //
         if (jumped)
             lastJumpCounter -= Time.deltaTime;
         if (lastJumpCounter < 0)
@@ -180,12 +168,23 @@ public class PlayerMovement : MonoBehaviour
             jumped = false;
             lastJumpCounter = lastJumpDelay;
         }
-
         // Fixes animation bug on other tiles
         if (Physics2D.OverlapCircle(groundCheck.position, 0.5f, groundedNotFloorLayers)) groundedNotFloor = true;
         else groundedNotFloor = false;
         // -----------------------------------------------------------------------------------------
     }
+
+
+    void CollisionDeathTiles()
+    {
+        Collider2D deathTileCheck = Physics2D.OverlapCircle(groundCheck.position, 0.1f, deathTileLayer);
+        if (deathTileCheck != null)
+        {
+            if (ropeSprite != null) ropeSprite.SetActive(false);
+            player.Stats.IsAlive = false;
+        }
+    }
+
 
     void EnemyCollision()
     {

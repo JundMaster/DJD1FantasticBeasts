@@ -2,75 +2,74 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Goblin : MonoBehaviour
+sealed public class Goblin : MonoBehaviour
 
 {
     public Stats Stats { get; private set; }
 
-    [SerializeField] Transform magicPosition;
-    [SerializeField] GameObject magicPrefab;
+    // Editor stuff
+    [SerializeField] private Transform  magicPosition;
+    [SerializeField] private GameObject magicPrefab;
 
-    [SerializeField] LayerMask groundLayer;
-    [SerializeField] LayerMask boxesAndwalls;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask boxesAndwalls;
 
-    [SerializeField] Transform groundRangeCheck, groundCheck, wallCheck;
+    [SerializeField] private Transform groundRangeCheck, groundCheck, wallCheck;
 
     // Drops
-    [SerializeField] GameObject healthPickUp, manaPickUp;
+    [SerializeField] private GameObject healthPickUp, manaPickUp;
 
-    [SerializeField] float speed;       // WALKING SPEED
-    [SerializeField] float limitRange;  // RANGE FOR WALKING
-    [SerializeField] float maxAimRange; // RANGE FOR SHOOTING
-    [SerializeField] float attackDelay; // ATTACK DELAY
-    [SerializeField] float HP;          // CURRENT HP
+    // Editor variables
+    [SerializeField] private float  speed;       // WALKING SPEED
+    [SerializeField] private float  limitRange;  // RANGE FOR WALKING
+    [SerializeField] private float  maxAimRange; // RANGE FOR SHOOTING
+    [SerializeField] private float  attackDelay; // ATTACK DELAY
+    [SerializeField] private float  HP;          // CURRENT HP
 
-    [SerializeField] float enemyDamage;     // ENEMY DAMAGE
-    [SerializeField] float attackPushForce;  // HOW MUCH WILL ENEMY PUSH THE PLAYER
-    [SerializeField] int lootChance;    // LOOT CHANCE 1 - 10
-    [SerializeField] bool staticEnemy;    // IF ENEMY IS A STATIC ENEMY
-
-    //[SerializeField] bool   shooter; // ONLY FOR DEMO
-
-    public float Damage { get; private set; }
-    public float PushForce { get; private set; }
-    bool shooting;
-    bool shootAnimation;
+    [SerializeField] private float  enemyDamage;     // ENEMY DAMAGE
+    [SerializeField] private float  attackPushForce;  // HOW MUCH WILL ENEMY PUSH THE PLAYER
+    [SerializeField] private int    lootChance;    // LOOT CHANCE 1 - 10
+    [SerializeField] private bool   staticEnemy;    // IF ENEMY IS A STATIC ENEMY
 
 
-    float originalSpeed;
-    Vector2 startingPos;
-    bool limitWalkingRangeReached;
-    //Vector2 tempPosition;
-    float waitingTimeCounter;
+    // Attack
+    public float Damage     { get; private set; }
+    public float PushForce  { get; private set; }
+    private bool shooting;
+    private bool shootAnimation;
 
-    float canMoveTimer;
+    // Position and Movement
+    private float   originalSpeed;
+    private Vector2 startingPos;
+    private bool    limitWalkingRangeReached;
+    private float   waitingTimeCounter;
+    private float   canMoveTimer;
 
+    // Animator
+    private Animator animator;
 
-    Animator animator;
-    private void Awake()
-    {
-        Stats = new Stats();
-        animator = GetComponent<Animator>();
-    }
 
     private void Start()
     {
+        Stats = new Stats();
+        animator = GetComponent<Animator>();
+
+        // General
         Stats.IsAlive = true;
         startingPos = transform.position;
         Stats.CurrentHP = HP;
 
+        // Attack Delay
         Stats.CanRangeAttack = false;
         Stats.RangedAttackDelay = attackDelay;
-
+        // Damage
         Stats.RangedDamage = enemyDamage;
         Damage = enemyDamage;
         PushForce = attackPushForce;
 
+        // Position and Movement
         limitWalkingRangeReached = false;
-        //waitingTimeCounter = waitingTime;
         waitingTimeCounter = Random.Range(1f, 3f);
-
-
         originalSpeed = speed;
         canMoveTimer = 0;
     }
@@ -101,7 +100,7 @@ public class Goblin : MonoBehaviour
                 else if (manaPickUp != null) Instantiate(manaPickUp, transform.position, transform.rotation);
             }
 
-            Stats.Die(gameObject);
+            Destroy(gameObject);
         }
     }
 

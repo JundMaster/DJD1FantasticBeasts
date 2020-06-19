@@ -34,11 +34,6 @@ public class Stats
             IsAlive = false;
     }
 
-    public void Die(GameObject gameObject)
-    {
-        GameObject.Destroy(gameObject);
-    }
-
     public bool IsMaxHP()
     {
         bool isMaxHP = false;

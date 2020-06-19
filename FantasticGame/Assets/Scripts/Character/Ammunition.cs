@@ -2,34 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ammunition : MonoBehaviour
+sealed public class Ammunition : MonoBehaviour
 {
-    [SerializeField] GameObject     ammunitionHit;
-    [SerializeField] Rigidbody2D    rb;
-    [SerializeField] float          speed;
+    // Editor stuff
+    [SerializeField] private GameObject     ammunitionHit;
+    [SerializeField] private Rigidbody2D    rb;
+    [SerializeField] private float          speed;
 
-    Player p1;
-    Camera camera;
-    // Start is called before the first frame update
+    private Player p1;
+    private Camera camera;
+
     void Start()
     {
+        // Sets initial speed
         speed = 4f;
         rb.velocity = transform.right * speed;
 
-        camera = Camera.main;
-
-        // Destroys the object if it doesn't hit anything
-        p1 = FindObjectOfType<Player>();
+        camera  = Camera.main;
+        p1      = FindObjectOfType<Player>();
     }
 
     private void Update()
     {
+        // Destroys the object if it doesn't hit anything
         if ((gameObject.transform.position.x > (camera.transform.position.x) + (camera.aspect * 2f * camera.orthographicSize)) ||
             (gameObject.transform.position.x < (camera.transform.position.x) - (camera.aspect * 2f * camera.orthographicSize)))
                 Destroy(gameObject);
     }
 
-    void OnTriggerEnter2D(Collider2D hitInfo)
+    private void OnTriggerEnter2D(Collider2D hitInfo)
     {
         Treasure treasure = hitInfo.GetComponent<Treasure>();
         Enemy enemy = hitInfo.GetComponent<Enemy>();
@@ -58,11 +59,8 @@ public class Ammunition : MonoBehaviour
             goblin.Stats.TakeDamage(p1.Stats.RangedDamage);
         }
 
-
+        // Instantiates collision prefab and destroys this gameobject
         Instantiate(ammunitionHit, transform.position, transform.rotation);
-
         Destroy(gameObject);
-
-
     }
 }

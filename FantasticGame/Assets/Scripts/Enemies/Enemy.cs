@@ -122,7 +122,7 @@ public class Enemy : MonoBehaviour
                 else if (manaPickUp != null) Instantiate(manaPickUp, transform.position, transform.rotation);
             }
                
-            Stats.Die(gameObject);
+            Destroy(gameObject);
         }
 
         //animator.SetFloat("speed", speed);

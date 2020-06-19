@@ -36,7 +36,7 @@ public abstract class PowerUpBase : MonoBehaviour
         }
     }
 
-    // Initiates the pickup gameobject and destroys this gameobject
+    // Instantiates the pickup gameobject and destroys this gameobject
     protected void PickAndDestroy()
     {
         Instantiate(pickedUp, transform.position, transform.rotation);

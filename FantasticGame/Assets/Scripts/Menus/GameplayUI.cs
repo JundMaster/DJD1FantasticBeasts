@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameplayUI : MonoBehaviour
+sealed public class GameplayUI : MonoBehaviour
 {
-    [SerializeField] RectTransform healthBar;
-    [SerializeField] RectTransform manaBar;
+    [SerializeField] private RectTransform healthBar;
+    [SerializeField] private RectTransform manaBar;
 
     private Player player;
 
@@ -16,7 +16,10 @@ public class GameplayUI : MonoBehaviour
 
     private void Update()
     {
-        player = FindObjectOfType<Player>();
+        if (player == null)
+        {
+            player = FindObjectOfType<Player>();
+        }
 
         if (manaBar)
         {

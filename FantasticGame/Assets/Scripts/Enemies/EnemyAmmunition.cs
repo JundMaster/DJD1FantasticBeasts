@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAmmunition : MonoBehaviour
+sealed public class EnemyAmmunition : MonoBehaviour
 {
-    [SerializeField] GameObject ammunitionHit;
-    [SerializeField] GameObject ammunitionHitShield;
-    [SerializeField] Rigidbody2D rb;
-    [SerializeField] float speed;
+    [SerializeField] private GameObject     ammunitionHit;
+    [SerializeField] private GameObject     ammunitionHitShield;
+    [SerializeField] private Rigidbody2D    rb;
+    [SerializeField] private float          speed;
 
     public Enemy enemy;
     public Goblin goblinDamage;
-    // Start is called before the first frame update
+
+
     void Start()
     {
         speed = 4f;
