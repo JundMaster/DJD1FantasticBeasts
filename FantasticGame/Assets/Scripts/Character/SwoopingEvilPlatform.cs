@@ -2,25 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwoopingEvilPlatform : MonoBehaviour
+sealed public class SwoopingEvilPlatform : MonoBehaviour
 {
-    PlayerMovement              player;
-    [SerializeField] GameObject swoopingSpawnerPrefab;
+    [SerializeField] private GameObject swoopingSpawnerPrefab;
 
-    float dieCounter;
+    private PlayerMovement player;
 
+    private float dieCounter;
 
     // Only 1 swooping evil alive at a time
     public static bool isAlive;
-    // Start is called before the first frame update
+
+    private Camera camera;
+
     void Start()
     {
         isAlive = true;
         player = FindObjectOfType<PlayerMovement>();
         dieCounter = 20f;
+        camera = Camera.main;
+
+        if (SwoopingEvilPlatform.isAlive)
+        {
+            StartCoroutine(swoopingSound());
+        }
+        else if (!SwoopingEvilPlatform.isAlive)
+        {
+            StopCoroutine(swoopingSound());
+        }
     }
 
-    
     private void Update()
     {
         // Starts a counter as soon as swooping spawns
@@ -39,7 +50,20 @@ public class SwoopingEvilPlatform : MonoBehaviour
             Instantiate(swoopingSpawnerPrefab, transform.position, transform.rotation);
             Destroy(gameObject);
         }
+    }
 
+    // Plays swooping platform sound (if swooping is inside the screen)
+    IEnumerator swoopingSound()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            if ((gameObject.transform.position.x < (camera.transform.position.x) + (camera.aspect * camera.orthographicSize)) &&
+                (gameObject.transform.position.x > (camera.transform.position.x) - (camera.aspect * camera.orthographicSize)))
+            {
+                SoundManager.PlaySound(AudioClips.swoopingPlatform); // plays sound
+            }
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

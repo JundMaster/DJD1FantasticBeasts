@@ -59,6 +59,7 @@ sealed public class Ammunition : MonoBehaviour
             goblin.Stats.TakeDamage(p1.Stats.RangedDamage);
         }
 
+        SoundManager.PlaySound(AudioClips.enemyHit); // plays sound
         // Instantiates collision prefab and destroys this gameobject
         Instantiate(ammunitionHit, transform.position, transform.rotation);
         Destroy(gameObject);

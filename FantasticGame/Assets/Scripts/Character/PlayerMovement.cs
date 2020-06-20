@@ -31,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     private bool                        jumped;
     private float                       lastJumpCounter;
     private float                       lastJumpDelay;
+    private bool                        GroundedSoundPlayable;
 
     // ROPE
     [SerializeField] private Transform          ropeAnchor;
@@ -99,6 +100,8 @@ public class PlayerMovement : MonoBehaviour
         invulnerableTimer = invulnerableDelay;
         spriteEnableDelay = 0.1f;
         spriteEnableCounter = spriteEnableDelay;
+
+        GroundedSoundPlayable = true;
     }
 
     void Update()
@@ -193,6 +196,7 @@ public class PlayerMovement : MonoBehaviour
         if (collider != null)
             if (Invulnerable == false)
             {
+                SoundManager.PlaySound(AudioClips.hit); // Plays sound
                 EnemyHit();
             }
     }
@@ -248,11 +252,19 @@ public class PlayerMovement : MonoBehaviour
         if (groundCollision != null && jumped == false)
         {
             OnGround = true;
+
+            // Plays landing sound when lands on the floor
+            if (GroundedSoundPlayable == false)
+            {
+                SoundManager.PlaySound(AudioClips.jumpLanding); // plays sound
+                GroundedSoundPlayable = true;
+            }
         }
         else
+        {
             OnGround = false;
-
-        
+            GroundedSoundPlayable = false;
+        }
 
         // If the character leaves the ground, it has some time (coyoteTime float) to jump
         if (OnGround)
@@ -276,6 +288,8 @@ public class PlayerMovement : MonoBehaviour
             jumpTime = Time.time;
             OnGround = false;
             jumped = true;
+
+            SoundManager.PlaySound(AudioClips.jump); // plays sound
         }
         else if ((Input.GetButton("Jump") && ((Time.time - jumpTime) < jumpMaxTime)))
         {
@@ -286,7 +300,6 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             Rb.gravityScale = 5.0f;
-   
         }
     }
 
@@ -351,7 +364,10 @@ public class PlayerMovement : MonoBehaviour
                     rope.distance = ropeHit.distance;
 
                     ropeSprite.SetActive(true);
-                    ropeRender.enabled = true;     
+                    ropeRender.enabled = true;
+
+                    SoundManager.PlaySound(AudioClips.ropeGoing); // plays sound
+                    SoundManager.PlaySound(AudioClips.ropeHit); // plays sound
                 }
             }
 

@@ -49,6 +49,8 @@ public class Player : MonoBehaviour
     public float                        CurrentHP           { get; set; }
     public bool                         RangedAttacked      { get; private set; }
     public bool                         UsingShield         { get; private set; }
+    private float                       shieldSoundTimer;
+    private float                       shieldSoundDelay;
     public Vector2                      ShieldPosition      { get; private set; }
     public LevelManager                 Manager             { get; private set; }
 
@@ -94,6 +96,9 @@ public class Player : MonoBehaviour
         LookingDown = false;
         LookingUp   = false;
         canScreenShake = true;
+
+        shieldSoundDelay = 0.2f;
+        
     }
 
     // Update is called once per frame
@@ -123,7 +128,6 @@ public class Player : MonoBehaviour
             else
                 LookingDown = false;
             // ---------------------------------------------------------------------------------------------
-
 
             // SHIELD --------------------------------------------------------------------------------------
             ShieldPosition = shieldPosition.position;
@@ -217,13 +221,17 @@ public class Player : MonoBehaviour
         }
     }
 
-    // Attacks, sets animation, starts a timer on update, spends mana, instantiates the shoot prefab
+    // Attacks, sets animation & sound, starts a timer on update, spends mana, instantiates the shoot prefab
     void Shoot()
-    {
-        RangedAttacked = true;
+    {   
+        // Animator & Sound
         animator.SetBool("rangedAttack", true);
+        SoundManager.PlaySound(AudioClips.magicAttack);
+        // Attack delay + spend mana
+        RangedAttacked = true;
         Stats.CanRangeAttack = false;
         Stats.SpendMana();
+        // Instantiates
         Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
     }
 
@@ -272,8 +280,18 @@ public class Player : MonoBehaviour
         Instantiate(shieldPrefab, shieldPosition.position, transform.rotation);
         UsingShield = true;
         Stats.CurrentMana -= 10f * Time.deltaTime;
-    }
 
+        // Plays shield sound with a delay
+        if (UsingShield)
+        {
+            shieldSoundTimer -= Time.deltaTime;
+        }
+        if (shieldSoundTimer < 0)
+        {
+            SoundManager.PlaySound(AudioClips.shield); // plays sound
+            shieldSoundTimer = shieldSoundDelay;
+        }
+    }
 
 }
 

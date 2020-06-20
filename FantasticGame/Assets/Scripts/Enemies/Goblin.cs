@@ -187,7 +187,7 @@ sealed public class Goblin : MonoBehaviour
                     speed = originalSpeed;
                     transform.Rotate(0, 180f, 0f);
                     limitWalkingRangeReached = false;
-                    waitingTimeCounter = 2f; // Random.Range(1f, 3f);
+                    waitingTimeCounter = Random.Range(1f, 3f);
                 }
             }
         }
