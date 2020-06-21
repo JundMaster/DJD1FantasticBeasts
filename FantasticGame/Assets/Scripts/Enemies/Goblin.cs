@@ -8,7 +8,7 @@ sealed public class Goblin : MonoBehaviour
     public Stats Stats { get; private set; }
 
     // Editor stuff
-    [SerializeField] private Transform  magicPosition;
+    [SerializeField] private Transform  magicPosition, magicJumpPosition;
     [SerializeField] private GameObject magicPrefab;
 
     [SerializeField] private LayerMask groundLayer;
@@ -96,8 +96,8 @@ sealed public class Goblin : MonoBehaviour
             int chance = Random.Range(0, 10);
             if (chance > lootChance)
             {
-                if (healthPickUp != null && chance >= 5) Instantiate(healthPickUp, transform.position, transform.rotation);
-                else if (manaPickUp != null) Instantiate(manaPickUp, transform.position, transform.rotation);
+                if (healthPickUp != null && chance >= 5) Instantiate(healthPickUp, transform.position + new Vector3 (0, 0.4f, 0), transform.rotation);
+                else if (manaPickUp != null) Instantiate(manaPickUp, transform.position + new Vector3(0, 0.4f, 0), transform.rotation);
             }
 
             Destroy(gameObject);
@@ -110,13 +110,16 @@ sealed public class Goblin : MonoBehaviour
     {
         Player p1 = FindObjectOfType<Player>();
         RaycastHit2D aimTop = Physics2D.Raycast(magicPosition.position, magicPosition.right, maxAimRange);
-        if (aimTop.rigidbody == p1.Movement.Rb)
+        RaycastHit2D aimTopJump = Physics2D.Raycast(magicJumpPosition.position, magicPosition.right, maxAimRange);
+        if (aimTop.rigidbody == p1.Movement.Rb || aimTopJump.rigidbody == p1.Movement.Rb)
         {
-            shooting = true; // FOR ANIMATOR
             shootAnimation = false; // FOR ANIMATOR
+            shooting = true; // FOR ANIMATOR
+            
             // Sets a timer to move, sets a timer to attack
             canMoveTimer = attackDelay;
             Stats.RangedAttackDelay -= Time.deltaTime;
+
             if (Stats.RangedAttackDelay < 0)
             {
                 Shoot();
@@ -126,6 +129,7 @@ sealed public class Goblin : MonoBehaviour
         else
         {   // If the player leaves max range, if the timer is less than 0, the enemy moves
             canMoveTimer -= Time.deltaTime;
+                
             if (canMoveTimer <= 0)
             {
                 shootAnimation = false; // FOR ANIMATOR
@@ -138,7 +142,10 @@ sealed public class Goblin : MonoBehaviour
     // Shoots
     void Shoot()
     {
+        SoundManager.PlaySound(AudioClips.magicAttack); // Plays sound
+
         shootAnimation = true; // FOR ANIMATOR
+        
         GameObject projectileObject = Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
         EnemyAmmunition ammo = projectileObject.GetComponent<EnemyAmmunition>();
 

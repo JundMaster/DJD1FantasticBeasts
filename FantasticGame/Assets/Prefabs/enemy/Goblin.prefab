@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 98882452}
-  m_Layer: 13
+  m_Layer: 21
   m_Name: groundRangeCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1988814185636755353}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1058641896
 GameObject:
@@ -39,7 +39,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1058641897}
-  m_Layer: 13
+  m_Layer: 21
   m_Name: groundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,7 +58,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1988814185636755353}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1427029995
 GameObject:
@@ -69,7 +69,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1427029996}
-  m_Layer: 13
+  m_Layer: 21
   m_Name: wallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,7 +88,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1988814185636755353}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1774078115
 GameObject:
@@ -99,7 +99,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1774078116}
-  m_Layer: 13
+  m_Layer: 21
   m_Name: backStabCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,37 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1988814185636755353}
-  m_RootOrder: 4
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5716902637164806937
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5129092121907661594}
+  m_Layer: 21
+  m_Name: jumpPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5129092121907661594
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5716902637164806937}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.241, y: 0.507, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1988814185636755353}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5849754886814068401
 GameObject:
@@ -134,7 +164,7 @@ GameObject:
   - component: {fileID: 5849754886814068406}
   - component: {fileID: 975655053}
   - component: {fileID: 975655048}
-  m_Layer: 13
+  m_Layer: 21
   m_Name: Goblin
   m_TagString: enemy
   m_Icon: {fileID: 0}
@@ -153,6 +183,7 @@ RectTransform:
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children:
   - {fileID: 5849754887289469781}
+  - {fileID: 5129092121907661594}
   - {fileID: 98882452}
   - {fileID: 1058641897}
   - {fileID: 1427029996}
@@ -178,11 +209,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   magicPosition: {fileID: 5849754887289469781}
+  magicJumpPosition: {fileID: 5129092121907661594}
   magicPrefab: {fileID: 938036225051192266, guid: b31e39fa92235a94782fa88099db05bc,
     type: 3}
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 512
   groundLayer:
     serializedVersion: 2
     m_Bits: 133376
@@ -331,7 +360,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5849754887289469781}
-  m_Layer: 13
+  m_Layer: 21
   m_Name: magicPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}

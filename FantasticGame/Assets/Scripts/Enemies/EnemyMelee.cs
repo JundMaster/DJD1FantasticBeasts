@@ -193,6 +193,8 @@ public class EnemyMelee : MonoBehaviour
     // Melee Attack
     void Melee()
     {
+        SoundManager.PlaySound(AudioClips.magicAttack); // Plays sound
+
         meleeAttack = false;
         if (atackingCollider != null)
         {

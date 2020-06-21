@@ -196,7 +196,7 @@ public class PlayerMovement : MonoBehaviour
         if (collider != null)
             if (Invulnerable == false)
             {
-                SoundManager.PlaySound(AudioClips.hit); // Plays sound
+                SoundManager.PlaySound(AudioClips.enemyHit); // Plays sound
                 EnemyHit();
             }
     }

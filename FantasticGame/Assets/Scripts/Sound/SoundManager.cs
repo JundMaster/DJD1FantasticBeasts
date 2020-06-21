@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor.SceneManagement;
 
 sealed public class SoundManager : MonoBehaviour
 {
@@ -22,6 +23,7 @@ sealed public class SoundManager : MonoBehaviour
 
     private static AudioSource audioSource;
 
+    
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -40,7 +42,11 @@ sealed public class SoundManager : MonoBehaviour
         swoopingPlatform = Resources.Load<AudioClip>("Sounds/swoopingPlatform");
 
         shield          = Resources.Load<AudioClip>("Sounds/shield");
+
+
+        
     }
+
 
     // Method used to play a sound
     public static void PlaySound(AudioClips clip)
@@ -48,34 +54,34 @@ sealed public class SoundManager : MonoBehaviour
         switch (clip)
         {
             case AudioClips.jump:
-                audioSource.PlayOneShot(jump);
+                audioSource.PlayOneShot(jump, 0.5f);
                 break;
             case AudioClips.jumpLanding:
                 audioSource.PlayOneShot(jumpLanding, 0.5f);
                 break;
             case AudioClips.hit:
-                audioSource.PlayOneShot(hit, 0.5f);
+                audioSource.PlayOneShot(enemyHit, 0.5f);
                 break;
             case AudioClips.enemyHit:
                 audioSource.PlayOneShot(enemyHit, 0.3f);
                 break;
             case AudioClips.magicAttack:
-                audioSource.PlayOneShot(magicAttack, 0.5f);
+                audioSource.PlayOneShot(magicAttack, 0.2f);
                 break;
             case AudioClips.powerUp:
                 audioSource.PlayOneShot(powerUp, 1);
                 break;
             case AudioClips.ropeHit:
-                audioSource.PlayOneShot(ropeHit, 0.7f);
+                audioSource.PlayOneShot(ropeHit, 0.3f);
                 break;
             case AudioClips.ropeGoing:
-                audioSource.PlayOneShot(ropeGoing);
+                audioSource.PlayOneShot(ropeGoing, 0.6f);
                 break;
             case AudioClips.swoopingPlatform:
                 audioSource.PlayOneShot(swoopingPlatform, 0.6f);
                 break;
             case AudioClips.shield:
-                audioSource.PlayOneShot(shield, 1f);
+                audioSource.PlayOneShot(shield, 0.2f);
                 break;
         }
     }

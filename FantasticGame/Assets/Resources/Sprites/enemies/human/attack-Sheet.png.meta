@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: 5f76470536cc38e4ab3036b128237e88
+guid: 2023383ef22e08544a2a69232949a6cf
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2918153358401894322
-    second: wood_box_0
+      213: -4518302543605216317
+    second: attack-Sheet_0
+  - first:
+      213: -1461705153809937357
+    second: attack-Sheet_1
+  - first:
+      213: -5254297954493108069
+    second: attack-Sheet_2
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -87,7 +93,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: WebGL
+    buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -102,26 +108,64 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: wood_box_0
+      name: attack-Sheet_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 30
-        height: 30
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 60
+        height: 60
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape:
-      - - {x: -15, y: -15}
-        - {x: -15, y: 14}
-        - {x: 15, y: 14}
-        - {x: 15, y: -15}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e4887584bf2a087d0800000000000000
-      internalID: -2918153358401894322
+      spriteID: 3cbcaac86c3cb41c0800000000000000
+      internalID: -4518302543605216317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: attack-Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 0
+        width: 60
+        height: 60
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33c0dc438eaf6bbe0800000000000000
+      internalID: -1461705153809937357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: attack-Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 60
+        height: 60
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b90706e49dbf417b0800000000000000
+      internalID: -5254297954493108069
       vertices: []
       indices: 
       edges: []

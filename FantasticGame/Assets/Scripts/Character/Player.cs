@@ -252,12 +252,6 @@ public class Player : MonoBehaviour
             Instantiate(meleePrefab, treasure.GetComponent<Rigidbody2D>().position, transform.rotation);
             treasure.GetComponent<Treasure>().Stats.TakeDamage(Stats.MeleeDamage);
         }
-        foreach (Collider2D enemy in enemyHit)
-        {
-            Instantiate(meleePrefab, enemy.GetComponent<Rigidbody2D>().position, transform.rotation);
-            enemy.GetComponent<Enemy>().Stats.TakeDamage(Stats.MeleeDamage);
-
-        }
         foreach (Collider2D enemy in meleeEnemyHit)
         {
             Instantiate(meleePrefab, enemy.GetComponent<Rigidbody2D>().position + new Vector2( 0f, 0.4f), transform.rotation);

@@ -73,6 +73,7 @@ sealed public class SwoopingEvilPlatform : MonoBehaviour
         {
             player.Rb.velocity = new Vector2(0f, 5f);
             isAlive = false;
+            SoundManager.PlaySound(AudioClips.hit); // plays sound
             Instantiate(swoopingSpawnerPrefab, transform.position, transform.rotation);
             Destroy(gameObject);
         }     

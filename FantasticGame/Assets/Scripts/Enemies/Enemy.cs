@@ -197,12 +197,13 @@ public class Enemy : MonoBehaviour
     // Shoots
     void Shoot()
     {
-        //backStabCheckerEnabled = true; // first time the enemy shoots, it enabled the backstabchecker
+        SoundManager.PlaySound(AudioClips.magicAttack); // Plays sound
+        
         Stats.CanRangeAttack = false;
         GameObject projectileObject = Instantiate(magicPrefab, magicPosition.position, magicPosition.rotation);
         EnemyAmmunition ammo = projectileObject.GetComponent<EnemyAmmunition>();
 
-        ammo.enemy = this;
+        //ammo.goblin = this;
     }
 
     // Movement, turns 180 if reaches max position || if collides against a wall || if doesn't detect ground
