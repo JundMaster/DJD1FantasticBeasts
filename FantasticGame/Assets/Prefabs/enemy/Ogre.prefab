@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 98882452}
-  m_Layer: 20
+  m_Layer: 13
   m_Name: groundRangeCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1058641897}
-  m_Layer: 20
+  m_Layer: 13
   m_Name: groundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,7 +69,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1427029996}
-  m_Layer: 20
+  m_Layer: 13
   m_Name: wallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1825343846}
-  m_Layer: 20
+  m_Layer: 13
   m_Name: backStab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -129,12 +129,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5849754886814068402}
-  - component: {fileID: 8581991521617864373}
+  - component: {fileID: 4131926959072978307}
   - component: {fileID: 5849754886814068403}
   - component: {fileID: 5849754886814068406}
   - component: {fileID: 5849754886814068405}
   - component: {fileID: 159888886}
-  m_Layer: 20
+  m_Layer: 13
   m_Name: Ogre
   m_TagString: enemy
   m_Icon: {fileID: 0}
@@ -160,7 +160,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8581991521617864373
+--- !u!114 &4131926959072978307
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -169,35 +169,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 5849754886814068401}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 446ae6776a2736d4aabef0ac77aeae41, type: 3}
+  m_Script: {fileID: 11500000, guid: 060c6f2385f4275448b191da5bf9478b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meleePosition: {fileID: 5849754887289469781}
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 512
   groundLayer:
     serializedVersion: 2
     m_Bits: 133376
   boxesAndwalls:
     serializedVersion: 2
     m_Bits: 131072
-  groundRangeCheck: {fileID: 98882452}
-  groundCheck: {fileID: 1058641897}
-  wallCheck: {fileID: 1427029996}
-  backStab: {fileID: 1825343846}
-  ammunitionHit: {fileID: 6844347999365019976, guid: 19da508e0b8c3694cb282b2dce1c4304,
-    type: 3}
+  attackPosition: {fileID: 5849754887289469781}
   healthPickUp: {fileID: 1343978244480085303, guid: 83ede7248b1352943a52dbf5ab5f5be2,
     type: 3}
   manaPickUp: {fileID: 1343978244480085303, guid: 2c6e8ccc07e440647a15a67c8d702c63,
     type: 3}
-  speed: 0.3
-  limitRange: 2
+  groundRangeCheck: {fileID: 98882452}
+  groundCheck: {fileID: 1058641897}
+  wallCheck: {fileID: 1427029996}
   HP: 500
   enemyDamage: 40
+  speed: 0.3
+  attackDelay: 0
+  limitRange: 2
   attackPushForce: 500
   lootChance: 0
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  backStab: {fileID: 1825343846}
+  ammunitionHit: {fileID: 6844347999365019976, guid: 19da508e0b8c3694cb282b2dce1c4304,
+    type: 3}
 --- !u!212 &5849754886814068403
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -324,7 +325,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5849754887289469781}
-  m_Layer: 20
+  m_Layer: 13
   m_Name: meleePosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}

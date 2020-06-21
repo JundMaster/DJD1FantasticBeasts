@@ -9,10 +9,10 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: attack
+    m_ConditionEvent: attacking
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: limitWalkingRangeReached
+    m_ConditionEvent: limitReached
     m_EventTreshold: 0
   - m_ConditionMode: 3
     m_ConditionEvent: speed
@@ -95,7 +95,7 @@ AnimatorController:
   m_Name: Ogre
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: attack
+  - m_Name: attacking
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -107,7 +107,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: limitWalkingRangeReached
+  - m_Name: limitReached
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -163,7 +163,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: attack
+    m_ConditionEvent: attacking
     m_EventTreshold: 0
   - m_ConditionMode: 4
     m_ConditionEvent: canMoveTimer
@@ -217,7 +217,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: limitWalkingRangeReached
+    m_ConditionEvent: limitReached
     m_EventTreshold: 0.1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4140993770082000987}
@@ -242,7 +242,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: attack
+    m_ConditionEvent: attacking
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5319771932342543298}
@@ -267,7 +267,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: attack
+    m_ConditionEvent: attacking
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5319771932342543298}

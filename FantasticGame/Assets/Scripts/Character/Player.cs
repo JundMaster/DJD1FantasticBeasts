@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
 
     // LAYERS
     [SerializeField] private LayerMask  treasureLayer;
-    [SerializeField] private LayerMask  enemyLayer, enemyAmmunitionLayer, meleeEnemyLayer, goblinLayer;
+    [SerializeField] private LayerMask  enemyLayer, enemyAmmunitionLayer;
     [SerializeField] private LayerMask  onGroundLayers;
 
     // CAMERA
@@ -243,24 +243,17 @@ public class Player : MonoBehaviour
         Instantiate(meleeAttackTemporary, meleePosition.position, transform.rotation);
 
         Collider2D[] treasureHit = Physics2D.OverlapCircleAll(meleePosition.position, Stats.MeleeAttackRange, treasureLayer);
-        Collider2D[] enemyHit = Physics2D.OverlapCircleAll(meleePosition.position, Stats.MeleeAttackRange, enemyLayer);
-        Collider2D[] meleeEnemyHit = Physics2D.OverlapCircleAll(meleePosition.position, Stats.MeleeAttackRange, meleeEnemyLayer);
-        Collider2D[] goblinHit = Physics2D.OverlapCircleAll(meleePosition.position, Stats.MeleeAttackRange, goblinLayer);
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(meleePosition.position, Stats.MeleeAttackRange, enemyLayer);
 
         foreach (Collider2D treasure in treasureHit)
         {
             Instantiate(meleePrefab, treasure.GetComponent<Rigidbody2D>().position, transform.rotation);
             treasure.GetComponent<Treasure>().Stats.TakeDamage(Stats.MeleeDamage);
         }
-        foreach (Collider2D enemy in meleeEnemyHit)
-        {
-            Instantiate(meleePrefab, enemy.GetComponent<Rigidbody2D>().position + new Vector2( 0f, 0.4f), transform.rotation);
-            enemy.GetComponent<EnemyMelee>().Stats.TakeDamage(Stats.MeleeDamage);
-        }
-        foreach (Collider2D enemy in goblinHit)
+        foreach (Collider2D enemy in enemies)
         {
             Instantiate(meleePrefab, enemy.GetComponent<Rigidbody2D>().position + new Vector2(0f, 0.4f), transform.rotation);
-            enemy.GetComponent<Goblin>().Stats.TakeDamage(Stats.MeleeDamage);
+            enemy.GetComponent<EnemyBase>().Stats.TakeDamage(Stats.MeleeDamage);
         }
     }
 

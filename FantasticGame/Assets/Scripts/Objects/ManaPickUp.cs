@@ -4,6 +4,11 @@ using UnityEngine;
 
 sealed public class ManaPickUp : PowerUpBase
 {
+    public ManaPickUp()
+    {
+        base.Type = PowerUpType.mana;
+    }
+
     protected override void PickUpAbility(Player player)
     {
         if (!(player.Stats.IsMaxMana()))
@@ -11,10 +16,5 @@ sealed public class ManaPickUp : PowerUpBase
             player.Stats.HealMana(30f);
             PickAndDestroy();
         }
-    }
-
-    public ManaPickUp()
-    {
-        base.Type = PowerUpType.mana;
     }
 }

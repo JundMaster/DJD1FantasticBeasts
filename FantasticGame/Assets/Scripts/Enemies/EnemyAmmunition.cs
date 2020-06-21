@@ -9,7 +9,7 @@ sealed public class EnemyAmmunition : MonoBehaviour
     [SerializeField] private Rigidbody2D    rb;
     [SerializeField] private float          speed;
 
-    public Goblin goblinDamage;
+    public EnemyBaseRanged enemy;
 
     void Start()
     {
@@ -39,7 +39,7 @@ sealed public class EnemyAmmunition : MonoBehaviour
                         }
                         else if (player.transform.position.x < rb.transform.position.x)
                         {
-                            player.Stats.TakeDamage(goblinDamage.Damage);
+                            player.Stats.TakeDamage(enemy.Damage);
                             Instantiate(ammunitionHit, transform.position, transform.rotation);
                         }
                     }
@@ -48,7 +48,7 @@ sealed public class EnemyAmmunition : MonoBehaviour
                         if (player.transform.position.x > rb.transform.position.x)
                         {
                             Instantiate(ammunitionHit, transform.position, transform.rotation);
-                            player.Stats.TakeDamage(goblinDamage.Damage);
+                            player.Stats.TakeDamage(enemy.Damage);
                         }
                         else if (player.transform.position.x < rb.transform.position.x)
                         {
@@ -58,13 +58,13 @@ sealed public class EnemyAmmunition : MonoBehaviour
                 }
                 else
                 {
-                    player.Stats.TakeDamage(goblinDamage.Damage);
+                    player.Stats.TakeDamage(enemy.Damage);
                     Instantiate(ammunitionHit, transform.position, transform.rotation);
 
                     if (player.transform.position.x > rb.transform.position.x)
-                        player.Movement.Rb.AddForce(new Vector2(goblinDamage.PushForce, 0f));
+                        player.Movement.Rb.AddForce(new Vector2(enemy.PushForce, 0f));
                     else if (player.transform.position.x < rb.transform.position.x)
-                        player.Movement.Rb.AddForce(new Vector2(-goblinDamage.PushForce, 0f));
+                        player.Movement.Rb.AddForce(new Vector2(-enemy.PushForce, 0f));
 
                     StartCoroutine(player.CameraShake.Shake(0.015f, 0.04f));
                 }

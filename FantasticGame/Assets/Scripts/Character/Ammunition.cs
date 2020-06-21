@@ -33,10 +33,7 @@ sealed public class Ammunition : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D hitInfo)
     {
         Treasure treasure = hitInfo.GetComponent<Treasure>();
-        Enemy enemy = hitInfo.GetComponent<Enemy>();
-        EnemyMelee enemyMelee = hitInfo.GetComponent<EnemyMelee>();
-        Goblin goblin = hitInfo.GetComponent<Goblin>();
-
+        EnemyBase enemy = hitInfo.GetComponent<EnemyBase>();
 
         // If there's a collision
         if (treasure != null)
@@ -49,15 +46,6 @@ sealed public class Ammunition : MonoBehaviour
             enemy.Stats.TakeDamage(p1.Stats.RangedDamage);
         }
 
-        if (enemyMelee != null)
-        {
-            enemyMelee.Stats.TakeDamage(p1.Stats.RangedDamage);
-        }
-
-        if (goblin != null)
-        {
-            goblin.Stats.TakeDamage(p1.Stats.RangedDamage);
-        }
 
         SoundManager.PlaySound(AudioClips.enemyHit); // plays sound
         // Instantiates collision prefab and destroys this gameobject
