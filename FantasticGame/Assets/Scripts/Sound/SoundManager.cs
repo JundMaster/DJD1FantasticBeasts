@@ -1,25 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.SceneManagement;
 
 sealed public class SoundManager : MonoBehaviour
 {
     // Sounds
     private static AudioClip jump;
     private static AudioClip jumpLanding;
-    
-    private static AudioClip hit;
     private static AudioClip enemyHit;
     private static AudioClip magicAttack;
-
     private static AudioClip powerUp;
-
     private static AudioClip ropeHit;
     private static AudioClip ropeGoing;
     private static AudioClip swoopingPlatform;
-
     private static AudioClip shield;
+    private static AudioClip niffler;
+
 
     private static AudioSource audioSource;
 
@@ -30,21 +26,14 @@ sealed public class SoundManager : MonoBehaviour
 
         jump            = Resources.Load<AudioClip>("Sounds/jump");
         jumpLanding     = Resources.Load<AudioClip>("Sounds/jumpLanding");
-        
-        hit             = Resources.Load<AudioClip>("Sounds/hit");
         enemyHit        = Resources.Load<AudioClip>("Sounds/enemyHit");
         magicAttack     = Resources.Load<AudioClip>("Sounds/magicAttack");
-
         powerUp         = Resources.Load<AudioClip>("Sounds/powerup");
-        
         ropeHit         = Resources.Load<AudioClip>("Sounds/ropeHit");
         ropeGoing       = Resources.Load<AudioClip>("Sounds/ropeGoing");
         swoopingPlatform = Resources.Load<AudioClip>("Sounds/swoopingPlatform");
-
         shield          = Resources.Load<AudioClip>("Sounds/shield");
-
-
-        
+        niffler         = Resources.Load<AudioClip>("Sounds/niffler");
     }
 
 
@@ -82,6 +71,9 @@ sealed public class SoundManager : MonoBehaviour
                 break;
             case AudioClips.shield:
                 audioSource.PlayOneShot(shield, 0.2f);
+                break;
+            case AudioClips.niffler:
+                audioSource.PlayOneShot(niffler, 0.4f);
                 break;
         }
     }

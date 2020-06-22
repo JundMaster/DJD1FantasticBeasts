@@ -13,5 +13,6 @@ public enum AudioClips
     ropeHit,
     ropeGoing,
     swoopingPlatform,
-    shield
+    shield,
+    niffler
 }

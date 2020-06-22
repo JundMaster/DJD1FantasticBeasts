@@ -27,7 +27,6 @@ public class Player : MonoBehaviour
     public bool LookingUp       { get; private set; }
     public bool LookingDown     { get; private set; }
 
-
     // LAYERS
     [SerializeField] private LayerMask  treasureLayer;
     [SerializeField] private LayerMask  enemyLayer, enemyAmmunitionLayer;
@@ -196,16 +195,6 @@ public class Player : MonoBehaviour
             // Kills swooping evil if it's pressed again
             if (Input.GetButtonDown("Fire3") && Movement.OnGround && SwoopingEvilPlatform.isAlive) 
                 SwoopingEvilPlatform.isAlive = false;
-            // ---------------------------------------------------------------------------------------------
-
-
-            // PLAYER DEATH --------------------------------------------------------------------------------
-            if (Stats.IsAlive == false)
-            {
-                SwoopingEvilPlatform.isAlive = false; // Destroys swooping evil  
-                Destroy(gameObject);
-                Manager.Respawn();
-            }
             // ---------------------------------------------------------------------------------------------
 
 

@@ -118,7 +118,7 @@ criminal scheme.
 
 Considering the whole story, the game will be based on solving puzzles,
 overcoming obstacles and fighting different kinds of enemies, such as goblins,
-trolls, and ogres.
+human wizards, and ogres.
 
 All of this has, as main goal, saving the creatures that have been captured.
 Throughout the gameplay, the player will have to use Newt's swooping evil to get
@@ -160,7 +160,7 @@ It's a community that operates in the shadows, mostly, engaged in criminal
 activities.
 
 In the game, this community is composed by sapient magical creatures, like
-Goblins, Trolls and Ogres.
+Goblins, Human Wizards and Ogres.
 
 ## Gameloops
 

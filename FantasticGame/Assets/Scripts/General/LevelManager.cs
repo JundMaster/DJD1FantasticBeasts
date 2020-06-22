@@ -19,6 +19,8 @@ sealed public class LevelManager : MonoBehaviour
     private float   maxPositionReached;
     private bool    reachedRespawn2, reachedRespawn3, reachedRespawn4;
 
+    // Creatures saved
+    public static byte creaturesSaved;
 
     private void Start()
     {
@@ -44,7 +46,6 @@ sealed public class LevelManager : MonoBehaviour
 
         if (p1.transform.position.x > maxPositionReached)
             maxPositionReached = p1.transform.position.x;
-
 
         // RESPAWN 2
         if (maxPositionReached > respawn2.transform.position.x && reachedRespawn2 == false)

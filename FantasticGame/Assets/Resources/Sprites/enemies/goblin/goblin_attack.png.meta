@@ -96,7 +96,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: WebGL
+    buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -116,7 +116,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 30
+        width: 40
         height: 30
       alignment: 7
       pivot: {x: 0.5, y: 0}
@@ -135,9 +135,9 @@ TextureImporter:
       name: goblin_attack_1
       rect:
         serializedVersion: 2
-        x: 30
+        x: 40
         y: 0
-        width: 30
+        width: 40
         height: 30
       alignment: 7
       pivot: {x: 0.5, y: 0}
@@ -156,9 +156,9 @@ TextureImporter:
       name: goblin_attack_2
       rect:
         serializedVersion: 2
-        x: 60
+        x: 80
         y: 0
-        width: 30
+        width: 40
         height: 30
       alignment: 7
       pivot: {x: 0.5, y: 0}
@@ -177,9 +177,9 @@ TextureImporter:
       name: goblin_attack_3
       rect:
         serializedVersion: 2
-        x: 90
+        x: 120
         y: 0
-        width: 30
+        width: 40
         height: 30
       alignment: 7
       pivot: {x: 0.5, y: 0}

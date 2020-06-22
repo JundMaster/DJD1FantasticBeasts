@@ -33,12 +33,18 @@ sealed public class Ammunition : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D hitInfo)
     {
         Treasure treasure = hitInfo.GetComponent<Treasure>();
+        SurpriseBox surpriseBox = hitInfo.GetComponent<SurpriseBox>();
         EnemyBase enemy = hitInfo.GetComponent<EnemyBase>();
 
         // If there's a collision
         if (treasure != null)
         {
             treasure.Stats.TakeDamage(p1.Stats.RangedDamage);
+        }
+
+        if (surpriseBox != null)
+        {
+            surpriseBox.Stats.TakeDamage(p1.Stats.RangedDamage);
         }
 
         if (enemy != null)

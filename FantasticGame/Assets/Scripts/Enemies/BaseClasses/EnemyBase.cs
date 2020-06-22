@@ -10,7 +10,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] protected LayerMask    groundLayer;
     [SerializeField] protected LayerMask    boxesAndwalls;
     [SerializeField] protected Transform    attackPosition;
-    [SerializeField] protected GameObject   healthPickUp, manaPickUp;
+    [SerializeField] protected GameObject   healthPickUp, manaPickUp, deathSpawn;
     [SerializeField] protected Transform    groundRangeCheck, groundCheck, wallCheck;
 
     [SerializeField] protected float    HP;          // CURRENT HP
@@ -48,6 +48,8 @@ public class EnemyBase : MonoBehaviour
         // ALIVE --------------------------------------------------------------------------------------
         if (!(Stats.IsAlive))
         {
+            Instantiate(deathSpawn, transform.position + new Vector3(0f, 0.2f, 0f), transform.rotation);
+
             int chance = Random.Range(0, 10);
             if (chance > lootChance)
             {

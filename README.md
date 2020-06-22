@@ -6,8 +6,8 @@ A game based on the movie *Fantastic Beasts and Where to Find them*
 |Name|Role|
 |:-:|:-:|
 |Gabriel Santos|Artist|
-|Pedro Marques|Programmer|
-|Nelson Milheiro|Game Designer / Sound|
+|Pedro Marques|Programmer / Music & Sound|
+|Nelson Milheiro|Game Designer|
 
 ## Controls
 

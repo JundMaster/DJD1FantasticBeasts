@@ -145,7 +145,7 @@ public class PlayerMovement : MonoBehaviour
             invulnerableTimer -= Time.deltaTime;
             spriteEnableCounter -= Time.deltaTime;
             if (player.Stats.CurrentHP < 0) player.Stats.IsAlive = false;
-            player.Stats.CurrentHP = invulnerableHP - 10f;
+            player.Stats.CurrentHP = invulnerableHP - 30f;
         }
         if (spriteEnableCounter < 0)
         {

@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 sealed public class GameplayUI : MonoBehaviour
 {
     [SerializeField] private RectTransform healthBar;
     [SerializeField] private RectTransform manaBar;
+    [SerializeField] private TextMeshProUGUI nifflerScore;
 
     private Player player;
 
@@ -29,6 +31,8 @@ sealed public class GameplayUI : MonoBehaviour
         {
             healthBar.localScale = new Vector3(player.CurrentHP / 100f, 1f, 1f);
         }
+
+        nifflerScore.text = $"{LevelManager.creaturesSaved} / 10";
     }
 }
 

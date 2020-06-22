@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class PowerUpBase : MonoBehaviour
 {
     // Inspector, gameobject to instantiate after pick up
-    [SerializeField] private GameObject pickedUp;
+    [SerializeField] protected GameObject pickedUp;
 
     // PowerUpType
     protected PowerUpType Type { get; set; }
@@ -32,12 +32,18 @@ public abstract class PowerUpBase : MonoBehaviour
                 case PowerUpType.health:
                     PickUpAbility(player);
                     break;
+                case PowerUpType.niffler:
+                    PickUpAbility(player);
+                    break;
+                case PowerUpType.surpriseBox:
+                    PickUpAbility(player);
+                    break;
             }
         }
     }
 
     // Instantiates the pickup gameobject and destroys this gameobject
-    protected void PickAndDestroy()
+    protected virtual void PickAndDestroy()
     {
         SoundManager.PlaySound(AudioClips.powerUp);
         Instantiate(pickedUp, transform.position, transform.rotation);

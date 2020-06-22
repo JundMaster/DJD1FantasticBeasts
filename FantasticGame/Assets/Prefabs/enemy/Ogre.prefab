@@ -183,6 +183,8 @@ MonoBehaviour:
     type: 3}
   manaPickUp: {fileID: 1343978244480085303, guid: 2c6e8ccc07e440647a15a67c8d702c63,
     type: 3}
+  deathSpawn: {fileID: 7297083882377176823, guid: d95fd448fefbf6544b26bfe7d58d261c,
+    type: 3}
   groundRangeCheck: {fileID: 98882452}
   groundCheck: {fileID: 1058641897}
   wallCheck: {fileID: 1427029996}

@@ -214,6 +214,8 @@ MonoBehaviour:
     type: 3}
   manaPickUp: {fileID: 1343978244480085303, guid: 2c6e8ccc07e440647a15a67c8d702c63,
     type: 3}
+  deathSpawn: {fileID: 7297083882377176823, guid: d95fd448fefbf6544b26bfe7d58d261c,
+    type: 3}
   groundRangeCheck: {fileID: 98882452}
   groundCheck: {fileID: 1058641897}
   wallCheck: {fileID: 1427029996}
@@ -222,7 +224,7 @@ MonoBehaviour:
   speed: 1
   attackDelay: 1
   limitRange: 2
-  attackPushForce: 150
+  attackPushForce: 0
   lootChance: 3
   magicPrefab: {fileID: 938036225051192266, guid: b31e39fa92235a94782fa88099db05bc,
     type: 3}
@@ -315,7 +317,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.04, y: 0.3}
+  m_Offset: {x: -0.04, y: 0.24}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -326,7 +328,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.32, y: 0.6}
+  m_Size: {x: 0.32, y: 0.47}
   m_EdgeRadius: 0
 --- !u!95 &1049529221
 Animator:
