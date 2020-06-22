@@ -32,7 +32,7 @@ sealed public class SurpriseBox : PowerUpBase
     {
         if (enemyInside)
         {
-            Instantiate(enemyInside, transform.position, transform.rotation);
+            Instantiate(enemyInside, transform.position - new Vector3(0f, 0.15f, 0f), transform.rotation);
         }
         PickAndDestroy();
     }

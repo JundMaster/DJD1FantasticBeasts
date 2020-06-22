@@ -21,6 +21,9 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] protected float    attackPushForce;    // HOW MUCH WILL ENEMY PUSH THE PLAYER
     [SerializeField] protected int      lootChance;         // LOOT CHANCE 1 - 10
 
+    // Destroyable object after death
+    [SerializeField] protected GameObject destroyObject;
+
     // Player
     protected Player p1;
 
@@ -48,6 +51,11 @@ public class EnemyBase : MonoBehaviour
         // ALIVE --------------------------------------------------------------------------------------
         if (!(Stats.IsAlive))
         {
+            if (destroyObject)
+            {
+                Destroy(destroyObject);
+            }
+
             Instantiate(deathSpawn, transform.position + new Vector3(0f, 0.2f, 0f), transform.rotation);
 
             int chance = Random.Range(0, 10);
