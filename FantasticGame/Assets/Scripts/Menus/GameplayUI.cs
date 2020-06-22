@@ -9,11 +9,20 @@ sealed public class GameplayUI : MonoBehaviour
     [SerializeField] private RectTransform manaBar;
     [SerializeField] private TextMeshProUGUI nifflerScore;
 
+    // Boss
+    [SerializeField] private GameObject bossHealthBarBase;
+    [SerializeField] private RectTransform bossHealthBar;
+    private bool bossEncounterFirstTime  = true;
+    private float hpBossBar = 0;
+    //////////////////////////////////
+
     private Player player;
+    private Boss boss;
 
     private void Awake()
     {
         player = FindObjectOfType<Player>();
+        bossHealthBarBase.SetActive(false);
     }
 
     private void Update()
@@ -32,7 +41,46 @@ sealed public class GameplayUI : MonoBehaviour
             healthBar.localScale = new Vector3(player.CurrentHP / 100f, 1f, 1f);
         }
 
-        nifflerScore.text = $"{LevelManager.creaturesSaved} / 10";
+        nifflerScore.text = $"{LevelManager.CreaturesSaved} / 10";
+
+
+        if (LevelManager.reachedBoss)
+        {
+            // Finds Boss
+            if (boss == null)
+            {
+                boss = FindObjectOfType<Boss>();
+            }
+
+            // Sets hp bar as active
+            bossHealthBarBase.SetActive(true);
+            if (bossEncounterFirstTime)
+            {
+                if (bossHealthBar != null) bossHealthBar.localScale = new Vector3(0f, 1f, 1f);
+                // Increments the bar size as time passes, then turns first time to false
+                if (hpBossBar > 0.95f)
+                {
+                    bossEncounterFirstTime = false;
+                }
+                else if (hpBossBar < 1)
+                {
+                    hpBossBar += 0.8f * Time.deltaTime;
+                    if (bossHealthBar != null) bossHealthBar.localScale += new Vector3(hpBossBar, 0f, 0f);
+                }
+            }
+
+            else
+            {   // Sets the bar with boss hp
+                if (boss != null) bossHealthBar.localScale = new Vector3(boss.Stats.CurrentHP / 1000f, 1f, 1f);
+            }
+        }
+
+        if (Boss.BossDefeated || LevelManager.reachedBoss == false) // If the fight ends, turns off the bar
+        {
+            hpBossBar = 0;
+            bossEncounterFirstTime = true;
+            bossHealthBarBase.SetActive(false);
+        }
     }
 }
 

@@ -15,7 +15,7 @@ public class DestroyPlayer : MonoBehaviour
     {
         if (player.Stats.IsAlive == false)
         {
-            SwoopingEvilPlatform.isAlive = false; // Destroys swooping evil  
+            SwoopingEvilPlatform.IsAlive = false; // Destroys swooping evil  
             Destroy(gameObject);
             player.Manager.Respawn();
         }

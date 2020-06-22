@@ -46,7 +46,7 @@ public class EnemyBase : MonoBehaviour
         animator.SetBool("attacking", attacking);
     }
 
-    protected void Die()
+    protected virtual void Die()
     {
         // ALIVE --------------------------------------------------------------------------------------
         if (!(Stats.IsAlive))

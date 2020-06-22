@@ -335,7 +335,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // It's possible to use swooping evil if it isn't being used as a platform
-        if (OnGround == false && SwoopingEvilPlatform.isAlive == false)
+        if (OnGround == false && SwoopingEvilPlatform.IsAlive == false)
         {
             if (Input.GetButtonDown("Fire3") )
             {

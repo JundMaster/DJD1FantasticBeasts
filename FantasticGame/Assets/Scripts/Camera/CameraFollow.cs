@@ -87,6 +87,7 @@ sealed public class CameraFollow : MonoBehaviour
         // ----------------------------------------------------------------------------------------------------------
 
         // MAX CAMERA POSITIONS -------------------------------------------------------------------------------------
+        
         if (transform.position.x + 2.5f >= maxLevelRangeXmax)
         {
             maxRange = true;
@@ -103,32 +104,41 @@ sealed public class CameraFollow : MonoBehaviour
 
 
         // CAMERA MOVEMENT ------------------------------------------------------------------------------------------
-        if (p1.Position.x < maxLevelRangeXmax)
+        if (LevelManager.reachedBoss && Boss.BossDefeated == false)// If boss is reached
         {
-            // p1 Pos
-            targetPos = p1.Position + offset;
-            targetPos.z = transform.position.z;
-
-            Rect rect = CreateRect();
-
-            if (targetPos.x < rect.xMin) rect.xMin = targetPos.x;
-            else if (targetPos.x > rect.xMax) rect.xMax = targetPos.x;
-            if (targetPos.y < rect.yMin) rect.yMin = targetPos.y;
-            else if (targetPos.y > rect.yMax) rect.yMax = targetPos.y;
-
-            if (p1.OnGround)
-                rect.yMin = targetPos.y - 0.1f;
-
-            // Center of rectangle
-            Vector3 movePosition = rect.center;
-            movePosition.z = transform.position.z;
-
-            // Cam direction
-            Vector3 camDirection = movePosition - transform.position;
-
-            // Cam movement
-            transform.position += camDirection * feedBackLoop;
+            Vector3 bossScreen = new Vector3(142.2765f, 0.6610f, -10f);
+            Vector3 currentPos = transform.position;
+            transform.position = Vector3.MoveTowards(currentPos, bossScreen, 10f * Time.fixedDeltaTime);
         }
+        else
+        {
+            if (p1.Position.x < maxLevelRangeXmax)
+            {
+                // p1 Pos
+                targetPos = p1.Position + offset;
+                targetPos.z = transform.position.z;
+
+                Rect rect = CreateRect();
+
+                if (targetPos.x < rect.xMin) rect.xMin = targetPos.x;
+                else if (targetPos.x > rect.xMax) rect.xMax = targetPos.x;
+                if (targetPos.y < rect.yMin) rect.yMin = targetPos.y;
+                else if (targetPos.y > rect.yMax) rect.yMax = targetPos.y;
+
+                if (p1.OnGround)
+                    rect.yMin = targetPos.y - 0.1f;
+
+                // Center of rectangle
+                Vector3 movePosition = rect.center;
+                movePosition.z = transform.position.z;
+
+                // Cam direction
+                Vector3 camDirection = movePosition - transform.position;
+
+                // Cam movement
+                transform.position += camDirection * feedBackLoop;
+            }
+        } 
         // ----------------------------------------------------------------------------------------------------------
 
     }

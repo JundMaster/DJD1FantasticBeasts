@@ -186,15 +186,15 @@ public class Player : MonoBehaviour
 
             // SWOOPING EVIL ------------------------------------------------------------------------------
             Collider2D swoopingCheck = Physics2D.OverlapCircle(swoopingPosition.position, 0.2f, onGroundLayers);
-            if (Input.GetButtonDown("Fire3") && Movement.OnGround && SwoopingEvilPlatform.isAlive == false && swoopingCheck == null)
+            if (Input.GetButtonDown("Fire3") && Movement.OnGround && SwoopingEvilPlatform.IsAlive == false && swoopingCheck == null)
             {
                 Instantiate(swoopingSpawnerPrefab, swoopingPosition.position, transform.rotation);
                 Instantiate(swoopingPrefab, swoopingPosition.position, transform.rotation);
 
             }
             // Kills swooping evil if it's pressed again
-            if (Input.GetButtonDown("Fire3") && Movement.OnGround && SwoopingEvilPlatform.isAlive) 
-                SwoopingEvilPlatform.isAlive = false;
+            if (Input.GetButtonDown("Fire3") && Movement.OnGround && SwoopingEvilPlatform.IsAlive) 
+                SwoopingEvilPlatform.IsAlive = false;
             // ---------------------------------------------------------------------------------------------
 
 

@@ -11,7 +11,7 @@ sealed public class Niffler : PowerUpBase
 
     protected override void PickUpAbility(Player player)
     {
-        LevelManager.creaturesSaved++;
+        LevelManager.CreaturesSaved++;
         PickAndDestroy();
     }
 

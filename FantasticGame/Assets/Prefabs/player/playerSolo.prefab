@@ -255,7 +255,7 @@ MonoBehaviour:
     m_Bits: 1777920
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 3153920
+    m_Bits: 1056768
 --- !u!114 &504492945739365232
 MonoBehaviour:
   m_ObjectHideFlags: 0

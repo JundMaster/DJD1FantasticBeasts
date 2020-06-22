@@ -11,22 +11,22 @@ sealed public class SwoopingEvilPlatform : MonoBehaviour
     private float dieCounter;
 
     // Only 1 swooping evil alive at a time
-    public static bool isAlive;
+    public static bool IsAlive { get; set; }
 
     private Camera camera;
 
     void Start()
     {
-        isAlive = true;
+        IsAlive = true;
         player = FindObjectOfType<PlayerMovement>();
         dieCounter = 20f;
         camera = Camera.main;
 
-        if (SwoopingEvilPlatform.isAlive)
+        if (SwoopingEvilPlatform.IsAlive)
         {
             StartCoroutine(swoopingSound());
         }
-        else if (!SwoopingEvilPlatform.isAlive)
+        else if (!SwoopingEvilPlatform.IsAlive)
         {
             StopCoroutine(swoopingSound());
         }
@@ -35,17 +35,17 @@ sealed public class SwoopingEvilPlatform : MonoBehaviour
     private void Update()
     {
         // Starts a counter as soon as swooping spawns
-        if (isAlive)
+        if (IsAlive)
         {
             dieCounter -= Time.deltaTime;
             if (dieCounter < 0)
             {
-                isAlive = false;
+                IsAlive = false;
             }
         }
 
         // Happens when player dies or swooping dies
-        if (isAlive == false)
+        if (IsAlive == false)
         {
             Instantiate(swoopingSpawnerPrefab, transform.position, transform.rotation);
             Destroy(gameObject);
@@ -72,7 +72,7 @@ sealed public class SwoopingEvilPlatform : MonoBehaviour
         if (collision.gameObject.GetComponent<Player>())
         {
             player.Rb.velocity = new Vector2(0f, 5f);
-            isAlive = false;
+            IsAlive = false;
             SoundManager.PlaySound(AudioClips.hit); // plays sound
             Instantiate(swoopingSpawnerPrefab, transform.position, transform.rotation);
             Destroy(gameObject);

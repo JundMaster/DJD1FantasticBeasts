@@ -10,6 +10,8 @@ TagManager:
   - playerAmmunition
   - ropeSprite
   - walls
+  - Boss
+  - BossBoxSpawn
   layers:
   - Default
   - TransparentFX
@@ -32,7 +34,7 @@ TagManager:
   - Foreground
   - DEATHTILE
   - surpriseBox
-  - 
+  - bossBoxes
   - 
   - 
   - 

@@ -5,20 +5,20 @@ using UnityEngine;
 public class EnemyBaseRanged : EnemyBase
 {
     // Editor stuff
-    [SerializeField] private GameObject magicPrefab;
+    [SerializeField] protected GameObject magicPrefab;
     [SerializeField] protected Transform  magicJumpPosition;
     [SerializeField] protected float  maxAimRange; // RANGE FOR SHOOTING
     [SerializeField] protected bool   staticEnemy;    // IF ENEMY IS A STATIC ENEMY
 
     // Public Getters
-    public float Damage { get; private set; }
-    public float PushForce { get; private set; }
+    public float Damage { get; protected set; }
+    public float PushForce { get; protected set; }
 
     // Attack
     protected bool shootAnimation;
 
 
-    private void Start()
+    protected virtual void Start()
     {
         Stats       = new Stats();
         animator    = GetComponent<Animator>();
@@ -45,7 +45,7 @@ public class EnemyBaseRanged : EnemyBase
     }
 
 
-    private void Update()
+    protected virtual void Update()
     {
         if (p1 == null)
         {
