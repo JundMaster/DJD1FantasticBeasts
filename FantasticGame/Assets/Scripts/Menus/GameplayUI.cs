@@ -7,7 +7,9 @@ sealed public class GameplayUI : MonoBehaviour
 {
     [SerializeField] private RectTransform healthBar;
     [SerializeField] private RectTransform manaBar;
+
     [SerializeField] private TextMeshProUGUI nifflerScore;
+    [SerializeField] private TextMeshProUGUI newtLives;
 
     // Boss
     [SerializeField] private GameObject bossHealthBarBase;
@@ -32,6 +34,7 @@ sealed public class GameplayUI : MonoBehaviour
             player = FindObjectOfType<Player>();
         }
 
+        // BARS UI
         if (manaBar)
         {
             manaBar.localScale = new Vector3(player.CurrentMana / 100f, 1f, 1f);
@@ -41,9 +44,14 @@ sealed public class GameplayUI : MonoBehaviour
             healthBar.localScale = new Vector3(player.CurrentHP / 100f, 1f, 1f);
         }
 
+        // NiFFLER UI
         nifflerScore.text = $"{LevelManager.CreaturesSaved} / 10";
 
+        // NEWT UI
+        if (LevelManager.assistMode == false) newtLives.text = "x" + LevelManager.newtLives;
+        else newtLives.text = "xx";
 
+        // BOSS UI
         if (LevelManager.reachedBoss)
         {
             // Finds Boss

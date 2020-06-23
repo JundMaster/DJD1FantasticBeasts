@@ -25,7 +25,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] protected GameObject destroyObject;
 
     // Player
-    protected Player p1;
+    protected PlayerMovement p1;
 
     // Attack
     protected bool attacking;

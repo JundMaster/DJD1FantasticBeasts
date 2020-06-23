@@ -18,12 +18,15 @@ sealed public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject bossRespawnPrefab;
     [SerializeField] private GameObject bossRespawnAnimation;
 
+    // newt Lives ////
+    public static int   newtLives   { get; private set; } = 5;
+    public static bool  assistMode  { get; set; } = false;
+    private int livesKeeper;
+
+    // GAME STATUS
+    public static bool GAMEOVER { get; set; } = false;
 
     private Player  p1;
-    
-    // Checkpoints
-    private float   maxPositionReached;
-    private bool    reachedRespawn2, reachedRespawn3, reachedRespawn4, reachedRespawn5, reachedRespawn6;
 
     // Creatures saved
     public static byte CreaturesSaved { get; set; }
@@ -32,6 +35,10 @@ sealed public class LevelManager : MonoBehaviour
     public static bool  reachedBoss;
     private Boss        boss;
     [SerializeField] private GameObject finalGameBarrier;
+
+    // Checkpoints
+    private float maxPositionReached;
+    private bool reachedRespawn2, reachedRespawn3, reachedRespawn4, reachedRespawn5, reachedRespawn6;
 
     private void Start()
     {
@@ -52,6 +59,15 @@ sealed public class LevelManager : MonoBehaviour
 
     private void Update()
     {
+        // Lives
+        if (assistMode) newtLives = livesKeeper;
+        else livesKeeper = newtLives;
+
+        // GameOver
+        if (newtLives < 0) GAMEOVER = true;
+        if (GAMEOVER) GameOver();
+
+
         if (p1 == null)
         {
             p1 = FindObjectOfType<Player>();
@@ -63,32 +79,32 @@ sealed public class LevelManager : MonoBehaviour
         // RESPAWN 2
         if (maxPositionReached > respawn2.transform.position.x && reachedRespawn2 == false)
         {
-            Instantiate(respawnPrefab, respawn2.transform.position, respawnPrefab.transform.rotation);
             reachedRespawn2 = true;
+            Instantiate(respawnPrefab, respawn2.transform.position, respawnPrefab.transform.rotation);
         }
         // RESPAWN 3
-        if (maxPositionReached > respawn3.transform.position.x && reachedRespawn3 == false)
+        else if (maxPositionReached > respawn3.transform.position.x && reachedRespawn3 == false)
         {
-            Instantiate(respawnPrefab, respawn3.transform.position, respawnPrefab.transform.rotation);
             reachedRespawn3 = true;
+            Instantiate(respawnPrefab, respawn3.transform.position, respawnPrefab.transform.rotation);
         }
         // RESPAWN 4
-        if (maxPositionReached > respawn4.transform.position.x && reachedRespawn4 == false)
+        else if (maxPositionReached > respawn4.transform.position.x && reachedRespawn4 == false)
         {
-            Instantiate(respawnPrefab, respawn4.transform.position, respawnPrefab.transform.rotation);
             reachedRespawn4 = true;
+            Instantiate(respawnPrefab, respawn4.transform.position, respawnPrefab.transform.rotation);  
         }
         // RESPAWN 5
-        if (maxPositionReached > respawn5.transform.position.x && reachedRespawn5 == false)
+        else if (maxPositionReached > respawn5.transform.position.x && reachedRespawn5 == false)
         {
-            Instantiate(respawnPrefab, respawn5.transform.position, respawnPrefab.transform.rotation);
             reachedRespawn5 = true;
+            Instantiate(respawnPrefab, respawn5.transform.position, respawnPrefab.transform.rotation);
         }
         // RESPAWN 6
-        if (maxPositionReached > respawn6.transform.position.x && reachedRespawn6 == false)
+        else if (maxPositionReached > respawn6.transform.position.x && reachedRespawn6 == false)
         {
-            Instantiate(respawnPrefab, respawn6.transform.position, respawnPrefab.transform.rotation);
             reachedRespawn6 = true;
+            Instantiate(respawnPrefab, respawn6.transform.position, respawnPrefab.transform.rotation);
         }
 
 
@@ -123,6 +139,8 @@ sealed public class LevelManager : MonoBehaviour
 
     public void Respawn()
     {
+        newtLives--;
+
         // RESPAWN1
         if (maxPositionReached > respawn1.transform.position.x)
             if (maxPositionReached < respawn2.transform.position.x)
@@ -166,8 +184,11 @@ sealed public class LevelManager : MonoBehaviour
             }
             Destroy(bossObject);
         }
-        
-        
+    }
+
+    private void GameOver()
+    {
+        PauseMenu.LoadMenu();
     }
 
 

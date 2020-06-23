@@ -138,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // INVULNERABLE  -----------------------------------------------------------------------------
-        normalHP = player.Stats.CurrentHP;
+        if (player != null) normalHP = player.Stats.CurrentHP;
         if (Invulnerable == false) invulnerableHP = player.Stats.CurrentHP;
         if (Invulnerable)
         {
@@ -191,14 +191,17 @@ public class PlayerMovement : MonoBehaviour
 
     void EnemyCollision()
     {
-        Collider2D collider = Physics2D.OverlapBox(boxCol.bounds.center, boxCol.bounds.size, 0, enemyLayer);
+        if (player.GodMode == false)
+        {
+            Collider2D collider = Physics2D.OverlapBox(boxCol.bounds.center, boxCol.bounds.size, 0, enemyLayer);
 
-        if (collider != null)
-            if (Invulnerable == false)
-            {
-                SoundManager.PlaySound(AudioClips.enemyHit); // Plays sound
-                EnemyHit();
-            }
+            if (collider != null)
+                if (Invulnerable == false)
+                {
+                    SoundManager.PlaySound(AudioClips.enemyHit); // Plays sound
+                    EnemyHit();
+                }
+        }
     }
 
     void EnemyHit()
@@ -214,7 +217,7 @@ public class PlayerMovement : MonoBehaviour
         Collider2D collisionTop = Physics2D.OverlapCircle(ceilingOverHead.position, 0.02f, onGroundLayers);
 
         // Checks if the player pressed crouch
-        if (Input.GetKeyDown("down") && OnGround)
+        if (Input.GetKey("down") && OnGround)
         {
             usingCrouch = true;
             IsCrouched = true;
@@ -280,9 +283,10 @@ public class PlayerMovement : MonoBehaviour
         float jumpMaxTime = 0.15f;
 
         // Jump conditions
-        if (Input.GetButtonDown("Jump") && coyoteCounter > 0 && Rb.velocity.y < 0.1 && usingCrouch == false && circleCol.enabled == false)
+        if (Input.GetButtonDown("Jump") && coyoteCounter > 0 && Rb.velocity.y < 0.1)
         {
             // If the player jumps, gravityScale is set to 0
+            usingCrouch = false;
             currentVelocity.y = jumpSpeed;
             Rb.gravityScale = 0.0f;
             jumpTime = Time.time;

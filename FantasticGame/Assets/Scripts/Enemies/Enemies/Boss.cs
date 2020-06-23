@@ -20,7 +20,7 @@ sealed public class Boss : EnemyBaseRanged
     {
         Stats = new Stats();
         animator = GetComponent<Animator>();
-        p1 = FindObjectOfType<Player>();
+        p1 = FindObjectOfType<PlayerMovement>();
 
         // General
         Stats.IsAlive = true;
@@ -49,7 +49,7 @@ sealed public class Boss : EnemyBaseRanged
     {
         if (p1 == null)
         {
-            p1 = FindObjectOfType<Player>();
+            p1 = FindObjectOfType<PlayerMovement>();
         }
 
         // ANIMATIONS
@@ -84,7 +84,7 @@ sealed public class Boss : EnemyBaseRanged
             RaycastHit2D aimTop = Physics2D.Raycast(attackPosition.position, attackPosition.right, maxAimRange);
             RaycastHit2D aimJump = Physics2D.Raycast(magicJumpPosition.position, attackPosition.right, maxAimRange);
             RaycastHit2D aimCrouch = Physics2D.Raycast(magicCrouchPosition.position, attackPosition.right, maxAimRange);
-            if (aimTop.rigidbody == p1.Movement.Rb || aimJump.rigidbody == p1.Movement.Rb || aimCrouch.rigidbody == p1.Movement.Rb)
+            if (aimTop.rigidbody == p1.Rb || aimJump.rigidbody == p1.Rb || aimCrouch.rigidbody == p1.Rb)
             {
                 shootAnimation = false; // FOR ANIMATOR
                 attacking = true; // FOR ANIMATOR
@@ -95,8 +95,8 @@ sealed public class Boss : EnemyBaseRanged
 
                 if (Stats.RangedAttackDelay < 0)
                 {
-                    if (aimTop.rigidbody == p1.Movement.Rb || aimJump.rigidbody == p1.Movement.Rb) Shoot();
-                    else if (aimCrouch.rigidbody == p1.Movement.Rb) ShootCrouch();
+                    if (aimTop.rigidbody == p1.Rb || aimJump.rigidbody == p1.Rb) Shoot();
+                    else if (aimCrouch.rigidbody == p1.Rb) ShootCrouch();
 
                     Stats.RangedAttackDelay = attackDelay;
                 }

@@ -54,9 +54,9 @@ public class Player : MonoBehaviour
     public LevelManager                 Manager             { get; private set; }
 
     // CHEATS
-    [SerializeField] private bool godMode;
-    [SerializeField] private bool fly;
-    [SerializeField] private bool infiniteMana;
+    [SerializeField] public bool    GodMode         { get; set; }
+    [SerializeField] public bool    InfiniteMana    { get; set; }
+    [SerializeField] private bool   fly;
 
 
     // Start is called before the first frame update
@@ -122,7 +122,7 @@ public class Player : MonoBehaviour
                 LookingUp = true;
             else 
                 LookingUp = false;
-            if (Input.GetKey("down"))
+            if (Input.GetKey("down") && Movement.OnGround)
                 LookingDown = true;
             else
                 LookingDown = false;
@@ -199,13 +199,9 @@ public class Player : MonoBehaviour
 
 
             // CHEATS --------------------------------------------------------------------------------------
-            if (godMode)
-            {
-                Movement.Invulnerable = true;
-                Movement.invulnerableHP = 100f;
-            }
+            if (GodMode) Stats.CurrentHP = 100f;
             if (fly) if (Input.GetButton("Jump")) Movement.Rb.gravityScale = 0f;
-            if (infiniteMana) Stats.CurrentMana = Stats.MaxMana;
+            if (InfiniteMana) Stats.CurrentMana = Stats.MaxMana;
             // ---------------------------------------------------------------------------------------------
         }
     }

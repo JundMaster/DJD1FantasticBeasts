@@ -19,7 +19,7 @@ public class EnemyBaseMelee : EnemyBase
     private void Start()
     {
         animator    = GetComponent<Animator>();
-        p1          = FindObjectOfType<Player>();
+        p1          = FindObjectOfType<PlayerMovement>();
 
         Stats = new Stats
         {
@@ -48,7 +48,7 @@ public class EnemyBaseMelee : EnemyBase
     {
         if (p1 == null)
         {
-            p1 = FindObjectOfType<Player>();
+            p1 = FindObjectOfType<PlayerMovement>();
         }
 
         // OTHER ATTACKS ANIMATION DELAY
@@ -148,8 +148,8 @@ public class EnemyBaseMelee : EnemyBase
         attacking = false;
         if (atackingCollider != null)
         {
-            p1.Stats.TakeDamage(Stats.MeleeDamage);
-            if (p1.Movement.CrouchGetter)
+            p1.player.Stats.TakeDamage(Stats.MeleeDamage);
+            if (p1.CrouchGetter)
             {
                 Instantiate(ammunitionHit, p1.transform.position + new Vector3(0f, 0.3f, 0f), p1.transform.rotation);
             }
@@ -161,15 +161,15 @@ public class EnemyBaseMelee : EnemyBase
             // Pushes the player
             if (p1.transform.position.x > transform.position.x)
             {
-                p1.Movement.Rb.AddForce(new Vector2(attackPushForce, 0f));
+                p1.Rb.AddForce(new Vector2(attackPushForce, 0f));
             }
             else if (p1.transform.position.x < transform.position.x)
             {
-                p1.Movement.Rb.AddForce(new Vector2(-attackPushForce, 0f));
+                p1.Rb.AddForce(new Vector2(-attackPushForce, 0f));
             }
 
             // Shakes the screen
-            StartCoroutine(p1.CameraShake.Shake(0.025f, 0.08f));
+            StartCoroutine(p1.player.CameraShake.Shake(0.025f, 0.08f));
         }
     }
 

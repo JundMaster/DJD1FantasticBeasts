@@ -13,11 +13,14 @@ public class DestroyPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (player.Stats.IsAlive == false)
+        if (player != null)
         {
-            SwoopingEvilPlatform.IsAlive = false; // Destroys swooping evil  
-            Destroy(gameObject);
-            player.Manager.Respawn();
+            if (player.Stats.IsAlive == false)
+            {
+                SwoopingEvilPlatform.IsAlive = false; // Destroys swooping evil  
+                Destroy(gameObject);
+                player.Manager.Respawn();
+            }
         }
     }
 }
