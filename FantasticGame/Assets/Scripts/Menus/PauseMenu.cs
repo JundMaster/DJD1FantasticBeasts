@@ -48,31 +48,38 @@ sealed public class PauseMenu : MonoBehaviour
             }
         }
 
-        // When the player presses ESC
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (p1 == null) p1 = FindObjectOfType<Player>();
+
+        // Only if the player is alive and the game isn't over
+        if (LevelManager.GAMEOVER == false && p1 != null && p1.Stats.IsAlive && Respawn_GameOverMenu.inRespawnMenu == false)
         {
-            if(gamePaused)
-            {   // If the player isn't in main pause menu
-                if (!AssistModeMenu.activeSelf && !OptionsMenu.activeSelf)
-                {
-                    Resume();
-                }
-            }
-            else
+            // When the player presses ESC
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                Pause();
+                if (gamePaused)
+                {   // If the player isn't in main pause menu
+                    if (!AssistModeMenu.activeSelf && !OptionsMenu.activeSelf)
+                    {
+                        Resume();
+                    }
+                }
+                else
+                {
+                    Pause();
+                }
             }
         }
 
 
-        if (p1 == null) p1 = FindObjectOfType<Player>();
-
         // Updates assist mode text
-        if (p1.GodMode) infHP.text = "infinite hp: on";
-        else infHP.text = "infinite hp: off";
-        if (p1.InfiniteMana) infMana.text = "infinite mana: on";
-        else infMana.text = "infinite mana: off";
-        if (LevelManager.assistMode) infLives.text = "infinite lives: on";
+        if (p1 != null)
+        {
+            if (p1.GodMode) infHP.text = "infinite hp: on";
+            else infHP.text = "infinite hp: off";
+            if (p1.InfiniteMana) infMana.text = "infinite mana: on";
+            else infMana.text = "infinite mana: off";
+        }
+        if (LevelManager.AssistMode) infLives.text = "infinite lives: on";
         else infLives.text = "infinite lives: off";
     }
 
@@ -88,7 +95,7 @@ sealed public class PauseMenu : MonoBehaviour
 
     public void InfiniteLives()
     {
-        LevelManager.assistMode = !LevelManager.assistMode;
+        LevelManager.AssistMode = !LevelManager.AssistMode;
     }
 
     public void Resume()
@@ -114,7 +121,7 @@ sealed public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    public void QuitGame()
+    public static void QuitGame()
     {
         Application.Quit();
     }

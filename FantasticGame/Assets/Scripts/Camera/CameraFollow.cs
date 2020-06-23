@@ -39,49 +39,55 @@ sealed public class CameraFollow : MonoBehaviour
         }
 
         // IF PLAYER LOOKS UP OR DOWN -------------------------------------------------------------------------------
-        if (p1.player.LookingUp && offset.y > 0.6f)
+        if (p1 != null)
         {
-            lookingCounter -= Time.fixedDeltaTime;
-            if (lookingCounter < 0)
-                if (offset.y < 1.5f)
-                    offset.y += 3 * Time.fixedDeltaTime;
-            if (p1.Rb.velocity.x != 0)
+            if (p1.player.LookingUp && offset.y > 0.6f)
+            {
+                lookingCounter -= Time.fixedDeltaTime;
+                if (lookingCounter < 0)
+                    if (offset.y < 1.5f)
+                        offset.y += 3 * Time.fixedDeltaTime;
+                if (p1.Rb.velocity.x != 0)
+                    if (p1.Rb.velocity.y > -12)
+                    {
+                        offset.y = originalOffset.y;
+                        lookingCounter = lookingDelay;
+                    }
+            }
+            else if (p1.player.LookingDown)
+            {
+                lookingCounter -= Time.fixedDeltaTime;
+                if (lookingCounter < 0)
+                    if (offset.y > 0f)
+                        offset.y -= 3 * Time.fixedDeltaTime;
+                if (p1.Rb.velocity.x != 0)
+                    if (p1.Rb.velocity.y > -12)
+                    {
+                        offset.y = originalOffset.y;
+                        lookingCounter = lookingDelay;
+                    }
+            }
+            else // WHENEVER SPEED IS > -12, SETS CAMERA TO ITS NORMAL STATE
                 if (p1.Rb.velocity.y > -12)
-                {
-                    offset.y = originalOffset.y;
-                    lookingCounter = lookingDelay;
-                }
-        }
-        else if (p1.player.LookingDown)
-        {
-            lookingCounter -= Time.fixedDeltaTime;
-            if (lookingCounter < 0)
-                if (offset.y > 0f)
-                    offset.y -= 3 * Time.fixedDeltaTime;
-            if (p1.Rb.velocity.x != 0)
-                if (p1.Rb.velocity.y > -12)
-                {
-                    offset.y = originalOffset.y;
-                    lookingCounter = lookingDelay;
-                }
-        }
-        else // WHENEVER SPEED IS > -12, SETS CAMERA TO ITS NORMAL STATE
-            if (p1.Rb.velocity.y > -12)
             {
                 offset.y = originalOffset.y;
                 lookingCounter = lookingDelay;
                 feedBackLoop = 0.2f;
             }
-        // ----------------------------------------------------------------------------------------------------------
+            // ----------------------------------------------------------------------------------------------------------
+        }
 
         // CAMERA WHEN PLAYER VELOCITY IS TOO HIGH ------------------------------------------------------------------
         if (minRange == false && maxRange == false)
         {
-            if (p1.Rb.velocity.y < -12)
+            if (p1 != null)
             {
-                if (offset.y > -2f)
-                    offset.y -= 3 * Time.fixedDeltaTime;
-                feedBackLoop = 0.5f;
+                if (p1.Rb.velocity.y < -12)
+                {
+                    if (offset.y > -2f)
+                        offset.y -= 3 * Time.fixedDeltaTime;
+                    feedBackLoop = 0.5f;
+                }
             }
         }
         // ----------------------------------------------------------------------------------------------------------
@@ -112,31 +118,34 @@ sealed public class CameraFollow : MonoBehaviour
         }
         else
         {
-            if (p1.Position.x < maxLevelRangeXmax)
+            if (p1 != null)
             {
-                // p1 Pos
-                targetPos = p1.Position + offset;
-                targetPos.z = transform.position.z;
+                if (p1.Position.x < maxLevelRangeXmax)
+                {
+                    // p1 Pos
+                    targetPos = p1.Position + offset;
+                    targetPos.z = transform.position.z;
 
-                Rect rect = CreateRect();
+                    Rect rect = CreateRect();
 
-                if (targetPos.x < rect.xMin) rect.xMin = targetPos.x;
-                else if (targetPos.x > rect.xMax) rect.xMax = targetPos.x;
-                if (targetPos.y < rect.yMin) rect.yMin = targetPos.y;
-                else if (targetPos.y > rect.yMax) rect.yMax = targetPos.y;
+                    if (targetPos.x < rect.xMin) rect.xMin = targetPos.x;
+                    else if (targetPos.x > rect.xMax) rect.xMax = targetPos.x;
+                    if (targetPos.y < rect.yMin) rect.yMin = targetPos.y;
+                    else if (targetPos.y > rect.yMax) rect.yMax = targetPos.y;
 
-                if (p1.OnGround)
-                    rect.yMin = targetPos.y - 0.1f;
+                    if (p1.OnGround)
+                        rect.yMin = targetPos.y - 0.1f;
 
-                // Center of rectangle
-                Vector3 movePosition = rect.center;
-                movePosition.z = transform.position.z;
+                    // Center of rectangle
+                    Vector3 movePosition = rect.center;
+                    movePosition.z = transform.position.z;
 
-                // Cam direction
-                Vector3 camDirection = movePosition - transform.position;
+                    // Cam direction
+                    Vector3 camDirection = movePosition - transform.position;
 
-                // Cam movement
-                transform.position += camDirection * feedBackLoop;
+                    // Cam movement
+                    transform.position += camDirection * feedBackLoop;
+                }
             }
         } 
         // ----------------------------------------------------------------------------------------------------------

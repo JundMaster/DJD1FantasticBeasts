@@ -18,9 +18,10 @@ sealed public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject bossRespawnPrefab;
     [SerializeField] private GameObject bossRespawnAnimation;
 
+
     // newt Lives ////
-    public static int   newtLives   { get; private set; } = 5;
-    public static bool  assistMode  { get; set; } = false;
+    public static int   NewtLives   { get; set; } = 5;
+    public static bool  AssistMode  { get; set; } = false;
     private int livesKeeper;
 
     // GAME STATUS
@@ -42,6 +43,8 @@ sealed public class LevelManager : MonoBehaviour
 
     private void Start()
     {
+        Time.timeScale = 1f;
+
         Instantiate(player, respawn1.position, respawn1.transform.rotation);
         p1 = FindObjectOfType<Player>();
 
@@ -60,21 +63,20 @@ sealed public class LevelManager : MonoBehaviour
     private void Update()
     {
         // Lives
-        if (assistMode) newtLives = livesKeeper;
-        else livesKeeper = newtLives;
-
-        // GameOver
-        if (newtLives < 0) GAMEOVER = true;
-        if (GAMEOVER) GameOver();
-
+        if (NewtLives < 0) NewtLives = 0;
+        if (AssistMode) NewtLives = livesKeeper;
+        else livesKeeper = NewtLives;
 
         if (p1 == null)
         {
             p1 = FindObjectOfType<Player>();
         }
 
-        if (p1.transform.position.x > maxPositionReached)
-            maxPositionReached = p1.transform.position.x;
+        if (p1 != null)
+        {
+            if (p1.transform.position.x > maxPositionReached)
+                maxPositionReached = p1.transform.position.x;
+        }
 
         // RESPAWN 2
         if (maxPositionReached > respawn2.transform.position.x && reachedRespawn2 == false)
@@ -109,9 +111,12 @@ sealed public class LevelManager : MonoBehaviour
 
 
         // Spawns boss
-        if (p1.transform.position.x > 139.5f && reachedBoss == false && Boss.BossDefeated == false)
+        if (p1 != null)
         {
-            SpawnBoss();
+            if (p1.transform.position.x > 139.5f && reachedBoss == false && Boss.BossDefeated == false)
+            {
+                SpawnBoss();
+            }
         }
         // If the player is fighting the boss
         if (reachedBoss)
@@ -139,57 +144,66 @@ sealed public class LevelManager : MonoBehaviour
 
     public void Respawn()
     {
-        newtLives--;
-
         // RESPAWN1
-        if (maxPositionReached > respawn1.transform.position.x)
-            if (maxPositionReached < respawn2.transform.position.x)
-                Instantiate(player, respawn1.position, transform.rotation);
+        if (respawn1)
+        {
+            if (maxPositionReached > respawn1.position.x)
+                if (maxPositionReached < respawn2.position.x)
+                    Instantiate(player, respawn1.position, transform.rotation);
+        }
 
         // RESPAWN2
-        if (maxPositionReached > respawn2.transform.position.x)
-            if (maxPositionReached < respawn3.transform.position.x)
-                Instantiate(player, respawn2.position, transform.rotation);
+        if (respawn2)
+        {
+            if (maxPositionReached > respawn2.position.x)
+                if (maxPositionReached < respawn3.position.x)
+                    Instantiate(player, respawn2.position, transform.rotation);
+        }
 
 
         // RESPAWN3
-        if (maxPositionReached > respawn3.transform.position.x)
-            if (maxPositionReached < respawn4.transform.position.x)
-                Instantiate(player, respawn3.position, transform.rotation);
+        if (respawn3)
+        {
+            if (maxPositionReached > respawn3.position.x)
+                if (maxPositionReached < respawn4.position.x)
+                    Instantiate(player, respawn3.position, transform.rotation);
+        }
 
         // RESPAWN4
-        if (maxPositionReached > respawn4.transform.position.x)
-            if (maxPositionReached < respawn5.transform.position.x)
-                Instantiate(player, respawn4.position, transform.rotation);
+        if (respawn4)
+        {
+            if (maxPositionReached > respawn4.position.x)
+                if (maxPositionReached < respawn5.position.x)
+                    Instantiate(player, respawn4.position, transform.rotation);
+        }
 
         // RESPAWN5
-        if (maxPositionReached > respawn5.transform.position.x)
-            if (maxPositionReached < respawn6.transform.position.x)
-                Instantiate(player, respawn5.position, transform.rotation);
+        if (respawn5)
+        {
+            if (maxPositionReached > respawn5.position.x)
+                if (maxPositionReached < respawn6.position.x)
+                    Instantiate(player, respawn5.position, transform.rotation);
+        }
 
         // RESPAWN6 // BEFORE BOSS
-        if (maxPositionReached > respawn6.transform.position.x)
+        if (respawn6)
         {
-            Instantiate(player, respawn6.position, transform.rotation);
-
-            // Sets reached boss to false, if player dies
-            reachedBoss = false;
-
-            GameObject[] bossBoxSpawn = GameObject.FindGameObjectsWithTag("BossBoxSpawn");
-            GameObject bossObject = GameObject.FindGameObjectWithTag("Boss");
-
-            foreach (GameObject box in bossBoxSpawn)
+            if (maxPositionReached > respawn6.position.x)
             {
-                Destroy(box);
+                Instantiate(player, respawn6.position, transform.rotation);
+
+                // Sets reached boss to false, if player dies
+                reachedBoss = false;
+
+                GameObject[] bossBoxSpawn = GameObject.FindGameObjectsWithTag("BossBoxSpawn");
+                GameObject bossObject = GameObject.FindGameObjectWithTag("Boss");
+
+                foreach (GameObject box in bossBoxSpawn)
+                {
+                    Destroy(box);
+                }
+                Destroy(bossObject);
             }
-            Destroy(bossObject);
         }
     }
-
-    private void GameOver()
-    {
-        PauseMenu.LoadMenu();
-    }
-
-
 }

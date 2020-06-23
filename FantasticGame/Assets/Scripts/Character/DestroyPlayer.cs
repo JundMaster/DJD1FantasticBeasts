@@ -15,11 +15,14 @@ public class DestroyPlayer : MonoBehaviour
     {
         if (player != null)
         {
+            // Destroys everything related to the player
             if (player.Stats.IsAlive == false)
             {
-                SwoopingEvilPlatform.IsAlive = false; // Destroys swooping evil  
-                Destroy(gameObject);
+                // Destroys swooping evil
+                SwoopingEvilPlatform.IsAlive = false; 
+                // Respawns on the nearest active respawn
                 player.Manager.Respawn();
+                Destroy(gameObject);
             }
         }
     }

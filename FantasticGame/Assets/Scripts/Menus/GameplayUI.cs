@@ -35,20 +35,23 @@ sealed public class GameplayUI : MonoBehaviour
         }
 
         // BARS UI
-        if (manaBar)
+        if (player != null)
         {
-            manaBar.localScale = new Vector3(player.CurrentMana / 100f, 1f, 1f);
-        }
-        if (healthBar)
-        {
-            healthBar.localScale = new Vector3(player.CurrentHP / 100f, 1f, 1f);
+            if (manaBar)
+            {
+                manaBar.localScale = new Vector3(player.CurrentMana / 100f, 1f, 1f);
+            }
+            if (healthBar)
+            {
+                healthBar.localScale = new Vector3(player.CurrentHP / 100f, 1f, 1f);
+            }
         }
 
         // NiFFLER UI
         nifflerScore.text = $"{LevelManager.CreaturesSaved} / 10";
 
         // NEWT UI
-        if (LevelManager.assistMode == false) newtLives.text = "x" + LevelManager.newtLives;
+        if (LevelManager.AssistMode == false) newtLives.text = "x" + LevelManager.NewtLives;
         else newtLives.text = "xx";
 
         // BOSS UI

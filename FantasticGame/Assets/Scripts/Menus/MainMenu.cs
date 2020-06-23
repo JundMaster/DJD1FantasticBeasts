@@ -13,6 +13,9 @@ sealed public class MainMenu : MonoBehaviour
         selectedButton = new GameObject();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        // Reset statics
+        ResetStatics();
     }
 
     private void Update()
@@ -28,13 +31,21 @@ sealed public class MainMenu : MonoBehaviour
         }
     }
 
-    public static void PlayGame()
+    public void PlayGame()
     {
         SceneManager.LoadScene("Final");
     }
 
-    public static void QuitGame()
+    public void QuitGame()
     {
         Application.Quit();
+    }
+
+    private void ResetStatics()
+    {
+        LevelManager.NewtLives = 5;
+        LevelManager.CreaturesSaved = 0;
+        LevelManager.GAMEOVER = false;
+        LevelManager.AssistMode = false;
     }
 }
