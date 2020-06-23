@@ -10,8 +10,14 @@ public class Player : MonoBehaviour
 
     // MELEE
     [SerializeField] private Transform      meleePosition;
-    [SerializeField] private GameObject     meleePrefab;
-    [SerializeField] private GameObject     meleeAttackTemporary;
+    [SerializeField] private GameObject     meleeHitPrefab;
+    [SerializeField] private Transform      meleeTrailPosition;
+    private float   trailInitiaPos;
+    private float   trailFinalPos;
+    public float    trailCurrentPos    { get; private set; }
+    public bool     Attacking   { get; private set; }
+    private bool    maxReached;
+    private bool    minReached;
 
     // SHIELD
     [SerializeField] private Transform      shieldPosition;
@@ -31,6 +37,7 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask  treasureLayer;
     [SerializeField] private LayerMask  enemyLayer, enemyAmmunitionLayer;
     [SerializeField] private LayerMask  onGroundLayers;
+    [SerializeField] private LayerMask  surpriseBoxLayer;
 
     // CAMERA
     public CameraShake                  CameraShake         { get; private set; }
@@ -97,7 +104,15 @@ public class Player : MonoBehaviour
         canScreenShake = true;
 
         shieldSoundDelay = 0.2f;
-        
+
+        // TRAIL
+        trailInitiaPos  = 0.2f;
+        trailFinalPos   = 0.93f;
+        meleeTrailPosition.localPosition = new Vector3(trailInitiaPos, 0.3f, 0f);
+        trailCurrentPos = meleeTrailPosition.localPosition.x;
+        Attacking = false;
+        maxReached = false;
+        minReached = true;
     }
 
     // Update is called once per frame
@@ -174,13 +189,48 @@ public class Player : MonoBehaviour
             {   // If timeDelay gets < 0, sets timer back to AttackDelay again and the character can attack
                 Stats.MeleeAttackCounter = Stats.MeleeAttackDelay;
                 Stats.CanMeleeAttack = true;
+
+                Attacking = false; // FOR TRAIL
             }
 
             if (Input.GetButtonDown("Fire1"))
+            {
                 if (Stats.CanMeleeAttack && !UsingShield && !Movement.CrouchGetter && !Movement.usingRope)
                 {
                     MeleeAttack();
                 }
+            }
+
+            // TRAIL /////////////////////////////////
+            // Keeps refreshing trail current position
+            trailCurrentPos = meleeTrailPosition.localPosition.x;
+            if (Attacking)
+            {
+                if (meleeTrailPosition.localPosition.x < trailFinalPos)
+                {
+                    if (minReached)
+                        trailCurrentPos += 10f * Time.deltaTime;
+                }
+                if (meleeTrailPosition.localPosition.x > trailFinalPos)
+                {
+                    minReached = false;
+                    maxReached = true;
+                }
+                if (meleeTrailPosition.localPosition.x > trailInitiaPos)
+                {
+                    if (maxReached)
+                    {
+                        if (meleeTrailPosition.localPosition.x > trailInitiaPos)
+                            trailCurrentPos -= 10f * Time.deltaTime;
+                    }
+                }
+            }
+            else
+            {
+                minReached = true;
+                maxReached = false;
+            }
+            meleeTrailPosition.localPosition = new Vector3(trailCurrentPos, 0.26f, 0f);
             // ---------------------------------------------------------------------------------------------
 
 
@@ -223,22 +273,32 @@ public class Player : MonoBehaviour
     // Attacks, sets animation, starts a timer on update, instantiates the attack prefab
     void MeleeAttack()
     {
+        Attacking = true; // FOR TRAIL
         animator.SetBool("attack", true);
         Stats.CanMeleeAttack = false;
-        Instantiate(meleeAttackTemporary, meleePosition.position, transform.rotation);
 
-        Collider2D[] treasureHit = Physics2D.OverlapCircleAll(meleePosition.position, Stats.MeleeAttackRange, treasureLayer);
-        Collider2D[] enemies = Physics2D.OverlapCircleAll(meleePosition.position, Stats.MeleeAttackRange, enemyLayer);
+
+        Collider2D[] treasureHit = Physics2D.OverlapCircleAll(meleePosition.position, 0.465f, treasureLayer);
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(meleePosition.position, 0.465f, enemyLayer);
+        Collider2D[] surpriseBoxes = Physics2D.OverlapCircleAll(meleePosition.position, 0.465f, surpriseBoxLayer);
 
         foreach (Collider2D treasure in treasureHit)
         {
-            Instantiate(meleePrefab, treasure.GetComponent<Rigidbody2D>().position, transform.rotation);
+            SoundManager.PlaySound(AudioClips.enemyHit);
+            Instantiate(meleeHitPrefab, treasure.GetComponent<Rigidbody2D>().position, transform.rotation);
             treasure.GetComponent<Treasure>().Stats.TakeDamage(Stats.MeleeDamage);
         }
         foreach (Collider2D enemy in enemies)
         {
-            Instantiate(meleePrefab, enemy.GetComponent<Rigidbody2D>().position + new Vector2(0f, 0.4f), transform.rotation);
+            SoundManager.PlaySound(AudioClips.enemyHit);
+            Instantiate(meleeHitPrefab, enemy.GetComponent<Rigidbody2D>().position + new Vector2(0f, 0.4f), transform.rotation);
             enemy.GetComponent<EnemyBase>().Stats.TakeDamage(Stats.MeleeDamage);
+        }
+        foreach (Collider2D box in surpriseBoxes)
+        {
+            SoundManager.PlaySound(AudioClips.enemyHit);
+            Instantiate(meleeHitPrefab, box.GetComponent<Rigidbody2D>().position + new Vector2(0f, 0.4f), transform.rotation);
+            box.GetComponent<SurpriseBox>().Stats.TakeDamage(Stats.MeleeDamage);
         }
     }
 
@@ -263,6 +323,12 @@ public class Player : MonoBehaviour
             SoundManager.PlaySound(AudioClips.shield); // plays sound
             shieldSoundTimer = shieldSoundDelay;
         }
+    }
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(meleePosition.position, 0.465f);
     }
 
 }
