@@ -11,15 +11,16 @@ sealed public class SoundManager : MonoBehaviour
     private static AudioClip magicAttack;
     private static AudioClip powerUp;
     private static AudioClip ropeHit;
-    private static AudioClip ropeGoing;
     private static AudioClip swoopingPlatform;
     private static AudioClip shield;
     private static AudioClip niffler;
+    private static AudioClip melee;
+    private static AudioClip walk;
 
 
     private static AudioSource audioSource;
+    private float effectsVolume = 0.5f;
 
-    
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -30,12 +31,17 @@ sealed public class SoundManager : MonoBehaviour
         magicAttack     = Resources.Load<AudioClip>("Sounds/magicAttack");
         powerUp         = Resources.Load<AudioClip>("Sounds/powerup");
         ropeHit         = Resources.Load<AudioClip>("Sounds/ropeHit");
-        ropeGoing       = Resources.Load<AudioClip>("Sounds/ropeGoing");
         swoopingPlatform = Resources.Load<AudioClip>("Sounds/swoopingPlatform");
         shield          = Resources.Load<AudioClip>("Sounds/shield");
         niffler         = Resources.Load<AudioClip>("Sounds/niffler");
+        melee           = Resources.Load<AudioClip>("Sounds/melee");
+        walk            = Resources.Load<AudioClip>("Sounds/walk");
     }
 
+    private void Update()
+    {
+        audioSource.volume = effectsVolume;
+    }
 
     // Method used to play a sound
     public static void PlaySound(AudioClips clip)
@@ -43,38 +49,48 @@ sealed public class SoundManager : MonoBehaviour
         switch (clip)
         {
             case AudioClips.jump:
-                audioSource.PlayOneShot(jump, 0.5f);
+                audioSource.PlayOneShot(jump, 1f);
                 break;
             case AudioClips.jumpLanding:
-                audioSource.PlayOneShot(jumpLanding, 0.5f);
+                audioSource.PlayOneShot(jumpLanding, 1f);
                 break;
             case AudioClips.hit:
-                audioSource.PlayOneShot(enemyHit, 0.5f);
+                audioSource.PlayOneShot(enemyHit, 1f);
                 break;
             case AudioClips.enemyHit:
-                audioSource.PlayOneShot(enemyHit, 0.3f);
+                audioSource.PlayOneShot(enemyHit, 0.6f);
                 break;
             case AudioClips.magicAttack:
-                audioSource.PlayOneShot(magicAttack, 0.2f);
+                audioSource.PlayOneShot(magicAttack, 0.4f);
                 break;
             case AudioClips.powerUp:
-                audioSource.PlayOneShot(powerUp, 1);
+                audioSource.PlayOneShot(powerUp, 2f);
                 break;
             case AudioClips.ropeHit:
-                audioSource.PlayOneShot(ropeHit, 0.3f);
-                break;
-            case AudioClips.ropeGoing:
-                audioSource.PlayOneShot(ropeGoing, 0.6f);
+                audioSource.PlayOneShot(ropeHit, 0.6f);
                 break;
             case AudioClips.swoopingPlatform:
-                audioSource.PlayOneShot(swoopingPlatform, 0.6f);
+                audioSource.PlayOneShot(swoopingPlatform, 1.2f);
                 break;
             case AudioClips.shield:
-                audioSource.PlayOneShot(shield, 0.2f);
+                audioSource.PlayOneShot(shield, 0.4f);
                 break;
             case AudioClips.niffler:
-                audioSource.PlayOneShot(niffler, 0.4f);
+                audioSource.PlayOneShot(niffler, 0.8f);
+                break;
+            case AudioClips.melee:
+                audioSource.PlayOneShot(melee, 0.8f);
+                break;
+            case AudioClips.walk:
+                audioSource.PlayOneShot(walk, 0.6f);
                 break;
         }
+    }
+
+
+    public void SetVolume(float volume)
+    {
+        // Controls sound volume
+        effectsVolume = volume;
     }
 }

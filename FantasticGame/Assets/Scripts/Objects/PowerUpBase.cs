@@ -38,6 +38,9 @@ public abstract class PowerUpBase : MonoBehaviour
                 case PowerUpType.surpriseBox:
                     PickUpAbility(player);
                     break;
+                case PowerUpType.extraLife:
+                    PickUpAbility(player);
+                    break;
             }
         }
     }

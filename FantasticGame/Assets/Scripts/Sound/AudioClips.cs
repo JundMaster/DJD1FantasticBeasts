@@ -11,8 +11,9 @@ public enum AudioClips
     magicAttack,
     powerUp,
     ropeHit,
-    ropeGoing,
     swoopingPlatform,
     shield,
-    niffler
+    niffler,
+    melee,
+    walk
 }

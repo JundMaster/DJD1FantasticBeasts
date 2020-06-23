@@ -114,14 +114,14 @@ sealed public class PauseMenu : MonoBehaviour
         gamePaused = true;
     }
 
-    public static void LoadMenu()
+    public void LoadMenu()
     {
         Time.timeScale = 1f;
         gamePaused = false;
         SceneManager.LoadScene("MainMenu");
     }
 
-    public static void QuitGame()
+    public void QuitGame()
     {
         Application.Quit();
     }

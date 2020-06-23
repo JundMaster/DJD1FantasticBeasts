@@ -6,10 +6,12 @@ using UnityEngine.EventSystems;
 
 sealed public class MainMenu : MonoBehaviour
 {
+    // To get the last selected button
     private GameObject selectedButton;
 
     private void Start()
     {
+        // Last selected button
         selectedButton = new GameObject();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -43,7 +45,7 @@ sealed public class MainMenu : MonoBehaviour
 
     private void ResetStatics()
     {
-        LevelManager.NewtLives = 5;
+        LevelManager.NewtLives = 3;
         LevelManager.CreaturesSaved = 0;
         LevelManager.GAMEOVER = false;
         LevelManager.AssistMode = false;

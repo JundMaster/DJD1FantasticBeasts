@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 sealed public class Respawn_GameOverMenu : MonoBehaviour
 {
@@ -76,7 +77,9 @@ sealed public class Respawn_GameOverMenu : MonoBehaviour
     public void Restart()
     {
         // Loads the same level
-        PauseMenu.LoadMenu();
+        Time.timeScale = 1f;
+        PauseMenu.gamePaused = false;
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void Quit()

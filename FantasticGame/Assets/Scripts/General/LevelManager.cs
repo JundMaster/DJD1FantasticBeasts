@@ -20,7 +20,7 @@ sealed public class LevelManager : MonoBehaviour
 
 
     // newt Lives ////
-    public static int   NewtLives   { get; set; } = 5;
+    public static int   NewtLives   { get; set; } = 3;
     public static bool  AssistMode  { get; set; } = false;
     private int livesKeeper;
 

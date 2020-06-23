@@ -7,5 +7,6 @@ public enum PowerUpType
     health,
     mana,
     niffler,
-    surpriseBox
+    surpriseBox,
+    extraLife
 }

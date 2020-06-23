@@ -58,6 +58,10 @@ public class PlayerMovement : MonoBehaviour
     private float                       spriteEnableCounter;
     private float                       spriteEnableDelay;
 
+    // WALK SOUND TIMERS
+    private float walkSoundCounter;
+    private float walkSoundDelay;
+
     // Layers
     [SerializeField] private LayerMask  ceilingLayer;
     [SerializeField] private LayerMask  onGroundLayers;
@@ -101,7 +105,10 @@ public class PlayerMovement : MonoBehaviour
         spriteEnableDelay = 0.1f;
         spriteEnableCounter = spriteEnableDelay;
 
+        // Sounds
         GroundedSoundPlayable = true;
+        walkSoundDelay = 0.3f;
+        walkSoundCounter = walkSoundDelay;
     }
 
     void Update()
@@ -370,7 +377,6 @@ public class PlayerMovement : MonoBehaviour
                     ropeSprite.SetActive(true);
                     ropeRender.enabled = true;
 
-                    SoundManager.PlaySound(AudioClips.ropeGoing); // plays sound
                     SoundManager.PlaySound(AudioClips.ropeHit); // plays sound
                 }
             }
@@ -436,6 +442,20 @@ public class PlayerMovement : MonoBehaviour
         // Rope movement
         Vector2 rightBalance = new Vector2(1500f * Time.deltaTime, 0f);
         Vector2 leftBalance = new Vector2(-1500f * Time.deltaTime, 0f);
+
+
+        // Walking sound
+        if ((hAxis > 0.5f || hAxis < -0.5f) && OnGround)
+        {
+            walkSoundCounter -= Time.deltaTime;
+            if (walkSoundCounter < 0)
+            {
+                SoundManager.PlaySound(AudioClips.walk); // plays sound
+                walkSoundCounter = walkSoundDelay;
+            }
+        }
+        else walkSoundCounter = walkSoundDelay;
+
 
         // If the character is using a rope, ignore this speed
         if (!(usingRope))

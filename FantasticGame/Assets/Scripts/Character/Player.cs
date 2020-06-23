@@ -276,6 +276,7 @@ public class Player : MonoBehaviour
         Attacking = true; // FOR TRAIL
         animator.SetBool("attack", true);
         Stats.CanMeleeAttack = false;
+        SoundManager.PlaySound(AudioClips.melee);
 
 
         Collider2D[] treasureHit = Physics2D.OverlapCircleAll(meleePosition.position, 0.465f, treasureLayer);
