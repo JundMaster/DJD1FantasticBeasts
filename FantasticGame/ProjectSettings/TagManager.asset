@@ -12,6 +12,7 @@ TagManager:
   - walls
   - Boss
   - BossBoxSpawn
+  - backgroundMusic
   layers:
   - Default
   - TransparentFX

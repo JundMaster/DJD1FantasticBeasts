@@ -444,17 +444,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2 leftBalance = new Vector2(-1500f * Time.deltaTime, 0f);
 
 
-        // Walking sound
-        if ((hAxis > 0.5f || hAxis < -0.5f) && OnGround)
-        {
-            walkSoundCounter -= Time.deltaTime;
-            if (walkSoundCounter < 0)
-            {
-                SoundManager.PlaySound(AudioClips.walk); // plays sound
-                walkSoundCounter = walkSoundDelay;
-            }
-        }
-        else walkSoundCounter = walkSoundDelay;
+        
 
 
         // If the character is using a rope, ignore this speed
@@ -502,6 +492,11 @@ public class PlayerMovement : MonoBehaviour
             if (transform.right.x < 0)
                 transform.rotation = Quaternion.identity;
         }
+    }
+
+    public void StepSound()
+    {
+        SoundManager.PlaySound(AudioClips.walk); // plays sound
     }
 
 }

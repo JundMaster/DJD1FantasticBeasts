@@ -18,6 +18,7 @@ sealed public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject bossRespawnPrefab;
     [SerializeField] private GameObject bossRespawnAnimation;
 
+    [SerializeField] private GameObject blackScreenTransition;
 
     // newt Lives ////
     public static int   NewtLives   { get; set; } = 3;
@@ -41,8 +42,10 @@ sealed public class LevelManager : MonoBehaviour
     private float maxPositionReached;
     private bool reachedRespawn2, reachedRespawn3, reachedRespawn4, reachedRespawn5, reachedRespawn6;
 
-    private void Start()
+    private void Awake()
     {
+        blackScreenTransition.SetActive(true); // a black screen
+
         Time.timeScale = 1f;
 
         Instantiate(player, respawn1.position, respawn1.transform.rotation);
