@@ -27307,11 +27307,11 @@ MonoBehaviour:
     type: 3}
   niffler: {fileID: 5210145600633993996, guid: 6e7037ed5ff262e48aaa0125ded956a8, type: 3}
   nifflerRespawnPos: {fileID: 1040129281}
-  text1: {fileID: 4764763992460284350, guid: 5138acaa627ba0f44a9c3e48f91cb83c, type: 3}
+  text1: {fileID: 4764763992460284350, guid: d95d42b3449646049a7564c82d5b1d2f, type: 3}
   text1Pos: {fileID: 1987273218}
   goblin: {fileID: 5849754886814068401, guid: f8528c838d8a4a44d94df669cefd4872, type: 3}
   goblinRespawnPos: {fileID: 783433639}
-  text2: {fileID: 4764763992460284350, guid: ed625dbc881bf544daa20bd22a306823, type: 3}
+  text2: {fileID: 4764763992460284350, guid: a324af1f38222cc4b854aeafe7b73df1, type: 3}
   text2Pos: {fileID: 1349694588}
   firstBlackScreen: {fileID: 754228203}
   canvesToActive: {fileID: 862117532}
@@ -121546,7 +121546,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1985590669}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.11, y: -0.54, z: -38.007507}
+  m_LocalPosition: {x: -2.17, y: -0.67, z: -38.007507}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 742876798}
