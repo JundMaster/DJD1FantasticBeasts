@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4130881051258308909}
   - component: {fileID: 2490832357789072371}
   m_Layer: 0
-  m_Name: Attack and ranged new
+  m_Name: lookDown new
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39,7 +39,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0.47, y: 1.587}
-  m_SizeDelta: {x: 48.104248, y: 17.55249}
+  m_SizeDelta: {x: 43.763428, y: 12.280579}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &4764763992460284348
 MeshRenderer:
@@ -147,14 +147,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Press ''A'' to melee attack
-
-
-
-    Press ''D'' to cast a magic spell
-
-    this
-    spell costs some mana'
+  m_text: You can hold 'Down Arrow' to look down
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: decf7e23d4da75d4893f411c5fdbc422, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 0ea3b2970a138284a8a0cdcc883f9158, type: 2}
@@ -223,12 +216,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: -0.009145263, w: -0.04519689}
   m_textInfo:
     textComponent: {fileID: 2490832357789072371}
-    characterCount: 85
+    characterCount: 71
     spriteCount: 0
-    spaceCount: 17
-    wordCount: 17
+    spaceCount: 16
+    wordCount: 16
     linkCount: 0
-    lineCount: 4
+    lineCount: 2
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
