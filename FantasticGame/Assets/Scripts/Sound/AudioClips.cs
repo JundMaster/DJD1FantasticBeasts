@@ -15,5 +15,8 @@ public enum AudioClips
     shield,
     niffler,
     melee,
-    walk
+    walk,
+    textPopUp,
+    buttonSelected,
+    buttonScroll       
 }

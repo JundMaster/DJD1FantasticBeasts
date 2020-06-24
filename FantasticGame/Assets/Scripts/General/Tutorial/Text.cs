@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 sealed public class Text : MonoBehaviour
 {
-    [SerializeField] private TextMesh text;
+    [SerializeField] private TextMeshPro text;
 
     // Color text fadein
     private float alpha = 0;
@@ -19,6 +20,11 @@ sealed public class Text : MonoBehaviour
         camera = Camera.main;
 
         text.color = new Color(1, 1, 1, alpha);
+
+        if (LevelManager.WONGAME == false)
+        {
+            SoundManager.PlaySound(AudioClips.textPopUp);
+        }
     }
 
     // Update is called once per frame

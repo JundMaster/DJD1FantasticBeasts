@@ -100,4 +100,13 @@ sealed public class Respawn_GameOverMenu : MonoBehaviour
         Time.timeScale = 0f;
         gameOverMenu.SetActive(true);
     }
+
+    public void PlaySoundButtonSelect()
+    {
+        SoundManager.PlaySound(AudioClips.buttonSelected);
+    }
+    public void PlaySoundButtonScroll()
+    {
+        SoundManager.PlaySound(AudioClips.buttonScroll);
+    }
 }

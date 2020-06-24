@@ -16,6 +16,10 @@ sealed public class SoundManager : MonoBehaviour
     private static AudioClip niffler;
     private static AudioClip melee;
     private static AudioClip walk;
+    private static AudioClip textPopUp;
+    private static AudioClip buttonSelected;
+    private static AudioClip buttonScroll;
+
 
 
     private static AudioSource audioSource;
@@ -36,6 +40,9 @@ sealed public class SoundManager : MonoBehaviour
         niffler         = Resources.Load<AudioClip>("Sounds/niffler");
         melee           = Resources.Load<AudioClip>("Sounds/melee");
         walk            = Resources.Load<AudioClip>("Sounds/walk");
+        textPopUp = Resources.Load<AudioClip>("Sounds/textPopUp");
+        buttonSelected = Resources.Load<AudioClip>("Sounds/buttonSelected");
+        buttonScroll = Resources.Load<AudioClip>("Sounds/buttonScroll");
     }
 
     private void Update()
@@ -83,6 +90,15 @@ sealed public class SoundManager : MonoBehaviour
                 break;
             case AudioClips.walk:
                 audioSource.PlayOneShot(walk, 0.6f);
+                break;
+            case AudioClips.textPopUp:
+                audioSource.PlayOneShot(textPopUp, 2f);
+                break;
+            case AudioClips.buttonSelected:
+                audioSource.PlayOneShot(buttonSelected, 0.4f);
+                break;
+            case AudioClips.buttonScroll:
+                audioSource.PlayOneShot(buttonScroll, 1.2f);
                 break;
         }
     }

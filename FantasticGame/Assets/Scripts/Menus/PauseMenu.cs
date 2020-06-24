@@ -125,4 +125,13 @@ sealed public class PauseMenu : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public void PlaySoundButtonSelect()
+    {
+        SoundManager.PlaySound(AudioClips.buttonSelected);
+    }
+    public void PlaySoundButtonScroll()
+    {
+        SoundManager.PlaySound(AudioClips.buttonScroll);
+    }
 }

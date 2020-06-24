@@ -74,7 +74,8 @@ sealed public class LevelManager : MonoBehaviour
         if (p1 != null) if (p1.transform.position.x > CameraFollow.WinningRange) WONGAME = true;
 
         // Gameover condition // Turns Gameover status = true
-        if (NewtLives < 1) GAMEOVER = true;
+        if (NewtLives < 1 && AssistMode == false) GAMEOVER = true;
+        else GAMEOVER = false;
         
 
         if (p1 == null)

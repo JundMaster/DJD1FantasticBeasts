@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-sealed public class BGMusic : MonoBehaviour
+sealed public class AmbientSoundManager : MonoBehaviour
 {
     private static AudioSource audioSource;
-    private float musicVolume = 0.1f;
+    private float ambientVolume = 0.2f;
 
     void Start()
     {
@@ -16,12 +16,12 @@ sealed public class BGMusic : MonoBehaviour
     void Update()
     {
         // Sets volume = music volume
-        audioSource.volume = musicVolume;
+        audioSource.volume = ambientVolume;
     }
 
     public void SetVolume(float volume)
     {
         // Controls sound volume
-        musicVolume = volume;
+        ambientVolume = volume;
     }
 }
