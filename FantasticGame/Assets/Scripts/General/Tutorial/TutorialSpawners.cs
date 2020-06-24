@@ -6,11 +6,13 @@ sealed public class TutorialSpawners : MonoBehaviour
 {
     // Spawner related stuff
     [SerializeField] private Text[] spawner;
-    [SerializeField] private Transform[] spawnPositions;
+    [SerializeField] private Button[] buttonSpawner;
+    [SerializeField] private Transform[] textSpawnPositions;
+    [SerializeField] private Transform[] buttonSpawnerPositions;
     [SerializeField] private Transform[] spawnInitials;
 
     // Spawn times
-    public int spawnedTimes;
+    private int spawnedTimes;
 
     // ETC
     private Player p1;
@@ -18,7 +20,6 @@ sealed public class TutorialSpawners : MonoBehaviour
     void Start()
     {
         p1 = FindObjectOfType<Player>();
-
     }
 
     // Update is called once per frame
@@ -34,7 +35,8 @@ sealed public class TutorialSpawners : MonoBehaviour
             {
                 if (spawnedTimes == i)
                 {
-                    Instantiate(spawner[i], spawnPositions[i].position, transform.rotation);
+                    Instantiate(spawner[i], textSpawnPositions[i].position, transform.rotation);
+                    Instantiate(buttonSpawner[i], buttonSpawnerPositions[i].position, transform.rotation);
                     spawnedTimes++;
                 }
             }
