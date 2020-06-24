@@ -81,7 +81,7 @@ sealed public class CameraFollow : MonoBehaviour
         }
 
         // CAMERA WHEN PLAYER VELOCITY IS TOO HIGH ------------------------------------------------------------------
-        if (minRange == false && maxRange == false)
+        if (maxRange == false) // && minRange == false 
         {
             if (p1 != null)
             {
@@ -104,6 +104,7 @@ sealed public class CameraFollow : MonoBehaviour
             transform.position = new Vector3(maxLevelRangeXmax, transform.position.y, transform.position.z);
         }
         else maxRange = false;
+
 
         if (transform.position.x - 2.5f <= maxLevelRangeXmin)
         {
