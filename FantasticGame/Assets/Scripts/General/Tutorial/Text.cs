@@ -19,7 +19,7 @@ sealed public class Text : MonoBehaviour
         p1 = FindObjectOfType<Player>();
         camera = Camera.main;
 
-        text.color = new Color(1, 1, 1, alpha);
+        if (text) text.color = new Color(1, 1, 1, alpha);
 
         if (LevelManager.WONGAME == false)
         {
@@ -36,7 +36,7 @@ sealed public class Text : MonoBehaviour
         if (alpha < 1)
             alpha += 0.5f * Time.fixedDeltaTime;
 
-        text.color = new Color(1, 1, 1, alpha);
+        if (text) text.color = new Color(1, 1, 1, alpha);
 
         // Destroys the object
         OutOfBounds();
