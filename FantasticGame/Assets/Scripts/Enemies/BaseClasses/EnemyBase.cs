@@ -12,6 +12,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] protected Transform    attackPosition;
     [SerializeField] protected GameObject   healthPickUp, manaPickUp, deathSpawn;
     [SerializeField] protected Transform    groundRangeCheck, groundCheck, wallCheck;
+    [SerializeField] protected RectTransform healthBarRect;
 
     [SerializeField] protected float    HP;          // CURRENT HP
     [SerializeField] protected float    enemyDamage;     // ENEMY DAMAGE

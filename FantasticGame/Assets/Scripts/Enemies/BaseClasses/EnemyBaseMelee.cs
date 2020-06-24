@@ -23,8 +23,9 @@ public class EnemyBaseMelee : EnemyBase
 
         Stats = new Stats
         {
-            IsAlive         = true,
-            CurrentHP       = HP,
+            IsAlive     = true,
+            CurrentHP   = HP,
+            MaxHP       = HP,
 
             MeleeDamage     = enemyDamage,
             CanMeleeAttack  = false,
@@ -49,6 +50,11 @@ public class EnemyBaseMelee : EnemyBase
         if (p1 == null)
         {
             p1 = FindObjectOfType<PlayerMovement>();
+        }
+
+        if (healthBarRect)
+        {
+            healthBarRect.localScale = new Vector2(Stats.CurrentHP / Stats.MaxHP, 1f);
         }
 
         // OTHER ATTACKS ANIMATION DELAY

@@ -31,6 +31,8 @@ public class EnemyBaseRanged : EnemyBase
         Stats.IsAlive   = true;
         startingPos     = transform.position;
         Stats.CurrentHP = HP;
+        Stats.MaxHP     = HP;
+
 
         // Attack Delay
         Stats.CanRangeAttack    = false;
@@ -59,6 +61,11 @@ public class EnemyBaseRanged : EnemyBase
         {
             speed = 0;
             limitWalkingRangeReached = true;
+        }
+
+        if (healthBarRect)
+        {
+            healthBarRect.localScale = new Vector2(Stats.CurrentHP / Stats.MaxHP, 1f);
         }
 
         // ANIMATIONS
