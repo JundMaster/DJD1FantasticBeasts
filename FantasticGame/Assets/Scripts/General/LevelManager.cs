@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using UnityEngine.SceneManagement;
 
 sealed public class LevelManager : MonoBehaviour
 {
@@ -27,6 +26,7 @@ sealed public class LevelManager : MonoBehaviour
 
     // GAME STATUS
     public static bool GAMEOVER { get; set; } = false;
+    public static bool WONGAME { get; set; } = false;
 
     private Player  p1;
 
@@ -66,9 +66,16 @@ sealed public class LevelManager : MonoBehaviour
     private void Update()
     {
         // Lives
-        if (NewtLives < 0) NewtLives = 0;
-        if (AssistMode) NewtLives = livesKeeper;
+        if (AssistMode) NewtLives = livesKeeper; // Always keeps the same lives
         else livesKeeper = NewtLives;
+
+
+        // Winning condition
+        if (p1 != null) if (p1.transform.position.x > CameraFollow.WinningRange) WONGAME = true;
+
+        // Gameover condition // Turns Gameover status = true
+        if (NewtLives < 1) GAMEOVER = true;
+        
 
         if (p1 == null)
         {
@@ -81,6 +88,7 @@ sealed public class LevelManager : MonoBehaviour
                 maxPositionReached = p1.transform.position.x;
         }
 
+        // RESPAWNS POSITIONS /////////////////////////////////////////////////////////////////////////
         // RESPAWN 2
         if (maxPositionReached > respawn2.transform.position.x && reachedRespawn2 == false)
         {
@@ -111,7 +119,7 @@ sealed public class LevelManager : MonoBehaviour
             reachedRespawn6 = true;
             Instantiate(respawnPrefab, respawn6.transform.position, respawnPrefab.transform.rotation);
         }
-
+        ///////////////////////////////////////////////////////////////////////////////////////////////
 
         // Spawns boss
         if (p1 != null)
@@ -145,6 +153,7 @@ sealed public class LevelManager : MonoBehaviour
     }
 
 
+    // Respawns depending on the position reached
     public void Respawn()
     {
         // RESPAWN1

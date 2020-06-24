@@ -16,6 +16,7 @@ sealed public class CameraFollow : MonoBehaviour
     [SerializeField] private float maxLevelRangeXmax;
     private bool minRange;
     private bool maxRange;
+    public static float WinningRange { get; private set; }
 
     // LOOKING TIMER
     private float lookingCounter;
@@ -29,6 +30,8 @@ sealed public class CameraFollow : MonoBehaviour
         lookingCounter  = lookingDelay;
 
         originalOffset = offset;
+
+        WinningRange = maxLevelRangeXmax;
     }
 
     private void FixedUpdate()
@@ -94,10 +97,11 @@ sealed public class CameraFollow : MonoBehaviour
 
         // MAX CAMERA POSITIONS -------------------------------------------------------------------------------------
         
-        if (transform.position.x + 2.5f >= maxLevelRangeXmax)
+        if (transform.position.x >= maxLevelRangeXmax) //maxLevelRangeXmax
         {
             maxRange = true;
-            transform.position = new Vector3(maxLevelRangeXmax - 2.5f, transform.position.y, transform.position.z);
+            //transform.position = new Vector3(maxLevelRangeXmax - 2.5f, transform.position.y, transform.position.z);
+            transform.position = new Vector3(maxLevelRangeXmax, transform.position.y, transform.position.z);
         }
         else maxRange = false;
 

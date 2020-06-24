@@ -17,7 +17,7 @@ public class EnemyBaseRanged : EnemyBase
     // Attack
     protected bool shootAnimation;
 
-    protected void Awake()
+    protected virtual void Awake()
     {
         p1 = FindObjectOfType<PlayerMovement>();
     }
@@ -124,7 +124,7 @@ public class EnemyBaseRanged : EnemyBase
 
     // Movement, turns 180 if reaches max position || if collides against a wall || if doesn't detect ground
     // Uses a random timer to turn the enemy
-    protected void Movement()
+    protected virtual void Movement()
     {
         if (attacking == false)
         {

@@ -22,11 +22,11 @@ sealed public class SwoopingEvilPlatform : MonoBehaviour
         dieCounter = 20f;
         camera = Camera.main;
 
-        if (SwoopingEvilPlatform.IsAlive)
+        if (IsAlive)
         {
             StartCoroutine(swoopingSound());
         }
-        else if (!SwoopingEvilPlatform.IsAlive)
+        else if (!IsAlive)
         {
             StopCoroutine(swoopingSound());
         }

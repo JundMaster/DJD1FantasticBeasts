@@ -35,7 +35,7 @@ sealed public class PauseMenu : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (gamePaused)
+        if (gamePaused && LevelManager.WONGAME == false)
         {
             // Keeps a button selected
             if (EventSystem.current.currentSelectedGameObject == null)
@@ -51,10 +51,10 @@ sealed public class PauseMenu : MonoBehaviour
         if (p1 == null) p1 = FindObjectOfType<Player>();
 
         // Only if the player is alive and the game isn't over
-        if (LevelManager.GAMEOVER == false && p1 != null && p1.Stats.IsAlive && Respawn_GameOverMenu.inRespawnMenu == false)
+        if (p1 != null && p1.Stats.IsAlive && Respawn_GameOverMenu.InRespawnMenu == false)
         {
             // When the player presses ESC
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape) && LevelManager.WONGAME == false)
             {
                 if (gamePaused)
                 {   // If the player isn't in main pause menu

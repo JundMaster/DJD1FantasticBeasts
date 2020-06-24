@@ -15,7 +15,7 @@ sealed public class Respawn_GameOverMenu : MonoBehaviour
     [SerializeField] private GameObject gameOverMenu;
 
     // Tells if the player is currently in the respawn menu
-    public static bool inRespawnMenu { get; private set; } = false;
+    public static bool InRespawnMenu { get; private set; } = false;
 
     // Player
     private Player p1;
@@ -47,18 +47,18 @@ sealed public class Respawn_GameOverMenu : MonoBehaviour
             }
         }
 
-
-        // Turns Gameover status = true (takes effect on next death)
-        if (LevelManager.NewtLives < 1) LevelManager.GAMEOVER = true;
         
         // Respawn ( only if the game isn't over ) or gameover
         if (p1.Stats.IsAlive == false)
         {
             if (LevelManager.GAMEOVER)
+            {
+                InRespawnMenu = true;
                 GameOver();
+            }
             else
             {
-                inRespawnMenu = true;
+                InRespawnMenu = true;
                 RespawnMenu();
             }
         }
@@ -71,7 +71,7 @@ sealed public class Respawn_GameOverMenu : MonoBehaviour
         LevelManager.NewtLives--;
         checkpointRespawnMenu.SetActive(false);
         Time.timeScale = 1f;
-        inRespawnMenu = false;
+        InRespawnMenu = false;
     }
 
     public void Restart()
@@ -79,6 +79,7 @@ sealed public class Respawn_GameOverMenu : MonoBehaviour
         // Loads the same level
         Time.timeScale = 1f;
         PauseMenu.gamePaused = false;
+        InRespawnMenu = false;
         SceneManager.LoadScene("MainMenu");
     }
 

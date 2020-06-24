@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private Vector2     currentVelocity;
     private float       hAxis;
-    private float       runSpeed;
+    public float        RunSpeed { get; private set; }
 
     // CROUCHED
     [SerializeField] private BoxCollider2D      boxCol;
@@ -289,28 +289,33 @@ public class PlayerMovement : MonoBehaviour
         float jumpSpeed = 3f;
         float jumpMaxTime = 0.15f;
 
-        // Jump conditions
-        if (Input.GetButtonDown("Jump") && coyoteCounter > 0 && Rb.velocity.y < 0.1)
+        
+        // Prevents player from jumping after boss
+        if (!Boss.BossDefeated)
         {
-            // If the player jumps, gravityScale is set to 0
-            usingCrouch = false;
-            currentVelocity.y = jumpSpeed;
-            Rb.gravityScale = 0.0f;
-            jumpTime = Time.time;
-            OnGround = false;
-            jumped = true;
+            // Jump conditions
+            if (Input.GetButtonDown("Jump") && coyoteCounter > 0 && Rb.velocity.y < 0.1)
+            {
+                // If the player jumps, gravityScale is set to 0
+                usingCrouch = false;
+                currentVelocity.y = jumpSpeed;
+                Rb.gravityScale = 0.0f;
+                jumpTime = Time.time;
+                OnGround = false;
+                jumped = true;
 
-            SoundManager.PlaySound(AudioClips.jump); // plays sound
-        }
-        else if ((Input.GetButton("Jump") && ((Time.time - jumpTime) < jumpMaxTime)))
-        {
-            // While pressing jump, how much time has passed since jump was pressed
-            // Jumps until jumpTime reaches jumpMaxTime
-            OnGround = false;
-        }
-        else
-        {
-            Rb.gravityScale = 5.0f;
+                SoundManager.PlaySound(AudioClips.jump); // plays sound
+            }
+            else if ((Input.GetButton("Jump") && ((Time.time - jumpTime) < jumpMaxTime)))
+            {
+                // While pressing jump, how much time has passed since jump was pressed
+                // Jumps until jumpTime reaches jumpMaxTime
+                OnGround = false;
+            }
+            else
+            {
+                Rb.gravityScale = 5.0f;
+            }
         }
     }
 
@@ -435,21 +440,18 @@ public class PlayerMovement : MonoBehaviour
     void Movement()
     {
         // Running speed
-        if (player.UsingShield) runSpeed = 0f;
-        if (circleCol.enabled == true && player.UsingShield == true) runSpeed = 0f;
-        if (circleCol.enabled == true && player.UsingShield == false) runSpeed = 0f;
-        if (circleCol.enabled == false && player.UsingShield == false) runSpeed = 2f;
+        if (player.UsingShield) RunSpeed = 0f;
+        if (circleCol.enabled == true && player.UsingShield == true) RunSpeed = 0f;
+        if (circleCol.enabled == true && player.UsingShield == false) RunSpeed = 0f;
+        if (circleCol.enabled == false && player.UsingShield == false) RunSpeed = 2f;
         // Rope movement
         Vector2 rightBalance = new Vector2(1500f * Time.deltaTime, 0f);
         Vector2 leftBalance = new Vector2(-1500f * Time.deltaTime, 0f);
 
 
-        
-
-
         // If the character is using a rope, ignore this speed
         if (!(usingRope))
-            currentVelocity = new Vector2(runSpeed * hAxis, currentVelocity.y);
+            currentVelocity = new Vector2(RunSpeed * hAxis, currentVelocity.y);
 
         if (usingRope && rope.distance > 0.8f)
         {

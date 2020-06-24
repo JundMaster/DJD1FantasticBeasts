@@ -49,5 +49,10 @@ sealed public class MainMenu : MonoBehaviour
         LevelManager.CreaturesSaved = 0;
         LevelManager.GAMEOVER = false;
         LevelManager.AssistMode = false;
+        LevelManager.WONGAME = false;
+        LevelManager.reachedBoss = false;
+        PauseMenu.gamePaused = false;
+        Boss.BossDefeated = false;
+        
     }
 }
