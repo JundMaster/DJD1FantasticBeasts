@@ -58,7 +58,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1988814185636755353}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1427029995
 GameObject:
@@ -88,7 +88,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1988814185636755353}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1774078115
 GameObject:
@@ -118,7 +118,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1988814185636755353}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1571090758685688632
 GameObject:
@@ -226,7 +226,7 @@ RectTransform:
   m_Children:
   - {fileID: 23347929778585612}
   m_Father: {fileID: 1988814185636755353}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -282,6 +282,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b15e419d44cadf45812baa26eb8c82b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &5226096487346956421
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3864804333257120205}
+  m_Layer: 13
+  m_Name: backStab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3864804333257120205
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5226096487346956421}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.36, y: 0.136, z: 0}
+  m_LocalScale: {x: 0.6666667, y: 0.6666667, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1988814185636755353}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5716902637164806937
 GameObject:
   m_ObjectHideFlags: 0
@@ -347,6 +377,7 @@ RectTransform:
   - {fileID: 5849754887289469781}
   - {fileID: 5129092121907661594}
   - {fileID: 98882452}
+  - {fileID: 3864804333257120205}
   - {fileID: 1058641897}
   - {fileID: 1427029996}
   - {fileID: 1774078116}
@@ -377,6 +408,10 @@ MonoBehaviour:
   boxesAndwalls:
     serializedVersion: 2
     m_Bits: 131072
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  backStab: {fileID: 3864804333257120205}
   attackPosition: {fileID: 5849754887289469781}
   healthPickUp: {fileID: 1343978244480085303, guid: 83ede7248b1352943a52dbf5ab5f5be2,
     type: 3}

@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-sealed public class Boss : EnemyBaseRanged
+sealed public class Boss : Human
 {
-    // Position for crouch shot
-    [SerializeField] private Transform magicCrouchPosition;
-
     // Timers for box spawn + box spawn
     [SerializeField] private GameObject boxSpawn;
     [SerializeField] private Transform position1;
@@ -36,7 +33,6 @@ sealed public class Boss : EnemyBaseRanged
         PushForce = attackPushForce;
 
         // Position and Movement
-        limitWalkingRangeReached = false;
         waitingTimeCounter = 0.5f;
         originalSpeed = speed;
         canMoveTimer = 0;
@@ -77,56 +73,6 @@ sealed public class Boss : EnemyBaseRanged
         }
     }
 
-    protected override void AimCheck()
-    {
-        if (p1 != null)
-        {
-            RaycastHit2D aimTop = Physics2D.Raycast(attackPosition.position, attackPosition.right, maxAimRange);
-            RaycastHit2D aimJump = Physics2D.Raycast(magicJumpPosition.position, attackPosition.right, maxAimRange);
-            RaycastHit2D aimCrouch = Physics2D.Raycast(magicCrouchPosition.position, attackPosition.right, maxAimRange);
-            if (aimTop.rigidbody == p1.Rb || aimJump.rigidbody == p1.Rb || aimCrouch.rigidbody == p1.Rb)
-            {
-                shootAnimation = false; // FOR ANIMATOR
-                attacking = true; // FOR ANIMATOR
-
-                // Sets a timer to move, sets a timer to attack
-                canMoveTimer = attackDelay / 2;
-                Stats.RangedAttackDelay -= Time.deltaTime;
-
-                if (Stats.RangedAttackDelay < 0)
-                {
-                    if (aimTop.rigidbody == p1.Rb || aimJump.rigidbody == p1.Rb) Shoot();
-                    else if (aimCrouch.rigidbody == p1.Rb) ShootCrouch();
-
-                    Stats.RangedAttackDelay = attackDelay;
-                }
-            }
-            else
-            {   // If the player leaves max range, if the timer is less than 0, the enemy moves
-                canMoveTimer -= Time.deltaTime;
-
-                if (canMoveTimer <= 0)
-                {
-                    shootAnimation = false; // FOR ANIMATOR
-                    attacking = false; // FOR ANIMATOR
-                    if (staticEnemy == false) Movement();
-                }
-            }
-        }
-    }
-
-    private void ShootCrouch()
-    {
-        SoundManager.PlaySound(AudioClips.magicAttack); // Plays sound
-
-        shootAnimation = true; // FOR ANIMATOR
-
-        GameObject projectileObject = Instantiate(magicPrefab, magicCrouchPosition.position, attackPosition.rotation);
-        EnemyAmmunition ammo = projectileObject.GetComponent<EnemyAmmunition>();
-
-        ammo.enemy = this;
-    }
-
     protected override void Die()
     {
         // ALIVE --------------------------------------------------------------------------------------
@@ -147,5 +93,4 @@ sealed public class Boss : EnemyBaseRanged
             Destroy(gameObject);
         }
     }
-
 }

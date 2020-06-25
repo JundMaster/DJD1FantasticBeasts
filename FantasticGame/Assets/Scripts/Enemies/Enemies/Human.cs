@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-sealed public class Human : EnemyBaseRanged
+public class Human : EnemyBaseRanged
 {
     [SerializeField] private Transform magicCrouchPosition;
 
@@ -24,7 +24,7 @@ sealed public class Human : EnemyBaseRanged
 
                 if (Stats.RangedAttackDelay < 0)
                 {
-                    Shoot();
+                    shootAnimation = true; // FOR ANIMATOR // CALLS SHOOT()
                     Stats.RangedAttackDelay = attackDelay;
                 }
             }

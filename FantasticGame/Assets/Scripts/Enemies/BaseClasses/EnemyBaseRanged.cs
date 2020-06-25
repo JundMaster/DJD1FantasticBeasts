@@ -33,7 +33,6 @@ public class EnemyBaseRanged : EnemyBase
         Stats.CurrentHP = HP;
         Stats.MaxHP     = HP;
 
-
         // Attack Delay
         Stats.CanRangeAttack    = false;
         Stats.RangedAttackDelay = attackDelay;
@@ -43,7 +42,6 @@ public class EnemyBaseRanged : EnemyBase
         PushForce = attackPushForce;
 
         // Position and Movement
-        limitWalkingRangeReached = false;
         waitingTimeCounter      = Random.Range(1f, 3f);
         originalSpeed           = speed;
         canMoveTimer            = 0;
@@ -60,7 +58,6 @@ public class EnemyBaseRanged : EnemyBase
         if (staticEnemy)
         {
             speed = 0;
-            limitWalkingRangeReached = true;
         }
 
         if (healthBarRect)
@@ -68,15 +65,18 @@ public class EnemyBaseRanged : EnemyBase
             healthBarRect.localScale = new Vector2(Stats.CurrentHP / Stats.MaxHP, 1f);
         }
 
-        // ANIMATIONS
-        Animations();
-        animator.SetBool("shootAnimation", shootAnimation);
+        //  BACKSTAB ----------------------------------------------------------------------------------
+        BackStabCheck();
 
         //  AIMING CHECK ------------------------------------------------------------------------------
         AimCheck();
 
         // Checks if the enemy dies
         base.Die();
+
+        // ANIMATIONS
+        Animations();
+        animator.SetBool("shootAnimation", shootAnimation);
     }
 
 
@@ -98,7 +98,7 @@ public class EnemyBaseRanged : EnemyBase
 
                 if (Stats.RangedAttackDelay < 0)
                 {
-                    Shoot();
+                    shootAnimation = true; // FOR ANIMATOR // CALLS SHOOT
                     Stats.RangedAttackDelay = attackDelay;
                 }
             }
@@ -116,12 +116,10 @@ public class EnemyBaseRanged : EnemyBase
         }        
     }
 
-    // Shoots
-    protected void Shoot()
+    // Shoots // CALLED WHEN THE ENEMIES SHOOT IN THE ANIMATION // ANIMATION EVENT
+    protected virtual void Shoot()
     {
         SoundManager.PlaySound(AudioClips.magicAttack); // Plays sound
-
-        shootAnimation = true; // FOR ANIMATOR
 
         GameObject projectileObject = Instantiate(magicPrefab, attackPosition.position, attackPosition.rotation);
         EnemyAmmunition ammo = projectileObject.GetComponent<EnemyAmmunition>();
@@ -129,51 +127,33 @@ public class EnemyBaseRanged : EnemyBase
         ammo.enemy = this;
     }
 
-    // Movement, turns 180 if reaches max position || if collides against a wall || if doesn't detect ground
-    // Uses a random timer to turn the enemy
-    protected virtual void Movement()
+    // Checks if the player is on the enemy's back
+    protected override void BackStabCheck()
     {
-        if (attacking == false)
+        Collider2D checkSurround = Physics2D.OverlapCircle(backStab.position, 0.32f, playerLayer);
+
+        if (checkSurround)
         {
-            Collider2D isGroundedCheck = Physics2D.OverlapCircle(groundCheck.position, 0.05f, groundLayer);
-            if (isGroundedCheck)
-            {
-                transform.position += transform.right * speed * Time.deltaTime;
+            // Turns attack off
+            attacking = false;
 
-                // FRONT WALLS
-                Collider2D frontWall = Physics2D.OverlapCircle(wallCheck.position, 0.02f, boxesAndwalls);
-                if (frontWall != null && limitWalkingRangeReached == false)
-                {
-                    limitWalkingRangeReached = true;
-                }
+            // Sets max distances to false
+            leftDistReached = false;
+            rightDistReached = false;
 
-                Collider2D goundRangeCheck = Physics2D.OverlapCircle(groundRangeCheck.position, 0.1f, groundLayer);
-                // NO FLOOR
-                if (goundRangeCheck == null && limitWalkingRangeReached == false)
-                {
-                    limitWalkingRangeReached = true;
-                }
+            // Rotates the enemy and sets its original speed
+            transform.Rotate(0, 180f, 0f);
+            speed = originalSpeed;
 
-                // MAX RANGE
-                if ((transform.position.x > startingPos.x + limitRange || transform.position.x < startingPos.x - limitRange) && limitWalkingRangeReached == false)
-                {
-                    limitWalkingRangeReached = true;
-                }
+            canMoveTimer = attackDelay * 2f;
 
-                // WAITING TIME DELAY // If it reaches the limit distance, starts walking back
-                if (limitWalkingRangeReached)
-                {
-                    waitingTimeCounter -= Time.deltaTime;
-                    speed = 0;
-                }
-                if (waitingTimeCounter < 0)
-                {
-                    speed = originalSpeed;
-                    transform.Rotate(0, 180f, 0f);
-                    limitWalkingRangeReached = false;
-                    waitingTimeCounter = Random.Range(1f, 3f);
-                }
-            }
+            // Gives a new waiting timer for the next time it reaches max position
+            waitingTimeCounter = Random.Range(1f, 3f);
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (backStab) Gizmos.DrawWireSphere(backStab.position, 0.32f);
     }
 }

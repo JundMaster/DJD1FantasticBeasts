@@ -28,7 +28,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5849754886814068402}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1058641896
 GameObject:
@@ -58,7 +58,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5849754886814068402}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1427029995
 GameObject:
@@ -88,7 +88,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5849754886814068402}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &437982213466290410
 GameObject:
@@ -122,7 +122,7 @@ RectTransform:
   m_Children:
   - {fileID: 5302326119770637237}
   m_Father: {fileID: 5849754886814068402}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -178,6 +178,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b15e419d44cadf45812baa26eb8c82b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &460742395651437457
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 47596225161438732}
+  m_Layer: 13
+  m_Name: backStab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &47596225161438732
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 460742395651437457}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.401, y: 0.29, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5849754886814068402}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4410163314045007635
 GameObject:
   m_ObjectHideFlags: 0
@@ -273,6 +303,7 @@ Transform:
   - {fileID: 5849754887289469781}
   - {fileID: 5600710340282520208}
   - {fileID: 886074153621237573}
+  - {fileID: 47596225161438732}
   - {fileID: 98882452}
   - {fileID: 1058641897}
   - {fileID: 1427029996}
@@ -298,6 +329,10 @@ MonoBehaviour:
   boxesAndwalls:
     serializedVersion: 2
     m_Bits: 131072
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  backStab: {fileID: 47596225161438732}
   attackPosition: {fileID: 5849754887289469781}
   healthPickUp: {fileID: 1343978244480085303, guid: 83ede7248b1352943a52dbf5ab5f5be2,
     type: 3}
@@ -411,7 +446,7 @@ BoxCollider2D:
   m_Offset: {x: -0.04, y: 0.24}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
+    pivot: {x: 0.2938777, y: 0}
     oldSize: {x: 0.6, y: 0.6}
     newSize: {x: 0.3, y: 0.3}
     adaptiveTilingThreshold: 0.5
