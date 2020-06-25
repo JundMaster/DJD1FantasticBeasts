@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform      shieldPosition;
     [SerializeField] private GameObject     shieldPrefab;
     private bool                            canUseShield;
+    bool                                    pressShield;
 
     // SWOOPING EVIL
     [SerializeField] private Transform      swoopingPosition;
@@ -118,7 +119,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (PauseMenu.gamePaused == false && Respawn_GameOverMenu.InRespawnMenu == false && IntroScene.INTROSCENE == false)
+        if (PauseMenu.gamePaused == false && Respawn_GameOverMenu.InRespawnMenu == false)
         {
             // UPDATE VARIABLES ----------------------------------------------------------------------------
             CurrentMana = Stats.CurrentMana;
@@ -132,15 +133,20 @@ public class Player : MonoBehaviour
             Stats.RegenMana();
             animator.SetBool("attack", false);
             animator.SetBool("rangedAttack", false);
-            bool pressShield = Input.GetKey("s");
-            if (Input.GetKey("up"))
-                LookingUp = true;
-            else 
-                LookingUp = false;
-            if (Input.GetKey("down") && Movement.OnGround)
-                LookingDown = true;
-            else
-                LookingDown = false;
+
+            // Disables on cutscene
+            if (IntroScene.CUTSCENE == false)
+            {
+                pressShield = Input.GetKey("s");
+                if (Input.GetKey("up"))
+                    LookingUp = true;
+                else
+                    LookingUp = false;
+                if (Input.GetKey("down") && Movement.OnGround)
+                    LookingDown = true;
+                else
+                    LookingDown = false;
+            }
             // ---------------------------------------------------------------------------------------------
 
             // SHIELD --------------------------------------------------------------------------------------
@@ -174,9 +180,17 @@ public class Player : MonoBehaviour
                 canScreenShake = true;
             }
 
-            if (Input.GetButtonDown("Fire2"))
-                if (Stats.CanUseSpell() && Stats.CanRangeAttack && !UsingShield && !Movement.CrouchGetter && !Movement.usingRope)
-                    animator.SetBool("rangedAttack", true); // START ANIMATION
+            // Disables on cutscene
+            if (IntroScene.CUTSCENE == false)
+            {
+                if (Input.GetButtonDown("Fire2"))
+                {
+                    if (Stats.CanUseSpell() && Stats.CanRangeAttack && !UsingShield && !Movement.CrouchGetter && !Movement.usingRope)
+                    {
+                        animator.SetBool("rangedAttack", true); // START ANIMATION
+                    }
+                }
+            }
             // ---------------------------------------------------------------------------------------------
 
 
@@ -192,11 +206,15 @@ public class Player : MonoBehaviour
                 Attacking = false; // FOR TRAIL
             }
 
-            if (Input.GetButtonDown("Fire1"))
+            // Disables on cutscene
+            if (IntroScene.CUTSCENE == false)
             {
-                if (Stats.CanMeleeAttack && !UsingShield && !Movement.CrouchGetter && !Movement.usingRope)
+                if (Input.GetButtonDown("Fire1"))
                 {
-                    MeleeAttack();
+                    if (Stats.CanMeleeAttack && !UsingShield && !Movement.CrouchGetter && !Movement.usingRope)
+                    {
+                        MeleeAttack();
+                    }
                 }
             }
 

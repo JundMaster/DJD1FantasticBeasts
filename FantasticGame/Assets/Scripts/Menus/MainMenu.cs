@@ -53,6 +53,7 @@ sealed public class MainMenu : MonoBehaviour
         LevelManager.reachedBoss = false;
         PauseMenu.gamePaused = false;
         Boss.BossDefeated = false;
+        IntroScene.CUTSCENE = false;
     }
 
     public void PlaySoundButtonSelect()

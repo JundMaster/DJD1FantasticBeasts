@@ -12,10 +12,10 @@ sealed public class CameraFollow : MonoBehaviour
     private Vector3     originalOffset;
 
     // CAMERA RANGES
-    [SerializeField] private float maxLevelRangeXmin;
     [SerializeField] private float maxLevelRangeXmax;
-    private bool minRange;
+    [SerializeField] private float canMoveCamera;
     private bool maxRange;
+    public bool cameraMoving { get; private set; }
     public static float WinningRange { get; private set; }
 
     // LOOKING TIMER
@@ -100,18 +100,9 @@ sealed public class CameraFollow : MonoBehaviour
         if (transform.position.x >= maxLevelRangeXmax) //maxLevelRangeXmax
         {
             maxRange = true;
-            //transform.position = new Vector3(maxLevelRangeXmax - 2.5f, transform.position.y, transform.position.z);
             transform.position = new Vector3(maxLevelRangeXmax, transform.position.y, transform.position.z);
         }
         else maxRange = false;
-
-
-        if (transform.position.x - 2.5f <= maxLevelRangeXmin)
-        {
-            minRange = true;
-            transform.position = new Vector3(maxLevelRangeXmin + 2.5f, transform.position.y, transform.position.z);
-        }
-        else minRange = false;
 
 
         // CAMERA MOVEMENT ------------------------------------------------------------------------------------------
@@ -149,12 +140,16 @@ sealed public class CameraFollow : MonoBehaviour
                     Vector3 camDirection = movePosition - transform.position;
 
                     // Cam movement
-                    transform.position += camDirection * feedBackLoop;
+                    if (p1.transform.position.x > canMoveCamera)
+                    {
+
+                        transform.position += camDirection * feedBackLoop;
+                    }
                 }
             }
-        } 
+        }
         // ----------------------------------------------------------------------------------------------------------
-
+        if (p1.transform.position.x > canMoveCamera) cameraMoving = true;
     }
 
     // Creates a rectangle
@@ -185,7 +180,7 @@ sealed public class CameraFollow : MonoBehaviour
         Gizmos.DrawLine(p4, p1);
 
         Gizmos.color = new Color(255, 0, 0);
-        Gizmos.DrawLine(new Vector3(maxLevelRangeXmin, -30f, 0f), new Vector3(maxLevelRangeXmin, 30f, 0f));
+        Gizmos.DrawLine(new Vector3(canMoveCamera, -30f, 0f), new Vector3(canMoveCamera, 30f, 0f));
         Gizmos.DrawLine(new Vector3(maxLevelRangeXmax, -30f, 0f), new Vector3(maxLevelRangeXmax, 30f, 0f));
     }
     

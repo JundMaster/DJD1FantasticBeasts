@@ -109,7 +109,9 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // Gets hAxis and sets velocity // Update Variables
-        hAxis           = Input.GetAxis("Horizontal");
+        // Disables on cutscene
+        if (IntroScene.CUTSCENE == false) hAxis = Input.GetAxis("Horizontal");
+
         Position        = transform.position;
         currentVelocity = Rb.velocity;
         CrouchGetter    = circleCol.enabled;
@@ -218,19 +220,23 @@ public class PlayerMovement : MonoBehaviour
     {
         Collider2D collisionTop = Physics2D.OverlapCircle(ceilingOverHead.position, 0.02f, onGroundLayers);
 
-        // Checks if the player pressed crouch
-        if (Input.GetKey("down") && OnGround)
+        // Disables on cutscene
+        if (IntroScene.CUTSCENE == false)
         {
-            usingCrouch = true;
-            IsCrouched = true;
-            circleCol.enabled = true;
-            boxCol.enabled = false;
+            // Checks if the player pressed crouch
+            if (Input.GetKey("down") && OnGround)
+            {
+                usingCrouch = true;
+                IsCrouched = true;
+                circleCol.enabled = true;
+                boxCol.enabled = false;
+            }
+            else if (Input.GetKeyUp("down") && OnGround)
+            {
+                usingCrouch = false;
+            }
         }
-        else if (Input.GetKeyUp("down") && OnGround)
-        {
-            usingCrouch = false;
 
-        }
         // If it's not using crouch AND the collision isn't detecting a roof, stand up
         if (usingCrouch == false && IsCrouched == false)
         {
@@ -288,8 +294,9 @@ public class PlayerMovement : MonoBehaviour
         // Prevents player from jumping after boss
         if (!Boss.BossDefeated)
         {
+            // Disables on cutscene
             // Jump conditions
-            if (Input.GetButtonDown("Jump") && coyoteCounter > 0 && Rb.velocity.y < 0.1)
+            if (IntroScene.CUTSCENE == false && Input.GetButtonDown("Jump") && coyoteCounter > 0 && Rb.velocity.y < 0.1)
             {
                 // If the player jumps, gravityScale is set to 0
                 usingCrouch = false;

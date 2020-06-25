@@ -17,8 +17,6 @@ sealed public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject bossRespawnPrefab;
     [SerializeField] private GameObject bossRespawnAnimation;
 
-    [SerializeField] private GameObject blackScreenTransition;
-
     // newt Lives ////
     public static int   NewtLives   { get; set; } = 3;
     public static bool  AssistMode  { get; set; } = false;
@@ -44,8 +42,6 @@ sealed public class LevelManager : MonoBehaviour
 
     private void Awake()
     {
-        blackScreenTransition.SetActive(true); // a black screen
-
         Time.timeScale = 1f;
 
         Instantiate(player, respawn1.position, respawn1.transform.rotation);
