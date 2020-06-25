@@ -15,6 +15,7 @@ TagManager:
   - backgroundMusic
   - soundManager
   - p1GroundCheck
+  - spawnEnemyPrefab
   layers:
   - Default
   - TransparentFX

@@ -8,6 +8,9 @@ sealed public class SurpriseBox : PowerUpBase
 
     public Stats Stats { get; private set; }
 
+    // Gets enemy canvas
+    private GameObject enemyCanvas;
+
     public SurpriseBox()
     {
         base.Type = PowerUpType.surpriseBox;
@@ -19,6 +22,11 @@ sealed public class SurpriseBox : PowerUpBase
         };
     }
 
+    private void Start()
+    {
+        enemyCanvas = GameObject.FindGameObjectWithTag("spawnEnemyPrefab");
+    }
+
     private void Update()
     {
         if (!Stats.IsAlive)
@@ -26,15 +34,23 @@ sealed public class SurpriseBox : PowerUpBase
             Player p1 = FindObjectOfType<Player>();
             PickUpAbility(p1);
         }
+
+        if (enemyCanvas == null)
+            enemyCanvas = GameObject.FindGameObjectWithTag("spawnEnemyPrefab");
     }
 
     protected override void PickUpAbility(Player player)
     {
-        if (enemyInside)
+        if (enemyCanvas != null)
         {
-            Instantiate(enemyInside, transform.position - new Vector3(0f, 0.15f, 0f), transform.rotation);
+            if (enemyInside)
+            {
+                // Spawns the enemy in enemy canvas, so it can print its health bar
+                GameObject spawn = Instantiate(enemyInside, transform.position - new Vector3(0f, 0.15f, 0f), transform.rotation);
+                spawn.transform.SetParent(enemyCanvas.transform);
+            }
+            PickAndDestroy();
         }
-        PickAndDestroy();
     }
 
     protected override void PickAndDestroy()
