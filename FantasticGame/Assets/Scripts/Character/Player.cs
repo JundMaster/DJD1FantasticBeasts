@@ -118,7 +118,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (PauseMenu.gamePaused == false && Respawn_GameOverMenu.InRespawnMenu == false)
+        if (PauseMenu.gamePaused == false && Respawn_GameOverMenu.InRespawnMenu == false && IntroScene.INTROSCENE == false)
         {
             // UPDATE VARIABLES ----------------------------------------------------------------------------
             CurrentMana = Stats.CurrentMana;

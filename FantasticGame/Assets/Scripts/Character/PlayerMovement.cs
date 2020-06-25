@@ -58,10 +58,6 @@ public class PlayerMovement : MonoBehaviour
     private float                       spriteEnableCounter;
     private float                       spriteEnableDelay;
 
-    // WALK SOUND TIMERS
-    private float walkSoundCounter;
-    private float walkSoundDelay;
-
     // Layers
     [SerializeField] private LayerMask  ceilingLayer;
     [SerializeField] private LayerMask  onGroundLayers;
@@ -108,8 +104,6 @@ public class PlayerMovement : MonoBehaviour
 
         // Sounds
         GroundedSoundPlayable = true;
-        walkSoundDelay = 0.3f;
-        walkSoundCounter = walkSoundDelay;
     }
 
     void Update()
