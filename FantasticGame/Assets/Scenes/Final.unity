@@ -62557,7 +62557,7 @@ MonoBehaviour:
   respawnBossPosition: {fileID: 1426618134}
   bossRespawnPrefab: {fileID: 4511407318909747510, guid: 3ac3668f89825414aa1103516009c521,
     type: 3}
-  bossRespawnAnimation: {fileID: 7297083882377176823, guid: d95fd448fefbf6544b26bfe7d58d261c,
+  bossRespawnAnimation: {fileID: 2211637918359126280, guid: 05a52958534ebb1489081aa66f3500bf,
     type: 3}
   blackScreenTransition: {fileID: 2108938395}
   finalGameBarrier: {fileID: 1536437980}
@@ -142276,7 +142276,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1985590669}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.99, y: -0.66, z: -38.007507}
+  m_LocalPosition: {x: 138, y: 3.5, z: -38.007507}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 742876798}

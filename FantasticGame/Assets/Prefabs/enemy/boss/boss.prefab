@@ -244,11 +244,12 @@ MonoBehaviour:
     type: 3}
   manaPickUp: {fileID: 1343978244480085303, guid: 2c6e8ccc07e440647a15a67c8d702c63,
     type: 3}
-  deathSpawn: {fileID: 7297083882377176823, guid: d95fd448fefbf6544b26bfe7d58d261c,
+  deathSpawn: {fileID: 2211637918359126280, guid: 05a52958534ebb1489081aa66f3500bf,
     type: 3}
   groundRangeCheck: {fileID: 741401366301465445}
   groundCheck: {fileID: 741401366674415384}
   wallCheck: {fileID: 741401364961769245}
+  healthBarRect: {fileID: 0}
   HP: 1000
   enemyDamage: 20
   speed: 2
