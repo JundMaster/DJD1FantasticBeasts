@@ -7,7 +7,7 @@ A game based on the movie *Fantastic Beasts and Where to Find them*
 |Name|Role|
 |:-:|:-:|
 |Gabriel Santos|Artist|
-|Pedro Marques|Programmer / Music & Sound / Game Designer|
+|Pedro Marques|Programmer / Composer & Sound Designer / Game Designer|
 
 ## Controls
 
@@ -26,9 +26,11 @@ A game based on the movie *Fantastic Beasts and Where to Find them*
 - [General](https://www.youtube.com/channel/UCpk5Rkg8kjbrm6kNPsNU_EQ)
 - [Rope Mechanics](https://www.youtube.com/watch?v=sHhzWlrTgJo)
 - [Camera Shake](https://www.youtube.com/watch?v=9A9yj8KnM8c)
+- [Parallax](https://www.youtube.com/watch?v=zit45k6CUMk)
 
 ## Attributions
 
-'CameraShake.cs code' by Brackeys, "CAMERA SHAKE in Unity", _Youtube_, https://www.youtube.com/watch?v=9A9yj8KnM8c
-
-Logo - Wizard World Font by KELGE Fonts, https://www.fontspace.com/wizard-world-font-f33532
+> CameraShake.cs code:
+Brackeys, "CAMERA SHAKE in Unity", _Youtube_, https://www.youtube.com/watch?v=9A9yj8KnM8c
+> Text font:
+Wizard World Font by KELGE Fonts, https://www.fontspace.com/wizard-world-font-f33532
