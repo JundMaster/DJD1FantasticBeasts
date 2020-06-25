@@ -30,7 +30,10 @@ A game based on the movie *Fantastic Beasts and Where to Find them*
 
 ## Attributions
 
-> CameraShake.cs code:
+> CameraShake.cs code
+
 Brackeys, "CAMERA SHAKE in Unity", _Youtube_, https://www.youtube.com/watch?v=9A9yj8KnM8c
-> Text font:
+
+> Text font
+
 Wizard World Font by KELGE Fonts, https://www.fontspace.com/wizard-world-font-f33532

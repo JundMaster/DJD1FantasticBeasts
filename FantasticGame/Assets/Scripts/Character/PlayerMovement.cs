@@ -497,15 +497,9 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void StepSound()
+    public void StepSoundAndAnimation()
     {
         SoundManager.PlaySound(AudioClips.walk); // plays sound
-    }
-
-    public void WalkingEffect()
-    {
         Instantiate(walkingEffect, transform.position, walkingEffect.transform.rotation);
     }
-
-
 }

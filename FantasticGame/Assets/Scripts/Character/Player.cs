@@ -176,8 +176,7 @@ public class Player : MonoBehaviour
 
             if (Input.GetButtonDown("Fire2"))
                 if (Stats.CanUseSpell() && Stats.CanRangeAttack && !UsingShield && !Movement.CrouchGetter && !Movement.usingRope)
-                    Shoot();
-
+                    animator.SetBool("rangedAttack", true); // START ANIMATION
             // ---------------------------------------------------------------------------------------------
 
 
@@ -256,11 +255,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    // CALLED ON ANIMATION // ANIMATION EVENT
     // Attacks, sets animation & sound, starts a timer on update, spends mana, instantiates the shoot prefab
     void Shoot()
     {   
-        // Animator & Sound
-        animator.SetBool("rangedAttack", true);
+        //Sound
         SoundManager.PlaySound(AudioClips.magicAttack);
         // Attack delay + spend mana
         RangedAttacked = true;

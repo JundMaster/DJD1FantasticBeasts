@@ -59,3 +59,6 @@ TagManager:
   - name: bg buildings
     uniqueID: 2382064223
     locked: 0
+  - name: FOREGROUND
+    uniqueID: 1752290879
+    locked: 0
