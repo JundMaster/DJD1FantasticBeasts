@@ -74,6 +74,7 @@ public class PlayerMovement : MonoBehaviour
     public Player       player  { get; private set; }
     public Rigidbody2D  Rb      { get; private set; }
     private Animator    animator;
+    [SerializeField] private GameObject walkingEffect;
 
     private void Awake()
     {
@@ -500,5 +501,11 @@ public class PlayerMovement : MonoBehaviour
     {
         SoundManager.PlaySound(AudioClips.walk); // plays sound
     }
+
+    public void WalkingEffect()
+    {
+        Instantiate(walkingEffect, transform.position, walkingEffect.transform.rotation);
+    }
+
 
 }

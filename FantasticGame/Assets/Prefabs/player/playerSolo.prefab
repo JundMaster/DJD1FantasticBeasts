@@ -257,6 +257,8 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 1056768
+  walkingEffect: {fileID: 8463170344951124217, guid: 561730d7f9553284681d17378284703c,
+    type: 3}
 --- !u!114 &504492945739365232
 MonoBehaviour:
   m_ObjectHideFlags: 0

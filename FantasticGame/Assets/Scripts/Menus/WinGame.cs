@@ -73,7 +73,7 @@ sealed public class WinGame : MonoBehaviour
             // Refresh credits position
             if (canPlayCredits)
             {
-                creditsRoll += 0.002f * Time.deltaTime;
+                creditsRoll += 0.0015f * Time.deltaTime;
             }
             creditsText.transform.position = new Vector3(creditsText.transform.position.x, creditsText.transform.position.y + creditsRoll, creditsText.transform.position.z);
 

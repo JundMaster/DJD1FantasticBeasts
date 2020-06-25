@@ -14,6 +14,9 @@ sealed public class Parallax : MonoBehaviour
     [SerializeField] private float parallaxForce;
 
 
+    // Clours or Buildings
+    [SerializeField] private bool clouds;
+
     private void Start()
     {
         startingPos = transform.position.x;
@@ -28,8 +31,12 @@ sealed public class Parallax : MonoBehaviour
 
         float distance = cam.transform.position.x * parallaxForce;
 
-        transform.position = new Vector3(startingPos + distance, 2.1f, 10);
-
+        if (clouds)
+        {
+            transform.position = new Vector3(startingPos + distance, 5f, 10);
+        }
+        else
+            transform.position = new Vector3(startingPos + distance, 2.1f, 10);
 
 
         if (temp > startingPos + length) startingPos += length;
