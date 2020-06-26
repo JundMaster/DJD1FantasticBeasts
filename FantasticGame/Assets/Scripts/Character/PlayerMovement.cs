@@ -87,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
         rope.enabled        = false;
         ropeRender.enabled  = false;
         noVelY              = false;
-        ropeDelay           = 0.25f; // Usable ropes delay
+        ropeDelay           = 0.1f; // Usable ropes delay
         ropeTimer           = ropeDelay;
 
         boxCol.enabled      = true; // Crouch colliders
