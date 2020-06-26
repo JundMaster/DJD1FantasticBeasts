@@ -149,7 +149,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'You can activate assist mode by
 
-    pressing ''esc'' and choosing options'
+    pressing ''esc'' and choosing assist
+    mode'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: decf7e23d4da75d4893f411c5fdbc422, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 0ea3b2970a138284a8a0cdcc883f9158, type: 2}

@@ -18,6 +18,9 @@ sealed public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject pauseMenuUI;
     [SerializeField] private GameObject AssistModeMenu;
     [SerializeField] private GameObject OptionsMenu;
+    [SerializeField] private GameObject mainMenuPause;
+    [SerializeField] private GameObject restartConfirmationMenu;
+    [SerializeField] private GameObject quitConfirmationMenu;
 
     // Text on assist mode menu
     [SerializeField] private TextMeshProUGUI infHP;
@@ -50,21 +53,19 @@ sealed public class PauseMenu : MonoBehaviour
 
         if (p1 == null) p1 = FindObjectOfType<Player>();
 
-        // Only if the player is alive and the game isn't over
-        if (p1 != null && p1.Stats.IsAlive && Respawn_GameOverMenu.InRespawnMenu == false)
+        // Only if the player is alive and the game isn't over or in a cutscene
+        if (p1 != null && p1.Stats.IsAlive && Respawn_GameOverMenu.InRespawnMenu == false && IntroScene.CUTSCENE == false && LevelManager.WONGAME == false)
         {
             // When the player presses ESC
-            if (Input.GetKeyDown(KeyCode.Escape) && LevelManager.WONGAME == false)
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (gamePaused)
-                {   // If the player isn't in main pause menu
-                    if (!AssistModeMenu.activeSelf && !OptionsMenu.activeSelf)
-                    {
-                        Resume();
-                    }
+                if (gamePaused) // If the game is paused
+                {   // Goes back to the game
+                    Resume();
                 }
                 else
                 {
+                    // Pauses the game
                     Pause();
                 }
             }
@@ -100,7 +101,15 @@ sealed public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        // Sets buttons to NOT selected, closes the menus, activates main pause menu, and goes back to game
+        EventSystem.current.SetSelectedGameObject(null);
+        AssistModeMenu.SetActive(false);
+        OptionsMenu.SetActive(false);
+        restartConfirmationMenu.SetActive(false);
+        quitConfirmationMenu.SetActive(false);
+        mainMenuPause.SetActive(true);
         pauseMenuUI.SetActive(false);
+
         Time.timeScale = 1f;
         gamePaused = false;
     }

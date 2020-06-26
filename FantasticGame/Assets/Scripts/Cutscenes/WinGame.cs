@@ -43,6 +43,8 @@ sealed public class WinGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (p1 == null) p1 = FindObjectOfType<PlayerMovement>();
+
         if (LevelManager.WONGAME)
         {
             if (UI.activeSelf) UI.SetActive(false);
