@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Treasure : MonoBehaviour
+sealed public class Treasure : MonoBehaviour
 {
     // Drops - gameobjects
     [SerializeField] private GameObject healthPickUp, manaPickUp;

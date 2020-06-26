@@ -6,6 +6,11 @@ sealed public class BossSpawnBox : MonoBehaviour
 {
     // Gets spwaner prefab
     [SerializeField] private GameObject spawnprefab;
+    // Drops - gameobjects
+    [SerializeField] private GameObject healthPickUp, manaPickUp;
+    [SerializeField] private float lootChance;
+
+    BossSpawnBox[] boxes;
 
     private float random;
 
@@ -132,14 +137,34 @@ sealed public class BossSpawnBox : MonoBehaviour
         // Gets player
         Player player = hitInfo.transform.GetComponent<Player>();
 
-        // Does something if there's a collision with the player
-        if (player != null)
+        if (hitInfo != null)
         {
-            // Damages player and destroys itself
-            player.Stats.TakeDamage(10f);
-            StartCoroutine(player.CameraShake.Shake(0.015f, 0.04f));
+            // Does something if there's a collision with the player
+            if (player != null)
+            {
+                // Damages player and destroys itself
+                player.Stats.TakeDamage(10f);
+                StartCoroutine(player.CameraShake.Shake(0.015f, 0.04f));
+            }
+
+            // Drops loot on hit
+            float chance = Random.Range(0, 100);
+            if (chance < lootChance)
+            {
+                if (healthPickUp != null && chance >= lootChance / 2f)
+                {
+                    Instantiate(healthPickUp, transform.position, transform.rotation);
+                }
+                else if (manaPickUp != null && chance < lootChance / 2f)
+                {
+                    Instantiate(manaPickUp, transform.position, transform.rotation);
+                }
+            }
+
+
             Instantiate(spawnprefab, transform.position, transform.rotation);
             Destroy(gameObject);
+            SoundManager.PlaySound(AudioClips.enemyHit);
         }
     }
 }

@@ -153,6 +153,11 @@ sealed public class LevelManager : MonoBehaviour
     // Respawns depending on the position reached
     public void Respawn()
     {
+        // Destroys every pickup everytime the player respawns
+        GameObject[] pickUps = GameObject.FindGameObjectsWithTag("pickUp");
+        foreach (GameObject pickUp in pickUps)
+            Destroy(pickUp);
+
         // RESPAWN1
         if (respawn1)
         {

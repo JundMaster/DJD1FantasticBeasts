@@ -99,6 +99,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnprefab: {fileID: 7297083882377176823, guid: d95fd448fefbf6544b26bfe7d58d261c,
     type: 3}
+  healthPickUp: {fileID: 1343978244480085303, guid: 83ede7248b1352943a52dbf5ab5f5be2,
+    type: 3}
+  manaPickUp: {fileID: 1343978244480085303, guid: 2c6e8ccc07e440647a15a67c8d702c63,
+    type: 3}
+  lootChance: 25
 --- !u!198 &412754715200816392
 ParticleSystem:
   m_ObjectHideFlags: 0
