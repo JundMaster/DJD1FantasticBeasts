@@ -239,6 +239,10 @@ MonoBehaviour:
   boxesAndwalls:
     serializedVersion: 2
     m_Bits: 131072
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  backStab: {fileID: 0}
   attackPosition: {fileID: 6586371032254903204}
   healthPickUp: {fileID: 1343978244480085303, guid: 83ede7248b1352943a52dbf5ab5f5be2,
     type: 3}
@@ -250,7 +254,7 @@ MonoBehaviour:
   groundCheck: {fileID: 741401366674415384}
   wallCheck: {fileID: 741401364961769245}
   healthBarRect: {fileID: 0}
-  HP: 1000
+  HP: 1
   enemyDamage: 20
   speed: 2
   attackDelay: 1.1

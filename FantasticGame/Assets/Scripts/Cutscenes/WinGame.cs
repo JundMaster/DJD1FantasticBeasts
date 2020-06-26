@@ -24,6 +24,7 @@ sealed public class WinGame : MonoBehaviour
     [SerializeField] private TextMeshProUGUI nifflerScore;
     [SerializeField] private GameObject lastBlackScreen;
     [SerializeField] private GameObject creditsText;
+    [SerializeField] private Transform bottomCreditsPos;
 
     // LastMenu related stuff
     private bool canPlayCoRoutine = true;
@@ -73,9 +74,11 @@ sealed public class WinGame : MonoBehaviour
             // Refresh credits position
             if (canPlayCredits)
             {
-                creditsRoll += 0.0015f * Time.deltaTime;
+                creditsRoll += 0.003f * Time.deltaTime;
             }
             creditsText.transform.position = new Vector3(creditsText.transform.position.x, creditsText.transform.position.y + creditsRoll, creditsText.transform.position.z);
+            if (bottomCreditsPos.position.y > Camera.main.ScreenToWorldPoint(new Vector3(0, Camera.main.pixelHeight, Camera.main.nearClipPlane)).y)
+                LoadMenu();
 
             // Stops coroutine
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -128,11 +131,9 @@ sealed public class WinGame : MonoBehaviour
             firstBlackScreen.SetActive(false);
             lastBlackScreen.SetActive(true);
             yield return new WaitForSeconds(1f);
-            canPlayCredits = true;
-            yield return new WaitForSeconds(10f);
+            canPlayCredits = true;;
             break;
         }
-        LoadMenu();
     }
 
     public void LoadMenu()

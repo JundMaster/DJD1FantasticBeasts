@@ -154,7 +154,10 @@ MonoBehaviour:
     Press ''D'' to cast a magic spell
 
     this
-    spell costs some mana'
+    spell costs some mana
+
+
+    The enemy will notice you if you enter the red area'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: decf7e23d4da75d4893f411c5fdbc422, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 0ea3b2970a138284a8a0cdcc883f9158, type: 2}
