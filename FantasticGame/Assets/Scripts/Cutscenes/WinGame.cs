@@ -27,7 +27,8 @@ sealed public class WinGame : MonoBehaviour
     [SerializeField] private Transform bottomCreditsPos;
 
     // LastMenu related stuff
-    private bool canPlayCoRoutine = true;
+    private bool canPlayLevel01FinalScene = true;
+    private bool canPlayLevel02FinalScene = true;
     private bool canMovePlayer = true;
     private bool nifflerPrintScore = false;
     private bool canPlayCredits = false;
@@ -62,37 +63,56 @@ sealed public class WinGame : MonoBehaviour
             }
 
             // Plays CoRoutine
-            if (canPlayCoRoutine)
+            // level 01
+            if (SceneManager.GetActiveScene().name == "Final")
             {
-                StartCoroutine(WinMenu());
-                canPlayCoRoutine = false;
+                if (canPlayLevel01FinalScene)
+                {
+                    StartCoroutine(Level01FinalScene());
+                    canPlayLevel01FinalScene = false;
+                }
+            }
+            // level 02
+            else if (SceneManager.GetActiveScene().name == "Level02")
+            {
+                if (canPlayLevel02FinalScene)
+                {
+                    StartCoroutine(Level02FinalScene());
+                    canPlayLevel02FinalScene = false;
+                }
             }
 
-            // LastMenu related stuff
+
+            // Niffler creatures saved
             if (nifflerPrintScore == false)
                 nifflerScore.text = "";
             else nifflerScore.text = $"You saved niffler {LevelManager.CreaturesSaved} / 10 times !!";
 
-            // Refresh credits position
-            if (canPlayCredits)
-            {
-                creditsRoll += 0.003f * Time.deltaTime;
-            }
-            creditsText.transform.position = new Vector3(creditsText.transform.position.x, creditsText.transform.position.y + creditsRoll, creditsText.transform.position.z);
-            if (bottomCreditsPos.position.y > Camera.main.ScreenToWorldPoint(new Vector3(0, Camera.main.pixelHeight, Camera.main.nearClipPlane)).y)
-                LoadMenu();
 
-            // Stops coroutine
+
+            // Refresh credits position on last credits menu
+            if (creditsText)
+            {
+                if (canPlayCredits)
+                {
+                    creditsRoll += 0.003f * Time.deltaTime;
+                }
+                creditsText.transform.position = new Vector3(creditsText.transform.position.x, creditsText.transform.position.y + creditsRoll, creditsText.transform.position.z);
+                if (bottomCreditsPos.position.y > Camera.main.ScreenToWorldPoint(new Vector3(0, Camera.main.pixelHeight, Camera.main.nearClipPlane)).y)
+                    EndLevel();
+            }
+
+            // Passes cutscene if the user presses escape
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 StopAllCoroutines();
-                LoadMenu();
+                EndLevel();
             }
         }
     }
 
 
-    IEnumerator WinMenu()
+    IEnumerator Level01FinalScene()
     {
         while (true)
         {
@@ -117,7 +137,7 @@ sealed public class WinGame : MonoBehaviour
             yield return new WaitForSeconds(1.5f);
             Instantiate(spawnerSmokePrefab, nifflerRespawnPos.position, transform.rotation);
             Destroy(niff);
-            yield return new WaitForSeconds(2.5f);
+            yield return new WaitForSeconds(3f);
             Destroy(txt2);
             yield return new WaitForSeconds(1.5f);
             canvesToActive.SetActive(true);
@@ -133,15 +153,59 @@ sealed public class WinGame : MonoBehaviour
             firstBlackScreen.SetActive(false);
             lastBlackScreen.SetActive(true);
             yield return new WaitForSeconds(1f);
-            canPlayCredits = true;;
+            EndLevel();
             break;
         }
     }
 
-    public void LoadMenu()
+    IEnumerator Level02FinalScene()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(2f);
+            Instantiate(spawnerSmokePrefab, nifflerRespawnPos.position, transform.rotation);
+            GameObject niff = Instantiate(niffler, nifflerRespawnPos.position, transform.rotation);
+            yield return new WaitForSeconds(1f);
+            canMovePlayer = false;
+            GameObject txt1 = Instantiate(text1, text1Pos.position, transform.rotation);
+            yield return new WaitForSeconds(4f);
+            Destroy(txt1);
+            yield return new WaitForSeconds(1.5f);
+            Instantiate(spawnerSmokePrefab, nifflerRespawnPos.position, transform.rotation);
+            Destroy(niff);
+            yield return new WaitForSeconds(1.5f);
+            canvesToActive.SetActive(true);
+            firstBlackScreen.SetActive(true);
+            yield return new WaitForSeconds(1f);
+            nifflerHead.SetActive(true);
+            yield return new WaitForSeconds(1f);
+            nifflerPrintScore = true;
+            yield return new WaitForSeconds(3f);
+            nifflerHead.SetActive(false);
+            nifflerPrintScore = false;
+            yield return new WaitForSeconds(1f);
+            firstBlackScreen.SetActive(false);
+            lastBlackScreen.SetActive(true);
+            yield return new WaitForSeconds(0.5f);
+            creditsText.SetActive(true);
+            yield return new WaitForSeconds(3f);
+            canPlayCredits = true; ;
+            break;
+        }
+    }
+
+    public void EndLevel()
     {
         Time.timeScale = 1f;
         PauseMenu.gamePaused = false;
-        SceneManager.LoadScene("MainMenu");
+
+        if (SceneManager.GetActiveScene().name == "Final")
+        {
+            SceneManager.LoadScene("Level02");
+        }
+        else if (SceneManager.GetActiveScene().name == "Level02")
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
     }
 }

@@ -9,7 +9,6 @@ sealed public class IntroScene_Level02 : MonoBehaviour
     [SerializeField] private GameObject blackScreen;
     [SerializeField] private GameObject textOnBlackScreen;
 
-
     public static bool CUTSCENE { get; set; } = false;
 
     // Player

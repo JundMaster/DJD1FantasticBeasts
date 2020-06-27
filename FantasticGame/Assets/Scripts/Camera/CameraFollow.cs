@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 sealed public class CameraFollow : MonoBehaviour
 {
@@ -22,6 +23,10 @@ sealed public class CameraFollow : MonoBehaviour
     private float lookingCounter;
     private float lookingDelay;
 
+    // BOSS CAMERAS
+    Vector3 bossScreen;
+    Vector3 currentPos;
+
     private void Start()
     {
         p1 = FindObjectOfType<PlayerMovement>();
@@ -32,6 +37,9 @@ sealed public class CameraFollow : MonoBehaviour
         originalOffset = offset;
 
         WinningRange = maxLevelRangeXmax;
+
+        bossScreen = new Vector3(0, 0, 0);
+        currentPos = new Vector3(0, 0, 0);
     }
 
     private void FixedUpdate()
@@ -95,8 +103,8 @@ sealed public class CameraFollow : MonoBehaviour
         }
         // ----------------------------------------------------------------------------------------------------------
 
+
         // MAX CAMERA POSITIONS -------------------------------------------------------------------------------------
-        
         if (transform.position.x >= maxLevelRangeXmax) //maxLevelRangeXmax
         {
             maxRange = true;
@@ -108,8 +116,20 @@ sealed public class CameraFollow : MonoBehaviour
         // CAMERA MOVEMENT ------------------------------------------------------------------------------------------
         if (LevelManager.reachedBoss && Boss.BossDefeated == false)// If boss is reached
         {
-            Vector3 bossScreen = new Vector3(142.2765f, 0.6610f, -10f);
-            Vector3 currentPos = transform.position;
+            // level 01
+            if (SceneManager.GetActiveScene().name == "Final")
+            {
+                bossScreen = new Vector3(142.2765f, 0.6610f, -10f);
+                currentPos = transform.position;
+            }
+            // level 02
+            else if (SceneManager.GetActiveScene().name == "Level02") 
+            {
+                bossScreen = new Vector3(104.354f, 0.645992f, -10f);
+                currentPos = transform.position;
+            }
+
+            // Moves the camera to boss camera
             transform.position = Vector3.MoveTowards(currentPos, bossScreen, 10f * Time.fixedDeltaTime);
         }
         else
@@ -189,5 +209,4 @@ sealed public class CameraFollow : MonoBehaviour
         Gizmos.DrawLine(new Vector3(canMoveCamera, -30f, 0f), new Vector3(canMoveCamera, 30f, 0f));
         Gizmos.DrawLine(new Vector3(maxLevelRangeXmax, -30f, 0f), new Vector3(maxLevelRangeXmax, 30f, 0f));
     }
-    
 }

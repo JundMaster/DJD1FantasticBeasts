@@ -254,7 +254,7 @@ MonoBehaviour:
   groundCheck: {fileID: 741401366674415384}
   wallCheck: {fileID: 741401364961769245}
   healthBarRect: {fileID: 0}
-  HP: 1000
+  HP: 1
   enemyDamage: 20
   speed: 2
   attackDelay: 1.1

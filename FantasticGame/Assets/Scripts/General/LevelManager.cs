@@ -16,6 +16,7 @@ sealed public class LevelManager : MonoBehaviour
     [SerializeField] private Transform  respawnBossPosition;
     [SerializeField] private GameObject bossRespawnPrefab;
     [SerializeField] private GameObject bossRespawnAnimation;
+    [SerializeField] private float      reachedBossPosition;
 
     // newt Lives ////
     public static int   NewtLives   { get; set; } = 3;
@@ -121,7 +122,7 @@ sealed public class LevelManager : MonoBehaviour
         // Spawns boss
         if (p1 != null)
         {
-            if (p1.transform.position.x > 139.5f && reachedBoss == false && Boss.BossDefeated == false)
+            if (p1.transform.position.x > reachedBossPosition && reachedBoss == false && Boss.BossDefeated == false)
             {
                 SpawnBoss();
             }
@@ -219,5 +220,12 @@ sealed public class LevelManager : MonoBehaviour
                 Destroy(bossObject);
             }
         }
+    }
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(0, 255, 255);
+        Gizmos.DrawLine(new Vector3(reachedBossPosition, -30f, 0f), new Vector3(reachedBossPosition, 30f, 0f));
     }
 }

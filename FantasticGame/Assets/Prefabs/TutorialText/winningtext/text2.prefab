@@ -91,7 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ad27a550284fac4db3a595478345916, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: {fileID: 0}
+  text: {fileID: 8090701468647560468}
 --- !u!33 &1342262772884596922
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -129,7 +129,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Oh oh, be careful Newt !!!!!!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: decf7e23d4da75d4893f411c5fdbc422, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -207,7 +207,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_renderer: {fileID: 4764763992460284348}
   m_subTextObjects:
   - {fileID: 0}
