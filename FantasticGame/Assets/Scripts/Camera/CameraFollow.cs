@@ -149,7 +149,13 @@ sealed public class CameraFollow : MonoBehaviour
             }
         }
         // ----------------------------------------------------------------------------------------------------------
-        if (p1.transform.position.x > canMoveCamera) cameraMoving = true;
+        if (p1 != null)
+        {
+            if (p1.transform.position.x > canMoveCamera)
+            {
+                cameraMoving = true;
+            }
+        }
     }
 
     // Creates a rectangle

@@ -47,19 +47,22 @@ sealed public class Respawn_GameOverMenu : MonoBehaviour
             }
         }
 
-        
+
         // Respawn ( only if the game isn't over ) or gameover
-        if (p1.Stats.IsAlive == false)
+        if (p1 != null)
         {
-            if (LevelManager.GAMEOVER)
+            if (p1.Stats.IsAlive == false)
             {
-                InRespawnMenu = true;
-                GameOver();
-            }
-            else
-            {
-                InRespawnMenu = true;
-                RespawnMenu();
+                if (LevelManager.GAMEOVER)
+                {
+                    InRespawnMenu = true;
+                    GameOver();
+                }
+                else
+                {
+                    InRespawnMenu = true;
+                    RespawnMenu();
+                }
             }
         }
     }
