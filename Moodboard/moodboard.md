@@ -46,6 +46,12 @@
 
 ![NewtScamander-FantasticBeastsAndWheretoFindThem](Images/Character/NewtScamander-FantasticBeastsAndWheretoFindThem2.png)
 
+### Niffler
+
+> Niffler - Fantastic Beasts and Where to Find Them
+
+![Niffler](Images/Character/niffler.png)
+
 ### Art References
 
 > Record of Lodoss War - Deedlit in Wonder Labyrinth
