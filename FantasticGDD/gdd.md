@@ -30,8 +30,6 @@ Nelson Milheiro - 21904365</p>
 This Game Design Document is a guiding material for the development team and a
 compilation of all the important aspects of the game.
 
-
-
 - [Version Control](#version-control)
 - [Introduction](#introduction)
 - [Specifications](#specifications)
@@ -56,6 +54,14 @@ compilation of all the important aspects of the game.
     - [General Gameloop (core)](#general-gameloop-core)
   - [Gameplay](#gameplay)
     - [Control](#control)
+    - [Interface](#interface)
+      - [Main Menu](#main-menu)
+      - [In Game Interface](#in-game-interface)
+        - [Resume:](#resume)
+      - [Options:](#options)
+      - [Assist Mode:](#assist-mode)
+      - [Restart:](#restart)
+      - [Quit:](#quit)
     - [Actions](#actions)
     - [Surprise Boxes](#surprise-boxes)
     - [Chests](#chests)
@@ -144,8 +150,6 @@ to new positions and find collectible Nifflers.
 
 The game story starts in New York, in the mid 20's so, some of the scenarios
 will be inspired on NY visual.
-Even though, as the game progresses, the player will get in touch with
-different scenarios, such as, forests, lakes, etc.
 
 ![nelson_mb](Images/cenarios.png)
 
@@ -200,32 +204,34 @@ Goblins, Human Wizards and Ogres.
 
 #### Bosses
 
-Found at the end of each level and works like a regular human enemy, but 
-with more Health.
+Bosses are found at the end of each level and works like a regular human enemy, 
+but with more Health.
 
 ##### Boss 1
 
 ![boss 1](Images/enemies/boss_1.png)
 
-To make the battle against the boss one greater, from time to time, two wood 
-boxes will spawn and fly against the player. They may contain Health or Mana
-pick-ups.
+To make the battle against the boss one a greater challenge, from time to time, 
+two wooden boxes will spawn and fly against the player. They may contain Health 
+or Mana pick-ups.
 
 ![boss 1 fight](Images/enemies/boss_1_level.png)
 
 ##### Boss 2
 
-To also keep the boss 2 challenging, it has an special skill of spawning three
+![boss 2](Images/enemies/boss_2.png)
+
+To also keep the boss 2 challenging, it has a special skill of spawning three
 spells, randomly positioned, that cause damage to the player and might spawn
 either a Health or a Mana pick-up.
 
-![boss 2](Images/enemies/boss_2.png)
+![boss 2 fight](Images/enemies/boss_2_level.png)
 
 ## Gameloops
 
 ### Levels Gameloop
 
-Collectables -> Obstacles -> Enemies -> Saving Creature
+Collectables -> Obstacles -> Enemies -> Boss Fight
 
 ### General Gameloop (core)
 
@@ -236,6 +242,44 @@ Level beginning -> Level Progression -> Next Level
 ### Control
 
 Keyboard.
+
+### Interface
+
+#### Main Menu
+
+![main menu](Images/interface/main_menu.png)
+
+It is the very first screen presented to the player when the game starts and 
+it offers the possibility of starting a new game or exit.
+
+#### In Game Interface
+
+![in game interface](Images/interface/in_game_interface.png)
+
+Can be accessed my pressing the ESC key on the keyboard and allows the player
+to chose between the following options:
+
+##### Resume:
+
+  Goes back to the gameplay screen;
+    
+#### Options:
+
+  Gives the player the control of the volume of the music, ambient sounds and
+  effect sounds.
+  ![options](Images/interface/options.png)
+
+#### Assist Mode:
+
+  Allows the player to have infinite Health, Mana or Lives.
+  ![assist mode](Images/interface/assist_mode.png) 
+
+#### Restart:
+
+  Send the player back to the main menu;
+
+#### Quit:
+  Simply ends the game.
 
 ### Actions
 
@@ -263,7 +307,7 @@ inside is by opening them.
 ### Chests
 
 Items spread around the map that can be opened by attacking them and always 
-drop a Health or Mana pick-up of a drop rage of 50% for each one of them.
+drop a Health or Mana pick-up of a drop rate   of 50% for each one of them.
 
 ### Collectable Nifflers
 

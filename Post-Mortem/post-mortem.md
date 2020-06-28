@@ -21,9 +21,14 @@ com o estilo de arte/cores dos restantes elementos,
 
 ### Soluções
 
-Estas dificuldades foram resolvidas com alguma pesquisa de referências e testes
-durante o jogo. Estes testes permitiram-nos perceber se os elementos encaixavam
-uns nos outros e se transmitiam a mensagem que pretendíamos.
+Estas dificuldades foram resolvidas com alguma pesquisa de referências e 
+diversos testes durante o jogo. Estes testes permitiram-nos perceber se os 
+elementos encaixavam uns nos outros e se transmitiam a mensagem que 
+pretendíamos.
+Ainda para contornar um dos problemas com as animações dos personagems, usou-se
+a ténica de animar, inicialmente, um esqueleto do personagem, testar no _engine_
+e, caso a animação do esqueleto fosse aprovada, procedia-se eventualmente para 
+a animação final.
 
 ## Programação
 
