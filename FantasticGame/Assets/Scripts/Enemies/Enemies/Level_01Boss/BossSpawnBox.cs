@@ -10,8 +10,6 @@ sealed public class BossSpawnBox : MonoBehaviour
     [SerializeField] private GameObject healthPickUp, manaPickUp;
     [SerializeField] private float lootChance;
 
-    BossSpawnBox[] boxes;
-
     private float random;
 
     // Timers
@@ -33,7 +31,7 @@ sealed public class BossSpawnBox : MonoBehaviour
         random = Random.Range(0, 100);
 
         // Which Box is this
-        if (transform.position.x < 141) leftBox = true;
+        if (transform.position.x < 142) leftBox = true;
 
         // Timers
         descendCounter1 = 2f;
@@ -55,7 +53,7 @@ sealed public class BossSpawnBox : MonoBehaviour
         {
             descendCounter1 -= Time.deltaTime;
             // Lowers the box
-            if (descendCounter1 < 0 && transform.position.y > 0.25f)
+            if (descendCounter1 < 0 && transform.position.y > 0.3f)
             {
                 MoveBoxDown();
             }
@@ -69,7 +67,7 @@ sealed public class BossSpawnBox : MonoBehaviour
         {
             descendCounter2 -= Time.deltaTime;
             // Lowers the box
-            if (descendCounter2 < 0 && transform.position.y > 0.25f)
+            if (descendCounter2 < 0 && transform.position.y > 0.3f)
             {
                 MoveBoxDown();
             }
@@ -83,7 +81,7 @@ sealed public class BossSpawnBox : MonoBehaviour
         {
             descendCounter3 -= Time.deltaTime;
             // Lowers the box
-            if (descendCounter3 < 0 && transform.position.y > 0.25f)
+            if (descendCounter3 < 0 && transform.position.y > 0.3f)
             {
                 MoveBoxDown();
             }

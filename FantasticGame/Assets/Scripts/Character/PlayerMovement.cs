@@ -184,7 +184,7 @@ public class PlayerMovement : MonoBehaviour
 
     void CollisionDeathTiles()
     {
-        Collider2D deathTileCheck = Physics2D.OverlapCircle(groundCheck.position, 0.5f, deathTileLayer);
+        Collider2D deathTileCheck = Physics2D.OverlapCircle(groundCheck.position, 0.3f, deathTileLayer);
         if (deathTileCheck != null)
         {
             if (ropeSprite != null) ropeSprite.SetActive(false);
