@@ -9,12 +9,12 @@ sealed public class Text : ButtonAndTextBase
 
     void Awake()
     {
-        if (text) text.color = new Color(1, 1, 1, alpha);
+        if (text) text.color = new Color(1, 1, 1, base.alpha);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (text) text.color = new Color(1, 1, 1, alpha);
+        // Sets text color alpha to alpha from base
+        if (text) text.color = new Color(1, 1, 1, base.alpha);
     }
 }

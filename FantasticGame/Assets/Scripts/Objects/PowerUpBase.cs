@@ -22,26 +22,8 @@ public abstract class PowerUpBase : MonoBehaviour
         // Does something if there's a collision with the player
         if (player != null)
         {
-            // Does something different depending on the type of pick up
-            switch (Type)
-            {
-                case PowerUpType.mana:
-                    PickUpAbility(player);
-                    break;
-
-                case PowerUpType.health:
-                    PickUpAbility(player);
-                    break;
-                case PowerUpType.niffler:
-                    PickUpAbility(player);
-                    break;
-                case PowerUpType.surpriseBox:
-                    PickUpAbility(player);
-                    break;
-                case PowerUpType.extraLife:
-                    PickUpAbility(player);
-                    break;
-            }
+            // PickUpAbility depends of which Type the Power Up is
+            PickUpAbility(player);
         }
     }
 

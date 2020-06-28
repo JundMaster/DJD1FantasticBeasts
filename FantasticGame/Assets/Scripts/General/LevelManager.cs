@@ -7,12 +7,7 @@ using UnityEngine.Experimental.Rendering.Universal;
 sealed public class LevelManager : MonoBehaviour
 {
     [SerializeField] private GameObject player;
-    [SerializeField] private Transform  respawn1;
-    [SerializeField] private Transform  respawn2;
-    [SerializeField] private Transform  respawn3;
-    [SerializeField] private Transform  respawn4;
-    [SerializeField] private Transform  respawn5;
-    [SerializeField] private Transform  respawn6;
+    [SerializeField] private Transform[] respawnPositions;
     [SerializeField] private GameObject respawnPrefab;
 
     [SerializeField] private Transform  respawnBossPosition;
@@ -44,22 +39,23 @@ sealed public class LevelManager : MonoBehaviour
 
     // Checkpoints
     private float   maxPositionReached;
-    private bool    reachedRespawn2, reachedRespawn3, reachedRespawn4, reachedRespawn5, reachedRespawn6;
+    private bool[]  reachedRespawns;
 
     private void Awake()
     {
         Time.timeScale = 1f;
 
-        Instantiate(player, respawn1.position, respawn1.transform.rotation);
+        Instantiate(player, respawnPositions[0].position, respawnPositions[0].transform.rotation);
         p1 = FindObjectOfType<Player>();
 
-        // Checkpoint
+        // Checkpoints reached
+        reachedRespawns = new bool[6];
         maxPositionReached = p1.transform.position.x;
-        reachedRespawn2 = false;
-        reachedRespawn3 = false;
-        reachedRespawn4 = false;
-        reachedRespawn5 = false;
-        reachedRespawn6 = false;
+        for (int i = 0; i < reachedRespawns.Length; i++)
+        {
+            reachedRespawns[i] = false;
+        }
+        reachedRespawns[0] = true;
 
         // mouse not visible
         Cursor.visible = false;
@@ -92,35 +88,13 @@ sealed public class LevelManager : MonoBehaviour
         }
 
         // RESPAWNS POSITIONS /////////////////////////////////////////////////////////////////////////
-        // RESPAWN 2
-        if (maxPositionReached > respawn2.transform.position.x && reachedRespawn2 == false)
+        for (int i = 1; i < respawnPositions.Length; i++)
         {
-            reachedRespawn2 = true;
-            Instantiate(respawnPrefab, respawn2.transform.position, respawnPrefab.transform.rotation);
-        }
-        // RESPAWN 3
-        else if (maxPositionReached > respawn3.transform.position.x && reachedRespawn3 == false)
-        {
-            reachedRespawn3 = true;
-            Instantiate(respawnPrefab, respawn3.transform.position, respawnPrefab.transform.rotation);
-        }
-        // RESPAWN 4
-        else if (maxPositionReached > respawn4.transform.position.x && reachedRespawn4 == false)
-        {
-            reachedRespawn4 = true;
-            Instantiate(respawnPrefab, respawn4.transform.position, respawnPrefab.transform.rotation);  
-        }
-        // RESPAWN 5
-        else if (maxPositionReached > respawn5.transform.position.x && reachedRespawn5 == false)
-        {
-            reachedRespawn5 = true;
-            Instantiate(respawnPrefab, respawn5.transform.position, respawnPrefab.transform.rotation);
-        }
-        // RESPAWN 6
-        else if (maxPositionReached > respawn6.transform.position.x && reachedRespawn6 == false)
-        {
-            reachedRespawn6 = true;
-            Instantiate(respawnPrefab, respawn6.transform.position, respawnPrefab.transform.rotation);
+            if (maxPositionReached > respawnPositions[i].transform.position.x && reachedRespawns[i] == false)
+            {
+                reachedRespawns[i] = true;
+                Instantiate(respawnPrefab, respawnPositions[i].transform.position, respawnPrefab.transform.rotation);
+            }
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -165,77 +139,56 @@ sealed public class LevelManager : MonoBehaviour
         foreach (GameObject pickUp in pickUps)
             Destroy(pickUp);
 
-        // RESPAWN1
-        if (respawn1)
+        // Respawns the player depending on the max position reached
+        for (int i = 0; i < respawnPositions.Length; i++)
         {
-            if (maxPositionReached > respawn1.position.x)
-                if (maxPositionReached < respawn2.position.x)
-                    Instantiate(player, respawn1.position, transform.rotation);
-        }
-
-        // RESPAWN2
-        if (respawn2)
-        {
-            if (maxPositionReached > respawn2.position.x)
-                if (maxPositionReached < respawn3.position.x)
-                    Instantiate(player, respawn2.position, transform.rotation);
-        }
-
-
-        // RESPAWN3
-        if (respawn3)
-        {
-            if (maxPositionReached > respawn3.position.x)
-                if (maxPositionReached < respawn4.position.x)
-                    Instantiate(player, respawn3.position, transform.rotation);
-        }
-
-        // RESPAWN4
-        if (respawn4)
-        {
-            if (maxPositionReached > respawn4.position.x)
-                if (maxPositionReached < respawn5.position.x)
-                    Instantiate(player, respawn4.position, transform.rotation);
-        }
-
-        // RESPAWN5
-        if (respawn5)
-        {
-            if (maxPositionReached > respawn5.position.x)
-                if (maxPositionReached < respawn6.position.x)
-                    Instantiate(player, respawn5.position, transform.rotation);
-        }
-
-        // RESPAWN6 // BEFORE BOSS
-        if (respawn6)
-        {
-            if (maxPositionReached > respawn6.position.x)
+            if (i < 5)
             {
-                Instantiate(player, respawn6.position, transform.rotation);
-
-                // Sets reached boss to false, if player dies
-                ReachedBoss = false;
-
-                GameObject bossObject = GameObject.FindGameObjectWithTag("Boss");
-                GameObject[] bossBoxSpawn = GameObject.FindGameObjectsWithTag("BossBoxSpawn");
-
-                // Level 02
-                if (SceneManager.GetActiveScene().name == "Level02")
+                if (respawnPositions[i])
                 {
-                    GameObject mainScreenLight = GameObject.FindGameObjectWithTag("screenMainLight");
-                    Light2D screenLight = mainScreenLight.GetComponent<Light2D>();
-                    screenLight.pointLightOuterRadius = 20.62f;
-                    screenLight.pointLightInnerRadius = 3.4f;
-                    screenLight.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, 10));
+                    if (reachedRespawns[i])
+                    {
+                        if (maxPositionReached < respawnPositions[i + 1].position.x)
+                        {
+                            Instantiate(player, respawnPositions[i].position, transform.rotation);
+                        }
+                    }
                 }
-
-                // Both levels // Level 1 = boxes // Level 2 = particles
-                foreach (GameObject box in bossBoxSpawn)
+            }
+            // for respawn 6 ( boss respawn )
+            else
+            {
+                if (respawnPositions[i])
                 {
-                    Destroy(box);
-                }
+                    if (reachedRespawns[i])
+                    {
+                        Instantiate(player, respawnPositions[i].position, transform.rotation);
 
-                Destroy(bossObject);
+                        // Sets reached boss to false, if player dies
+                        ReachedBoss = false;
+
+                        GameObject bossObject = GameObject.FindGameObjectWithTag("Boss");
+                        GameObject[] bossBoxSpawn = GameObject.FindGameObjectsWithTag("BossBoxSpawn");
+
+                        // Level 02
+                        if (SceneManager.GetActiveScene().name == "Level02")
+                        {
+                            GameObject mainScreenLight = GameObject.FindGameObjectWithTag("screenMainLight");
+                            Light2D screenLight = mainScreenLight.GetComponent<Light2D>();
+                            screenLight.pointLightOuterRadius = 20.62f;
+                            screenLight.pointLightInnerRadius = 3.4f;
+                            screenLight.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, 10));
+                        }
+
+                        // Both levels // Level 1 = boxes // Level 2 = particles
+                        foreach (GameObject box in bossBoxSpawn)
+                        {
+                            Destroy(box);
+                        }
+
+                        Destroy(bossObject);
+                    }
+                }
             }
         }
     }

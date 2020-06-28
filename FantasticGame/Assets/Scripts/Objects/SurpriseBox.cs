@@ -24,6 +24,7 @@ sealed public class SurpriseBox : PowerUpBase
 
     private void Start()
     {
+        // Finds enemy canvas
         enemyCanvas = GameObject.FindGameObjectWithTag("spawnEnemyPrefab");
     }
 

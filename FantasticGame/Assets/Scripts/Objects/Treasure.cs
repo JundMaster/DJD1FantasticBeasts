@@ -25,6 +25,7 @@ sealed public class Treasure : MonoBehaviour
         if (!Stats.IsAlive)
         {
             int chance = Random.Range(0, 10);
+            // Has a 100 chance of spawning 50/50 mana or health
             if (healthPickUp != null && chance >= 5)
             {
                 Instantiate(healthPickUp, transform.position, transform.rotation);

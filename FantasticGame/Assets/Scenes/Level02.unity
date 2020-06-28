@@ -21686,7 +21686,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 603443938}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.433, y: -0.336, z: -38.007507}
+  m_LocalPosition: {x: -2.62, y: -0.41, z: -38.007507}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1214577316}
@@ -52426,7 +52426,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: -156.05814, w: -11.688712}
   m_textInfo:
     textComponent: {fileID: 684727215}
-    characterCount: 8
+    characterCount: 4
     spriteCount: 0
     spaceCount: 0
     wordCount: 1
@@ -94534,12 +94534,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 6638613994297833557, guid: c819191c1b4f5194385fb9a38ca2908f, type: 3}
-  respawn1: {fileID: 603443939}
-  respawn2: {fileID: 1868549293}
-  respawn3: {fileID: 692551438}
-  respawn4: {fileID: 700665030}
-  respawn5: {fileID: 700665030}
-  respawn6: {fileID: 2023144273}
+  respawnPositions:
+  - {fileID: 603443939}
+  - {fileID: 1868549293}
+  - {fileID: 692551438}
+  - {fileID: 700665030}
+  - {fileID: 368060916}
+  - {fileID: 2023144273}
   respawnPrefab: {fileID: 5791722575922220040, guid: c28b3adbc50884044aa0cf978fa5edfb,
     type: 3}
   respawnBossPosition: {fileID: 1960174768}
@@ -94547,7 +94548,7 @@ MonoBehaviour:
     type: 3}
   bossRespawnAnimation: {fileID: 2211637918359126280, guid: 05a52958534ebb1489081aa66f3500bf,
     type: 3}
-  reachedBossPosition: 101.44
+  reachedBossPosition: 101.64
   finalGameBarrier: {fileID: 1696249926}
 --- !u!4 &1214577316
 Transform:
@@ -98830,9 +98831,9 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: -98.58882, w: -17.533035}
   m_textInfo:
     textComponent: {fileID: 1329708630}
-    characterCount: 9
+    characterCount: 6
     spriteCount: 0
-    spaceCount: 1
+    spaceCount: 0
     wordCount: 1
     linkCount: 0
     lineCount: 1
