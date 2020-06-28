@@ -138,6 +138,8 @@ sealed public class LevelManager : MonoBehaviour
         GameObject[] pickUps = GameObject.FindGameObjectsWithTag("pickUp");
         foreach (GameObject pickUp in pickUps)
             Destroy(pickUp);
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // Respawns the player depending on the max position reached
         for (int i = 0; i < respawnPositions.Length; i++)
