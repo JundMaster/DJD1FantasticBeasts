@@ -258,7 +258,7 @@ MonoBehaviour:
   enemyDamage: 20
   speed: 2
   attackDelay: 1.1
-  limitRange: 10
+  limitRange: 2.5
   attackPushForce: 500
   lootChance: 9
   destroyObject: {fileID: 0}
