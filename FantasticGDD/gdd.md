@@ -20,11 +20,17 @@ Nelson Milheiro - 21904365</p>
   - Initial GDD
 - v1.1 - 27/05/2020
   - Added new images; changed mechanics
+- v1.2 - 27/06/2020
+  - Added pickups, surprise boxes, chests and collectable nifflers;
+- v1.3 - 28/06/2020
+  - Added enemies images.
 
 # Introduction
 
 This Game Design Document is a guiding material for the development team and a
 compilation of all the important aspects of the game.
+
+
 
 - [Version Control](#version-control)
 - [Introduction](#introduction)
@@ -39,12 +45,22 @@ compilation of all the important aspects of the game.
   - [Characters](#characters)
     - [Player](#player)
     - [Enemies](#enemies)
+      - [Goblins](#goblins)
+      - [Ogre](#ogre)
+      - [Humans](#humans)
+      - [Bosses](#bosses)
+        - [Boss 1](#boss-1)
+        - [Boss 2](#boss-2)
   - [Gameloops](#gameloops)
     - [Levels Gameloop](#levels-gameloop)
     - [General Gameloop (core)](#general-gameloop-core)
   - [Gameplay](#gameplay)
     - [Control](#control)
     - [Actions](#actions)
+    - [Surprise Boxes](#surprise-boxes)
+    - [Chests](#chests)
+    - [Collectable Nifflers](#collectable-nifflers)
+    - [Pick-Ups](#pick-ups)
     - [Indicators](#indicators)
     - [Scale/Tiles](#scaletiles)
     - [Camera Trap](#camera-trap)
@@ -122,8 +138,7 @@ human wizards, and ogres.
 
 All of this has, as main goal, saving the creatures that have been captured.
 Throughout the gameplay, the player will have to use Newt's swooping evil to get
-to new positions and find collectibles, that will reveal some information
-about the beasts and the universe around them.
+to new positions and find collectible Nifflers.
 
 ## Setting
 
@@ -162,6 +177,50 @@ activities.
 In the game, this community is composed by sapient magical creatures, like
 Goblins, Human Wizards and Ogres.
 
+#### Goblins
+
+![goblin](Images/enemies/goblin.png)
+- Size: small;
+- Move speed: fast;
+- Attack speed: fast;
+
+#### Ogre
+
+![ogre](Images/enemies/ogre.png)
+- Size: big;
+- Move speed: medium;
+- Attack speed: slow;
+
+#### Humans
+
+![human wizards](Images/enemies/human.png)
+- Size: medium;
+- Move speed: medium;
+- Attack speed: medium;
+
+#### Bosses
+
+Found at the end of each level and works like a regular human enemy, but 
+with more Health.
+
+##### Boss 1
+
+![boss 1](Images/enemies/boss_1.png)
+
+To make the battle against the boss one greater, from time to time, two wood 
+boxes will spawn and fly against the player. They may contain Health or Mana
+pick-ups.
+
+![boss 1 fight](Images/enemies/boss_1_level.png)
+
+##### Boss 2
+
+To also keep the boss 2 challenging, it has an special skill of spawning three
+spells, randomly positioned, that cause damage to the player and might spawn
+either a Health or a Mana pick-up.
+
+![boss 2](Images/enemies/boss_2.png)
+
 ## Gameloops
 
 ### Levels Gameloop
@@ -194,16 +253,59 @@ Keyboard.
   - Using the Swooping Evil as a platform to pass through some obstacles:
 ![swooping evil platform](Images/swoopingPlatform.png)
 
+### Surprise Boxes
+
+This wood boxes with eyes are opened when the player either attack 
+or touch them.
+They can contain enemies or Collectable Nifflers. They only way to know what is
+inside is by opening them.
+
+### Chests
+
+Items spread around the map that can be opened by attacking them and always 
+drop a Health or Mana pick-up of a drop rage of 50% for each one of them.
+
+### Collectable Nifflers
+
+Little beasts spread around the map waiting for the player to pick them up.
+They are usually not in obvious places and can, sometimes, be found in surprise
+boxes.
+
+### Pick-Ups
+
+There are four kinds of pick-ups:
+- Mana: increases player's Mana;
+- Health: increases player's Health ;
+- Lives: increase player's life counter;
+
+The Mana and Health pick-ups can be found in chests around the map, or be
+dropped by enemies when they are killed.
+Life pick-ups, on the other hand, can only be found inside of chests or freely
+around the map.
+
 ### Indicators
 
 In this topic will be grouped some of the important interface features for the
 game.
 
-- Health Bar and mana Bar
-  - Indicator meant to be at the top left side of  the screen.
-  The mana bar will have a wand silhouette and the health bar will be attached at
-  the top of it.
-
+- Player:
+  - Health and Mana bars:
+    - Positioned at the top left corner of the screen;
+    - They indicate the Health and the Mana that the player has left;
+  - Collected Nifflers:
+    - Positioned at the top right corner of the screen;
+    - It indicates how many nifflers the player has to save and how many of them
+      have been already saved;
+  - Life counter:
+    - Positioned under the Collected Nifflers indicator and display how many
+      lives the player has left;
+- Enemies:
+  - Health bar:
+    - Positioned above each enemy and indicate the Health that the enemy has
+      left;
+    - The final boss is an exception for this rule. It's Health Bar is
+      positioned at the bottom center of the screen.
+  
 ### Scale/Tiles
 
 Character scale:
