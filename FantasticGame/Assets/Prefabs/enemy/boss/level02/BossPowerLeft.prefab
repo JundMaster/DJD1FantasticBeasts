@@ -49,7 +49,7 @@ MonoBehaviour:
     type: 3}
   manaPickUp: {fileID: 1343978244480085303, guid: 2c6e8ccc07e440647a15a67c8d702c63,
     type: 3}
-  lootChance: 60
+  lootChance: 50
 --- !u!198 &5140794639272769016
 ParticleSystem:
   m_ObjectHideFlags: 0

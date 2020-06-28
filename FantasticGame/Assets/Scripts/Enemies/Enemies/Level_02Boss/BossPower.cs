@@ -31,12 +31,18 @@ sealed public class BossPower : MonoBehaviour
         {
 
             // Plays hit sound once it hits the player
-            if (p1.Movement.Invulnerable == false)
+            if (p1.Movement.Invulnerable == false && p1.UsingShield == false)
             {
                 SoundManager.PlaySound(AudioClips.hit);
             }
-            // Player gets invulnerable and takes 30 damage
-            p1.Movement.Invulnerable = true;
+
+            // Player gets invulnerable and takes 30 damage  (if shield is off)
+            if (p1.UsingShield)
+            { }
+            else
+            {
+                p1.Movement.Invulnerable = true;
+            }
         }
 
         // Has a percentage to spawn loot on the first hit

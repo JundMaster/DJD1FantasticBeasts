@@ -142,8 +142,31 @@ sealed public class BossSpawnBox : MonoBehaviour
             // Does something if there's a collision with the player
             if (player != null)
             {
-                // Damages player and destroys itself
-                player.Stats.TakeDamage(10f);
+                // Damages player and destroys itself  (if shield is off)
+                if (player.UsingShield)
+                {
+                    if (player.transform.right.x < 0) // Turned left
+                    {
+                        if (player.transform.position.x > transform.position.x)
+                        {
+                        }
+                        else if (player.transform.position.x < transform.position.x)
+                        {
+                            player.Stats.TakeDamage(10f);
+                        }
+                    }
+                    else if (player.transform.right.x > 0) // Turned Right
+                    {
+                        if (player.transform.position.x > transform.position.x)
+                        {
+                            player.Stats.TakeDamage(10f);
+                        }
+                        else if (player.transform.position.x < transform.position.x)
+                        {
+                        }
+                    }
+                }
+
                 StartCoroutine(player.CameraShake.Shake(0.015f, 0.04f));
             }
 
