@@ -57,14 +57,16 @@ sealed public class WinGame : MonoBehaviour
                 p1.Rb.velocity = new Vector2(p1.RunSpeed, 0f);
             else
             {   // disables sound after a while
-                soundManager = GameObject.FindGameObjectWithTag("soundManager");
+                if (soundManager == null)
+                    soundManager = GameObject.FindGameObjectWithTag("soundManager");
                 if (soundManager != null)
-                    soundManager.SetActive(false);
+                    if (soundManager.activeSelf)
+                        soundManager.SetActive(false);
             }
 
             // Plays CoRoutine
             // level 01
-            if (SceneManager.GetActiveScene().name == "Final")
+            if (SceneManager.GetActiveScene().name == "Level01")
             {
                 if (canPlayLevel01FinalScene)
                 {
@@ -86,7 +88,7 @@ sealed public class WinGame : MonoBehaviour
             // Niffler creatures saved
             if (nifflerPrintScore == false)
                 nifflerScore.text = "";
-            else nifflerScore.text = $"You saved niffler {LevelManager.CreaturesSaved} / 10 times !!";
+            else nifflerScore.text = $"You rescued niffler {LevelManager.CreaturesSaved} / 10 times !!";
 
 
 
@@ -152,7 +154,7 @@ sealed public class WinGame : MonoBehaviour
             yield return new WaitForSeconds(1f);
             firstBlackScreen.SetActive(false);
             lastBlackScreen.SetActive(true);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(3f);
             EndLevel();
             break;
         }
@@ -199,7 +201,7 @@ sealed public class WinGame : MonoBehaviour
         Time.timeScale = 1f;
         PauseMenu.gamePaused = false;
 
-        if (SceneManager.GetActiveScene().name == "Final")
+        if (SceneManager.GetActiveScene().name == "Level01")
         {
             SceneManager.LoadScene("Level02");
         }

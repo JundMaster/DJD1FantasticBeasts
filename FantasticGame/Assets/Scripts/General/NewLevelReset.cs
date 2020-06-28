@@ -10,8 +10,8 @@ sealed public class NewLevelReset : MonoBehaviour
         LevelManager.GAMEOVER = false;
         LevelManager.AssistMode = false;
         LevelManager.WONGAME = false;
-        LevelManager.reachedBoss = false;
+        LevelManager.ReachedBoss = false;
+        LevelManager.BossDefeated = false;
         PauseMenu.gamePaused = false;
-        Boss.BossDefeated = false;
     }
 }

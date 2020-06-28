@@ -114,10 +114,10 @@ sealed public class CameraFollow : MonoBehaviour
 
 
         // CAMERA MOVEMENT ------------------------------------------------------------------------------------------
-        if (LevelManager.reachedBoss && Boss.BossDefeated == false)// If boss is reached
+        if (LevelManager.ReachedBoss && LevelManager.BossDefeated == false)// If boss is reached
         {
             // level 01
-            if (SceneManager.GetActiveScene().name == "Final")
+            if (SceneManager.GetActiveScene().name == "Level01")
             {
                 bossScreen = new Vector3(142.2765f, 0.6610f, -10f);
                 currentPos = transform.position;

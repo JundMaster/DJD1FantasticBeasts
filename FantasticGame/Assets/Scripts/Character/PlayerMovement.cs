@@ -110,7 +110,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // Gets hAxis and sets velocity // Update Variables
         // Disables on cutscene
-        if (IntroScene.CUTSCENE == false) hAxis = Input.GetAxis("Horizontal");
+        if (LevelManager.CUTSCENE == false) hAxis = Input.GetAxis("Horizontal");
 
         Position        = transform.position;
         currentVelocity = Rb.velocity;
@@ -221,7 +221,7 @@ public class PlayerMovement : MonoBehaviour
         Collider2D collisionTop = Physics2D.OverlapCircle(ceilingOverHead.position, 0.02f, onGroundLayers);
 
         // Disables on cutscene
-        if (IntroScene.CUTSCENE == false)
+        if (LevelManager.CUTSCENE == false)
         {
             // Checks if the player pressed crouch
             if (Input.GetKey("down") && OnGround)
@@ -292,11 +292,11 @@ public class PlayerMovement : MonoBehaviour
 
         
         // Prevents player from jumping after boss
-        if (!Boss.BossDefeated)
+        if (!LevelManager.BossDefeated)
         {
             // Disables on cutscene
             // Jump conditions
-            if (IntroScene.CUTSCENE == false && Input.GetButtonDown("Jump") && coyoteCounter > 0 && Rb.velocity.y < 0.1)
+            if (LevelManager.CUTSCENE == false && Input.GetButtonDown("Jump") && coyoteCounter > 0 && Rb.velocity.y < 0.1)
             {
                 // If the player jumps, gravityScale is set to 0
                 usingCrouch = false;
@@ -500,7 +500,10 @@ public class PlayerMovement : MonoBehaviour
 
     public void StepSoundAndAnimation()
     {
-        SoundManager.PlaySound(AudioClips.walk); // plays sound
-        Instantiate(walkingEffect, transform.position, walkingEffect.transform.rotation);
+        if (LevelManager.WONGAME == false)
+        {
+            SoundManager.PlaySound(AudioClips.walk); // plays sound
+            Instantiate(walkingEffect, transform.position, walkingEffect.transform.rotation);
+        }
     }
 }

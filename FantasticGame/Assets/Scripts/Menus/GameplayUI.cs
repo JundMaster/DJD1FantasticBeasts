@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 sealed public class GameplayUI : MonoBehaviour
 {
@@ -20,6 +21,7 @@ sealed public class GameplayUI : MonoBehaviour
 
     private Player player;
     private Boss boss;
+    private Boss_02 boss_02;
 
     private void Awake()
     {
@@ -56,12 +58,16 @@ sealed public class GameplayUI : MonoBehaviour
         else newtLives.text = "xx";
 
         // BOSS UI
-        if (LevelManager.reachedBoss)
+        if (LevelManager.ReachedBoss)
         {
-            // Finds Boss
+            // Finds Bosses
             if (boss == null)
             {
                 boss = FindObjectOfType<Boss>();
+            }
+            if (boss_02 == null)
+            {
+                boss_02 = FindObjectOfType<Boss_02>();
             }
 
             // Sets hp bar as active
@@ -83,11 +89,28 @@ sealed public class GameplayUI : MonoBehaviour
 
             else
             {   // Sets the bar with boss hp
-                if (boss != null) bossHealthBar.localScale = new Vector3(boss.Stats.CurrentHP / 1000f, 1f, 1f);
+
+                // Level 01
+                if (SceneManager.GetActiveScene().name == "Level01")
+                {
+                    if (boss != null)
+                    {
+                        bossHealthBar.localScale = new Vector3(boss.Stats.CurrentHP / boss.Stats.MaxHP, 1f, 1f);
+                    }
+                }
+
+                // Level 02
+                else if (SceneManager.GetActiveScene().name == "Level02")
+                {
+                    if (boss_02 != null)
+                    {
+                        bossHealthBar.localScale = new Vector3(boss_02.Stats.CurrentHP / boss_02.Stats.MaxHP, 1f, 1f);
+                    }
+                }
             }
         }
 
-        if (Boss.BossDefeated || LevelManager.reachedBoss == false) // If the fight ends, turns off the bar
+        if (LevelManager.BossDefeated || LevelManager.ReachedBoss == false) // If the fight ends, turns off the bar
         {
             hpBossBar = 0;
             bossEncounterFirstTime = true;

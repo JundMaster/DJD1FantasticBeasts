@@ -7,14 +7,11 @@ sealed public class IntroScene : MonoBehaviour
 {
     [SerializeField] private GameObject UI;
     [SerializeField] private GameObject tutorial;
-    [SerializeField] private Light2D light;
+    [SerializeField] private Light2D screenLight;
     [SerializeField] private AudioSource music;
     [SerializeField] private AudioSource ambientSound;
     [SerializeField] private GameObject blackScreen;
     [SerializeField] private GameObject textOnBlackScreen;
-
-
-    public static bool CUTSCENE { get; set; } = false;
 
     // Lights fade in
     private float innerRadiusFade;
@@ -30,7 +27,7 @@ sealed public class IntroScene : MonoBehaviour
 
     private void Start()
     {
-        CUTSCENE = true;
+        LevelManager.CUTSCENE = true;
 
         p1 = FindObjectOfType<Player>();
         cam = FindObjectOfType<CameraFollow>();
@@ -45,11 +42,11 @@ sealed public class IntroScene : MonoBehaviour
         // Lights Start
         innerRadiusFade = 0.63f;
         outerRadiusFade = 1.2f;
-        if (light)
+        if (screenLight)
         {
-            light.intensity = 1f;
-            light.pointLightInnerRadius = innerRadiusFade;
-            light.pointLightOuterRadius = outerRadiusFade;
+            screenLight.intensity = 1f;
+            screenLight.pointLightInnerRadius = innerRadiusFade;
+            screenLight.pointLightOuterRadius = outerRadiusFade;
         }
 
         // Stops time and calls INTRO
@@ -62,12 +59,11 @@ sealed public class IntroScene : MonoBehaviour
 
     void FixedUpdate()
     {
-
         if (playerWait) // makes player fly
             p1.Movement.Rb.gravityScale = 0f;
 
-        if (gameStarted) // Sets light to player postition
-            light.transform.position = p1.transform.position + new Vector3(0f, 0.3f, 0f);
+        if (gameStarted) // Sets light to player position
+            screenLight.transform.position = p1.transform.position + new Vector3(0f, 0.3f, 0f);
 
         // When the player passes through a certain point
         if (cam.cameraMoving)
@@ -79,11 +75,11 @@ sealed public class IntroScene : MonoBehaviour
             // activates uis
             if (UI) UI.SetActive(true); // UI OFF
 
-            // Fades in the lights
+            // Fades in the screenLights
             if (innerRadiusFade < 3.4f) innerRadiusFade += 0.5f * Time.fixedDeltaTime;
             if (outerRadiusFade < 20.62f) outerRadiusFade += 3f * Time.fixedDeltaTime;
-            light.pointLightInnerRadius = innerRadiusFade;
-            light.pointLightOuterRadius = outerRadiusFade;
+            screenLight.pointLightInnerRadius = innerRadiusFade;
+            screenLight.pointLightOuterRadius = outerRadiusFade;
         }
 
         // Destroys this object after the player moves
@@ -107,6 +103,6 @@ sealed public class IntroScene : MonoBehaviour
             yield return new WaitForSeconds(1f);
             break;
         }
-        CUTSCENE = false;
+        LevelManager.CUTSCENE = false;
     }
 }

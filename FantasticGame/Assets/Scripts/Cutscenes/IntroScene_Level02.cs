@@ -9,8 +9,6 @@ sealed public class IntroScene_Level02 : MonoBehaviour
     [SerializeField] private GameObject blackScreen;
     [SerializeField] private GameObject textOnBlackScreen;
 
-    public static bool CUTSCENE { get; set; } = false;
-
     // Player
     private Player p1;
 
@@ -19,21 +17,18 @@ sealed public class IntroScene_Level02 : MonoBehaviour
 
     private void Start()
     {
-        CUTSCENE = true;
+        LevelManager.CUTSCENE = true;
 
         p1 = FindObjectOfType<Player>();
         cam = FindObjectOfType<CameraFollow>();
 
-
         if (music) music.Stop();
-
 
         // Stops time and calls INTRO
         // Enables a black screen
         blackScreen.SetActive(true);
         Time.timeScale = 0f;
         StartCoroutine(Intro());
-      
     }
 
     void FixedUpdate()
@@ -60,6 +55,6 @@ sealed public class IntroScene_Level02 : MonoBehaviour
             yield return new WaitForSeconds(1f);
             break;
         }
-        CUTSCENE = false;
+        LevelManager.CUTSCENE = false;
     }
 }

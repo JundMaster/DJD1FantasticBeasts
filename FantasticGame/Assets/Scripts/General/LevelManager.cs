@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Experimental.Rendering.Universal;
 
 sealed public class LevelManager : MonoBehaviour
 {
@@ -18,28 +20,31 @@ sealed public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject bossRespawnAnimation;
     [SerializeField] private float      reachedBossPosition;
 
+    private Player p1;
+
     // newt Lives ////
     public static int   NewtLives   { get; set; } = 3;
     public static bool  AssistMode  { get; set; } = false;
-    private int livesKeeper;
+    private int         livesKeeper;
 
     // GAME STATUS
     public static bool GAMEOVER { get; set; } = false;
-    public static bool WONGAME { get; set; } = false;
-
-    private Player  p1;
+    public static bool WONGAME  { get; set; } = false;
+    public static bool CUTSCENE { get; set; } = false;
 
     // Creatures saved
-    public static byte CreaturesSaved { get; set; }
+    public static byte CreaturesSaved   { get; set; } = 0;
 
     // Boss
-    public static bool  reachedBoss;
+    public static bool  ReachedBoss     { get; set; } = false;
+    public static bool  BossDefeated    { get; set; } = false;
     private Boss        boss;
+    private Boss_02     boss_02;
     [SerializeField] private GameObject finalGameBarrier;
 
     // Checkpoints
-    private float maxPositionReached;
-    private bool reachedRespawn2, reachedRespawn3, reachedRespawn4, reachedRespawn5, reachedRespawn6;
+    private float   maxPositionReached;
+    private bool    reachedRespawn2, reachedRespawn3, reachedRespawn4, reachedRespawn5, reachedRespawn6;
 
     private void Awake()
     {
@@ -122,16 +127,16 @@ sealed public class LevelManager : MonoBehaviour
         // Spawns boss
         if (p1 != null)
         {
-            if (p1.transform.position.x > reachedBossPosition && reachedBoss == false && Boss.BossDefeated == false)
+            if (p1.transform.position.x > reachedBossPosition && ReachedBoss == false && BossDefeated == false)
             {
                 SpawnBoss();
             }
         }
         // If the player is fighting the boss
-        if (reachedBoss)
+        if (ReachedBoss)
         {
             // If the boss dies, it destroys the last barrier
-            if (boss == null)
+            if (boss == null && boss_02 == null)
             {
                 Destroy(finalGameBarrier);
             }
@@ -140,7 +145,7 @@ sealed public class LevelManager : MonoBehaviour
 
     public void SpawnBoss()
     {
-        reachedBoss = true;
+        ReachedBoss = true;
 
         // Spawns Boss
         Instantiate(bossRespawnAnimation, respawnBossPosition.position + new Vector3(0f, 0.2f, 0f), respawnBossPosition.rotation);
@@ -148,6 +153,7 @@ sealed public class LevelManager : MonoBehaviour
 
         // Finds boss
         if (boss == null) boss = FindObjectOfType<Boss>();
+        if (boss_02 == null) boss_02 = FindObjectOfType<Boss_02>();
     }
 
 
@@ -208,15 +214,27 @@ sealed public class LevelManager : MonoBehaviour
                 Instantiate(player, respawn6.position, transform.rotation);
 
                 // Sets reached boss to false, if player dies
-                reachedBoss = false;
+                ReachedBoss = false;
 
-                GameObject[] bossBoxSpawn = GameObject.FindGameObjectsWithTag("BossBoxSpawn");
                 GameObject bossObject = GameObject.FindGameObjectWithTag("Boss");
+                GameObject[] bossBoxSpawn = GameObject.FindGameObjectsWithTag("BossBoxSpawn");
 
+                // Level 02
+                if (SceneManager.GetActiveScene().name == "Level02")
+                {
+                    GameObject mainScreenLight = GameObject.FindGameObjectWithTag("screenMainLight");
+                    Light2D screenLight = mainScreenLight.GetComponent<Light2D>();
+                    screenLight.pointLightOuterRadius = 20.62f;
+                    screenLight.pointLightInnerRadius = 3.4f;
+                    screenLight.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, 10));
+                }
+
+                // Both levels // Level 1 = boxes // Level 2 = particles
                 foreach (GameObject box in bossBoxSpawn)
                 {
                     Destroy(box);
                 }
+
                 Destroy(bossObject);
             }
         }

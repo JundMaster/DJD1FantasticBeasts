@@ -135,7 +135,7 @@ public class Player : MonoBehaviour
             animator.SetBool("rangedAttack", false);
 
             // Disables on cutscene
-            if (IntroScene.CUTSCENE == false)
+            if (LevelManager.CUTSCENE == false)
             {
                 pressShield = Input.GetKey("s");
                 if (Input.GetKey("up"))
@@ -181,7 +181,7 @@ public class Player : MonoBehaviour
             }
 
             // Disables on cutscene
-            if (IntroScene.CUTSCENE == false)
+            if (LevelManager.CUTSCENE == false)
             {
                 if (Input.GetButtonDown("Fire2"))
                 {
@@ -207,7 +207,7 @@ public class Player : MonoBehaviour
             }
 
             // Disables on cutscene
-            if (IntroScene.CUTSCENE == false)
+            if (LevelManager.CUTSCENE == false)
             {
                 if (Input.GetButtonDown("Fire1"))
                 {

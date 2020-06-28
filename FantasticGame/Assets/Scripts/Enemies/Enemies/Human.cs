@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Human : EnemyBaseRanged
 {
-    [SerializeField] private Transform magicCrouchPosition;
+    [SerializeField] protected Transform magicCrouchPosition;
 
     protected override void AimCheck()
     {

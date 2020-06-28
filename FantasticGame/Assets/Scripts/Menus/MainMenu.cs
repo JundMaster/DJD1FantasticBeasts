@@ -35,7 +35,7 @@ sealed public class MainMenu : MonoBehaviour
 
     public void PlayGame()
     {
-        SceneManager.LoadScene("Final");
+        SceneManager.LoadScene("Level01");
     }
 
     public void QuitGame()
@@ -50,10 +50,10 @@ sealed public class MainMenu : MonoBehaviour
         LevelManager.GAMEOVER = false;
         LevelManager.AssistMode = false;
         LevelManager.WONGAME = false;
-        LevelManager.reachedBoss = false;
+        LevelManager.ReachedBoss = false;
+        LevelManager.BossDefeated = false;
+        LevelManager.CUTSCENE = false;
         PauseMenu.gamePaused = false;
-        Boss.BossDefeated = false;
-        IntroScene.CUTSCENE = false;
     }
 
     public void PlaySoundButtonSelect()

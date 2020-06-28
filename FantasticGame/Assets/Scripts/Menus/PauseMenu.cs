@@ -54,7 +54,7 @@ sealed public class PauseMenu : MonoBehaviour
         if (p1 == null) p1 = FindObjectOfType<Player>();
 
         // Only if the player is alive and the game isn't over or in a cutscene
-        if (p1 != null && p1.Stats.IsAlive && Respawn_GameOverMenu.InRespawnMenu == false && IntroScene.CUTSCENE == false && LevelManager.WONGAME == false)
+        if (p1 != null && p1.Stats.IsAlive && Respawn_GameOverMenu.InRespawnMenu == false && LevelManager.CUTSCENE == false && LevelManager.WONGAME == false)
         {
             // When the player presses ESC
             if (Input.GetKeyDown(KeyCode.Escape))

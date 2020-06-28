@@ -21686,7 +21686,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 603443938}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 99.07, y: 1.16, z: -38.007507}
+  m_LocalPosition: {x: -2.433, y: -0.336, z: -38.007507}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1214577316}
@@ -71733,7 +71733,7 @@ GameObject:
   - component: {fileID: 842568176}
   m_Layer: 0
   m_Name: ScreenLight
-  m_TagString: Untagged
+  m_TagString: screenMainLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -72714,6 +72714,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 321003582}
     m_Modifications:
+    - target: {fileID: 4131926959072978307, guid: 6e97daf21e437a64d99ba3672b8462d7,
+        type: 3}
+      propertyPath: limitRange
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5849754886814068401, guid: 6e97daf21e437a64d99ba3672b8462d7,
         type: 3}
       propertyPath: m_Name
@@ -72722,12 +72727,12 @@ PrefabInstance:
     - target: {fileID: 5849754886814068402, guid: 6e97daf21e437a64d99ba3672b8462d7,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -100.85757
+      value: -99.959
       objectReference: {fileID: 0}
     - target: {fileID: 5849754886814068402, guid: 6e97daf21e437a64d99ba3672b8462d7,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -410.1689
+      value: -410.141
       objectReference: {fileID: 0}
     - target: {fileID: 5849754886814068402, guid: 6e97daf21e437a64d99ba3672b8462d7,
         type: 3}
@@ -94538,11 +94543,11 @@ MonoBehaviour:
   respawnPrefab: {fileID: 5791722575922220040, guid: c28b3adbc50884044aa0cf978fa5edfb,
     type: 3}
   respawnBossPosition: {fileID: 1960174768}
-  bossRespawnPrefab: {fileID: 4511407318909747510, guid: 3ac3668f89825414aa1103516009c521,
+  bossRespawnPrefab: {fileID: 4511407318909747510, guid: a4cd7a031622be14199225d88a5455ce,
     type: 3}
   bossRespawnAnimation: {fileID: 2211637918359126280, guid: 05a52958534ebb1489081aa66f3500bf,
     type: 3}
-  reachedBossPosition: 101.12
+  reachedBossPosition: 101.44
   finalGameBarrier: {fileID: 1696249926}
 --- !u!4 &1214577316
 Transform:
@@ -94640,78 +94645,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1216405719}
   m_CullTransparentMesh: 0
---- !u!1 &1221605411
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1221605413}
-  - component: {fileID: 1221605412}
-  m_Layer: 0
-  m_Name: Global Light - Enable to test editor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1221605412
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1221605411}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_LightType: 4
-  m_BlendStyleIndex: 0
-  m_FalloffIntensity: 0.5
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
-  m_LightVolumeOpacity: 0
-  m_ApplyToSortingLayers: 000000009b6111735f6afb8d3fd67168
-  m_LightCookieSprite: {fileID: 0}
-  m_UseNormalMap: 0
-  m_LightOrder: 0
-  m_AlphaBlendOnOverlap: 0
-  m_ShadowIntensity: 0
-  m_ShadowVolumeIntensity: 0
-  m_PointLightInnerAngle: 360
-  m_PointLightOuterAngle: 360
-  m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 1
-  m_PointLightDistance: 3
-  m_PointLightQuality: 1
-  m_ShapeLightParametricSides: 5
-  m_ShapeLightParametricAngleOffset: 0
-  m_ShapeLightParametricRadius: 1
-  m_ShapeLightFalloffSize: 0.5
-  m_ShapeLightFalloffOffset: {x: 0, y: 0}
-  m_ShapePath:
-  - {x: -0.5, y: -0.5, z: 0}
-  - {x: 0.5, y: -0.5, z: 0}
-  - {x: 0.5, y: 0.5, z: 0}
-  - {x: -0.5, y: 0.5, z: 0}
---- !u!4 &1221605413
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1221605411}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.839321, y: 2.5449266, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1224973057
 GameObject:
   m_ObjectHideFlags: 0
@@ -130662,7 +130595,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1960174767}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 107.59, y: -0.998, z: 0}
+  m_LocalPosition: {x: 107.59, y: -1.271, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1214577316}
@@ -130893,7 +130826,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1966021624
 MonoBehaviour:
   m_ObjectHideFlags: 0
