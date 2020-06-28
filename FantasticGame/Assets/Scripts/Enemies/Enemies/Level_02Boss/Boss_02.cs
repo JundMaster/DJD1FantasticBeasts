@@ -34,12 +34,12 @@ sealed public class Boss_02 : Human
     // Light
     private GameObject  mainScreenLight;
     private Light2D     screenLight;
-    private float       innerRadius;
-    private float       maxInnerRadius      = 3.4f;
-    private float       minInnerRadius      = 0.63f;
-    private float       outerRadius;
-    private float       maxOuterRadius      = 20.62f;
-    private float       minOuterRadius      = 1.2f;
+    private float           innerRadius;
+    private readonly float  maxInnerRadius      = 3.4f;
+    private readonly float  minInnerRadius      = 0.63f;
+    private float           outerRadius;
+    private readonly float  maxOuterRadius      = 20.62f;
+    private readonly float  minOuterRadius      = 1.2f;
 
     protected override void Start()
     {
@@ -208,7 +208,7 @@ sealed public class Boss_02 : Human
                     EndSummonStance();
                     // Resets variables
                     canUsePowerAbility  = true;
-                    getRandNumbers      = false;
+                    getRandNumbers      = true;
                     usePowerCounter     = usePowerDelay;
                     spawnCounter        = spawnCounterDelay;
                 }
